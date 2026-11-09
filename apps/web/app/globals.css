@@ -1,0 +1,24 @@
+@import 'tailwindcss';
+@import '@srs/brand/theme.css';
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-studio-heading);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+  }
+}
+
+/* Visible focus for every interactive element, like .btn-cta:focus-visible on the source site.
+   Layered so Tailwind outline utilities can still override it. */
+@layer base {
+  :focus-visible {
+    outline: 3px solid var(--color-studio-ring);
+    outline-offset: 2px;
+  }
+}

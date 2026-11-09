@@ -1,0 +1,22 @@
+{
+  "name": "@srs/evals",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "eval:mapper": "node -e \"console.log('no eval cases until M1/M2')\"",
+    "eval:auditor": "node -e \"console.log('no eval cases until M1/M2')\""
+  },
+  "dependencies": {
+    "@srs/site-model": "workspace:*",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "vitest": "^5.1.0"
+  }
+}

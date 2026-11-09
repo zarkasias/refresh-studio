@@ -1,15 +1,15 @@
 {
   "id": "site_cafecito-santa-fe",
   "projectId": "proj_cafecito-santa-fe",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceUrl": "https://www.cafecitosantafe.com/",
   "platform": "squarespace",
   "platformEvidence": [],
   "platformConfidence": 0,
   "business": {
     "name": "Cafecito Santa Fe",
-    "phone": "(505) 310-0089",
-    "email": "cafe@trailheadsantafe.com",
+    "phones": [{ "value": "(505) 310-0089" }],
+    "emails": [{ "value": "cafe@trailheadsantafe.com" }],
     "address": "Trailhead Compound | 922 Shoofly St. Santa Fe, NM 87505",
     "hours": [
       {

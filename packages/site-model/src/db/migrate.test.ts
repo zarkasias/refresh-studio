@@ -130,6 +130,48 @@ describe('migrations on PGlite', () => {
     const [row] = await db.select().from(sites);
     expect(() => rowToSite({ ...row!, projectId: 'other' })).toThrow(/disagrees/);
   });
+
+  it('migrates a stored v1 site doc on read (ADR-006)', async () => {
+    await seedSite();
+    const [row] = await db.select().from(sites);
+    const v1Doc = {
+      ...minimalSite(),
+      schemaVersion: 1,
+      business: { name: 'Example Plumbing', phone: '555-0100', socialLinks: [] },
+    };
+    await db
+      .update(sites)
+      .set({ schemaVersion: 1, doc: v1Doc as never })
+      .where(eq(sites.id, row!.id));
+    const [stored] = await db.select().from(sites);
+    const site = rowToSite(stored!);
+    expect(site.schemaVersion).toBe(2);
+    expect(site.business.phones).toEqual([{ value: '555-0100' }]);
+  });
+
+  it('migrates the v1 snapshot of a frozen approved version on read (ADR-005, ADR-006)', async () => {
+    await seedSite();
+    await db.insert(variants).values(variantToRow(minimalVariant()));
+    const approved = {
+      ...minimalVersion(),
+      approvedAt: '2026-11-09T15:30:00.000Z',
+      approvedBy: 'consultant',
+    };
+    const row = versionToRow(approved);
+    const v1Snapshot = {
+      ...approved.snapshot,
+      site: {
+        ...approved.snapshot.site,
+        schemaVersion: 1,
+        business: { name: 'Example Plumbing', email: 'a@example.com', socialLinks: [] },
+      },
+    };
+    await db.insert(versions).values({ ...row, snapshot: v1Snapshot as never });
+    const [stored] = await db.select().from(versions);
+    const version = rowToVersion(stored!);
+    expect(version.snapshot.site.schemaVersion).toBe(2);
+    expect(version.snapshot.site.business.emails).toEqual([{ value: 'a@example.com' }]);
+  });
 });
 
 describe('constraints', () => {

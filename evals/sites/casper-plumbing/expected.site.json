@@ -1,15 +1,15 @@
 {
   "id": "site_casper-plumbing",
   "projectId": "proj_casper-plumbing",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceUrl": "https://www.casperplumbing.com/",
   "platform": "wix",
   "platformEvidence": [],
   "platformConfidence": 0,
   "business": {
     "name": "Casper Plumbing",
-    "phone": "307-441-4444",
-    "email": "infocasperplumbing@gmail.com",
+    "phones": [{ "value": "307-441-4444" }],
+    "emails": [{ "value": "infocasperplumbing@gmail.com" }],
     "address": "1700 E Yellowstone Hwy, Casper, WY 82609",
     "hours": [
       {
@@ -125,14 +125,24 @@
           "type": "contact",
           "content": {
             "heading": "Contact",
-            "body": "Address 1700 E Yellowstone Hwy, Casper, WY 82609. Phone 307-441-4444 (not linked). Opening Hours listed per day, all 7:00 am – 7:00 pm. Form fields: First Name, Last Name, Email, Message; button 'Send'; confirmation 'Thanks for submitting!'",
+            "body": "Address 1700 E Yellowstone Hwy, Casper, WY 82609. Phone 307-441-4444 (not linked). Opening Hours listed per day, all 7:00 am – 7:00 pm.",
             "ctas": [
               {
                 "label": "infocasperplumbing@gmail.com",
                 "href": "mailto:infocasperplumbing@gmail.com",
                 "kind": "email"
               }
-            ]
+            ],
+            "form": {
+              "fields": [
+                { "label": "First Name", "type": "text", "required": false },
+                { "label": "Last Name", "type": "text", "required": false },
+                { "label": "Email", "type": "email", "required": false },
+                { "label": "Message", "type": "textarea", "required": false }
+              ],
+              "submitLabel": "Send",
+              "confirmation": "Thanks for submitting!"
+            }
           },
           "confidence": 1
         }

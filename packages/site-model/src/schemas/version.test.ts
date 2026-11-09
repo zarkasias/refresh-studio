@@ -17,7 +17,7 @@ describe('VersionSchema', () => {
   });
   it('rejects a snapshot with an invalid site', () => {
     const v = minimalVersion();
-    const snapshot = { ...v.snapshot, site: { ...v.snapshot.site, schemaVersion: 2 } };
+    const snapshot = { ...v.snapshot, site: { ...v.snapshot.site, schemaVersion: 1 } };
     expect(VersionSchema.safeParse({ ...v, snapshot }).success).toBe(false);
   });
   it('rejects a snapshot of a different variant', () => {

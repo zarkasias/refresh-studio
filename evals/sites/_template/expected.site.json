@@ -1,15 +1,17 @@
 {
   "id": "site_TODO-slug",
   "projectId": "proj_TODO-slug",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceUrl": "TODO https://www.example.com/",
   "platform": "unknown",
   "platformEvidence": [],
   "platformConfidence": 0,
   "business": {
     "name": "TODO business name",
-    "phone": "TODO phone as displayed",
-    "email": "TODO email as displayed",
+    "phones": [
+      { "value": "TODO phone as displayed", "label": "TODO label the site uses, or delete" }
+    ],
+    "emails": [{ "value": "TODO email as displayed" }],
     "address": "TODO address as displayed",
     "hours": [{ "label": "TODO label", "text": "TODO hours text as displayed" }],
     "socialLinks": [{ "network": "TODO facebook", "url": "TODO https://www.facebook.com/example" }]
@@ -78,10 +80,16 @@
           "type": "contact",
           "content": {
             "heading": "TODO",
-            "body": "TODO what the contact section says (form fields, address, map note)",
+            "body": "TODO what the contact section says (address, map note)",
             "ctas": [
               { "label": "TODO Email us", "href": "TODO mailto:hello@example.com", "kind": "email" }
-            ]
+            ],
+            "form": {
+              "fields": [
+                { "label": "TODO field label as displayed", "type": "text", "required": false }
+              ],
+              "submitLabel": "TODO button text"
+            }
           },
           "confidence": 1
         }

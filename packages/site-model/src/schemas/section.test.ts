@@ -78,6 +78,73 @@ describe('SectionSchema', () => {
     const ctas = [{ label: 'Order', href: '/order', kind: 'order', provider }];
     expect(SectionSchema.safeParse({ ...s, content: { ctas } }).success).toBe(false);
   });
+  it.each(['features', 'process'])('accepts v2 section type %s', (type) => {
+    expect(SectionSchema.safeParse({ ...minimalSection(), type }).success).toBe(true);
+  });
+  it('accepts a pay CTA', () => {
+    const ctas = [{ label: 'Pay Online', href: 'https://pay.example.com/', kind: 'pay' }];
+    expect(SectionSchema.safeParse({ ...minimalSection(), content: { ctas } }).success).toBe(true);
+  });
+
+  describe('nav children', () => {
+    const nav = (items: unknown[], type = 'nav') => ({
+      ...minimalSection(),
+      id: 'sec_nav',
+      type,
+      content: { items },
+    });
+    it('accepts one level of children in a nav', () => {
+      const items = [{ title: 'Services', children: [{ title: 'Implants', link: '/implants' }] }];
+      expect(SectionSchema.safeParse(nav(items)).success).toBe(true);
+    });
+    it('rejects grandchildren', () => {
+      const items = [{ title: 'A', children: [{ title: 'B', children: [{ title: 'C' }] }] }];
+      expect(SectionSchema.safeParse(nav(items)).success).toBe(false);
+    });
+    it('rejects children outside a nav section', () => {
+      const items = [{ title: 'A', children: [{ title: 'B' }] }];
+      const result = SectionSchema.safeParse(nav(items, 'footer'));
+      expect(result.success).toBe(false);
+      expect(result.error?.issues[0]?.path).toEqual(['content', 'items', 0, 'children']);
+    });
+  });
+
+  describe('form', () => {
+    const withForm = (form: unknown) => ({
+      ...minimalSection(),
+      type: 'contact',
+      content: { form },
+    });
+    it('accepts a full form', () => {
+      const form = {
+        fields: [
+          { label: 'Name', type: 'text', required: true },
+          { label: 'Service', type: 'select', required: true, options: ['Refinishing', 'Both'] },
+          { label: 'Message', type: 'textarea', required: false },
+        ],
+        submitLabel: 'Send',
+        confirmation: 'Thanks for submitting!',
+      };
+      expect(SectionSchema.safeParse(withForm(form)).success).toBe(true);
+    });
+    it('rejects a form with no fields', () => {
+      expect(SectionSchema.safeParse(withForm({ fields: [] })).success).toBe(false);
+    });
+    it('rejects a field without required', () => {
+      expect(
+        SectionSchema.safeParse(withForm({ fields: [{ label: 'Name', type: 'text' }] })).success,
+      ).toBe(false);
+    });
+    it('rejects options on a text field', () => {
+      const fields = [{ label: 'Name', type: 'text', required: true, options: ['a'] }];
+      expect(SectionSchema.safeParse(withForm({ fields })).success).toBe(false);
+    });
+    it('rejects an unknown field type', () => {
+      const fields = [{ label: 'Name', type: 'password', required: true }];
+      expect(SectionSchema.safeParse(withForm({ fields })).success).toBe(false);
+    });
+  });
+
   it('rejects unknown content keys', () => {
     expect(SectionSchema.safeParse({ ...minimalSection(), content: { title: 'x' } }).success).toBe(
       false,

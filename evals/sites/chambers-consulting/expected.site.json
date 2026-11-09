@@ -1,15 +1,20 @@
 {
   "id": "site_chambers-consulting",
   "projectId": "proj_chambers-consulting",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceUrl": "https://www.chambers-consulting.dev/",
   "platform": "custom",
   "platformEvidence": [],
   "platformConfidence": 0,
   "business": {
     "name": "Chambers Consulting",
-    "email": "david@chambers-consulting.dev",
-    "socialLinks": [{ "network": "linkedin", "url": "https://linkedin.com/in/davidmachambers" }]
+    "emails": [{ "value": "david@chambers-consulting.dev" }],
+    "socialLinks": [{ "network": "linkedin", "url": "https://linkedin.com/in/davidmachambers" }],
+    "serviceArea": {
+      "description": "Based in Northern Virginia, working with businesses anywhere.",
+      "places": []
+    },
+    "people": [{ "name": "David Chambers", "role": "Website specialist" }]
   },
   "brand": {
     "extractedColors": [
@@ -100,7 +105,7 @@
         },
         {
           "id": "home-process",
-          "type": "richtext",
+          "type": "process",
           "content": {
             "heading": "Simple from start to finish.",
             "items": [
@@ -116,14 +121,22 @@
           "type": "contact",
           "content": {
             "heading": "Have a site that isn't working for you?",
-            "body": "Reply within one business day, no obligation. Form fields: Your name, Email, Website address (optional), What would you like to improve?",
+            "body": "Reply within one business day, no obligation.",
             "ctas": [
               {
                 "label": "david@chambers-consulting.dev",
                 "href": "mailto:david@chambers-consulting.dev",
                 "kind": "email"
               }
-            ]
+            ],
+            "form": {
+              "fields": [
+                { "label": "Your name", "type": "text", "required": true },
+                { "label": "Email", "type": "email", "required": true },
+                { "label": "Website address", "type": "url", "required": false },
+                { "label": "What would you like to improve?", "type": "textarea", "required": true }
+              ]
+            }
           },
           "confidence": 1
         },

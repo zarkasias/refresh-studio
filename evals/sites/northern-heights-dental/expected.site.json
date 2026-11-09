@@ -1,15 +1,15 @@
 {
   "id": "site_northern-heights-dental",
   "projectId": "proj_northern-heights-dental",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceUrl": "https://www.northernheightsdental.com/",
   "platform": "squarespace",
   "platformEvidence": [],
   "platformConfidence": 0,
   "business": {
     "name": "Northern Heights Dental",
-    "phone": "928-774-5050",
-    "email": "northernheightsdental@gmail.com",
+    "phones": [{ "value": "928-774-5050" }],
+    "emails": [{ "value": "northernheightsdental@gmail.com" }],
     "address": "1100 N San Francisco Street Suite D, Flagstaff, AZ, 86001, United States",
     "hours": [
       {
@@ -24,7 +24,24 @@
     "socialLinks": [
       { "network": "instagram", "url": "http://instagram.com/northernheightsdental" },
       { "network": "facebook", "url": "https://www.facebook.com/northernheightsdental/" }
-    ]
+    ],
+    "trust": {
+      "licenses": [],
+      "ratings": [],
+      "credentials": [
+        { "kind": "membership", "name": "ADA" },
+        { "kind": "membership", "name": "AAID" },
+        { "kind": "membership", "name": "AGD" },
+        { "kind": "membership", "name": "FACES" },
+        { "kind": "membership", "name": "Invisalign" },
+        {
+          "kind": "membership",
+          "name": "Flagstaff Chamber of Commerce",
+          "url": "https://business.flagstaffchamber.com/list/Member/northern-heights-dental-18642"
+        }
+      ]
+    },
+    "people": [{ "name": "Dr. Jacob Williams", "role": "DMD" }]
   },
   "brand": {
     "extractedColors": [
@@ -64,7 +81,7 @@
               {
                 "label": "Pay Online",
                 "href": "https://bcpay.online/?Profile=northernheightsWEB",
-                "kind": "link"
+                "kind": "pay"
               }
             ]
           },
@@ -262,7 +279,18 @@
           "type": "contact",
           "content": {
             "heading": "Request an Appointment",
-            "body": "Simple, comfortable, never rushed; the team will reach out to confirm and schedule. Says 'Fill out the form below'. Form Fields: 'Name, Last Name, Email Address, Phone, Subject, Tell Us More' Button: 'REQUEST APPOINTMENT'"
+            "body": "Simple, comfortable, never rushed; the team will reach out to confirm and schedule. Says 'Fill out the form below'.",
+            "form": {
+              "fields": [
+                { "label": "Name", "type": "text", "required": false },
+                { "label": "Last Name", "type": "text", "required": false },
+                { "label": "Email Address", "type": "email", "required": false },
+                { "label": "Phone", "type": "tel", "required": false },
+                { "label": "Subject", "type": "text", "required": false },
+                { "label": "Tell Us More", "type": "textarea", "required": false }
+              ],
+              "submitLabel": "REQUEST APPOINTMENT"
+            }
           },
           "confidence": 1
         },

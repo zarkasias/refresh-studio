@@ -1,15 +1,15 @@
 {
   "id": "site_delaware-valley-hardwoods",
   "projectId": "proj_delaware-valley-hardwoods",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceUrl": "https://delawarevalleyhardwoods.com/",
   "platform": "custom",
   "platformEvidence": [],
   "platformConfidence": 0,
   "business": {
     "name": "Delaware Valley Hardwoods",
-    "phone": "(302) 396-4560",
-    "email": "info@delawarevalleyhardwoods.com",
+    "phones": [{ "value": "(302) 396-4560" }],
+    "emails": [{ "value": "info@delawarevalleyhardwoods.com" }],
     "address": "2116 Peachtree Dr, Wilmington, DE 19805",
     "hours": [
       { "label": "Footer", "text": "Mon–Fri: 9AM–5PM" },
@@ -22,6 +22,36 @@
     "socialLinks": [
       { "network": "facebook", "url": "https://www.facebook.com/DelawareValleyHardwoods/" },
       { "network": "instagram", "url": "https://www.instagram.com/delaware.valley.hardwoods.jim/" }
+    ],
+    "trust": {
+      "foundedYear": 1998,
+      "licenses": [],
+      "ratings": [],
+      "credentials": [
+        {
+          "kind": "certification",
+          "name": "Bona Certified Craftsman",
+          "url": "https://www.bona.com/en-us/homeowner/find-a-contractor/contractor-details/?storeid=83311"
+        }
+      ]
+    },
+    "serviceArea": {
+      "description": "Northern Delaware & Nearby PA",
+      "places": [
+        "Wilmington",
+        "Newark",
+        "Hockessin",
+        "Pike Creek",
+        "Greenville",
+        "Claymont",
+        "Bear",
+        "Middletown"
+      ],
+      "radiusMiles": 10
+    },
+    "people": [
+      { "name": "Jim Kramer", "role": "Owner and Bona Certified Craftsman" },
+      { "name": "Andrea Kramer", "role": "Certified Sales Advisor" }
     ]
   },
   "brand": {
@@ -281,7 +311,21 @@
           "type": "contact",
           "content": {
             "heading": "Request a Consultation",
-            "body": "Form fields: Name * , Phone * , Email * , Service * (select: Refinishing, Installation, Both, Consultation), Project Details * . Button 'Send Request'."
+            "form": {
+              "fields": [
+                { "label": "Name", "type": "text", "required": true },
+                { "label": "Phone", "type": "tel", "required": true },
+                { "label": "Email", "type": "email", "required": true },
+                {
+                  "label": "Service",
+                  "type": "select",
+                  "required": true,
+                  "options": ["Refinishing", "Installation", "Both", "Consultation"]
+                },
+                { "label": "Project Details", "type": "textarea", "required": true }
+              ],
+              "submitLabel": "Send Request"
+            }
           },
           "confidence": 1
         },

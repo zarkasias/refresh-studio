@@ -1,15 +1,18 @@
 {
   "id": "site_iphci",
   "projectId": "proj_iphci",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceUrl": "https://www.iphci.com/",
   "platform": "wordpress",
   "platformEvidence": [],
   "platformConfidence": 0,
   "business": {
     "name": "Independence Plumbing, Heating & Cooling",
-    "phone": "319-334-7008",
-    "email": "info@iphci.com",
+    "phones": [
+      { "value": "319-334-7008", "label": "Independence" },
+      { "value": "319-827-6008", "label": "Jesup" }
+    ],
+    "emails": [{ "value": "info@iphci.com" }],
     "address": "509 20th Ave SW, Independence, IA 50644",
     "hours": [
       {
@@ -22,7 +25,28 @@
         "network": "facebook",
         "url": "https://www.facebook.com/Independence-Plumbing-Heating-Cooling-Inc-106196728537892"
       }
-    ]
+    ],
+    "trust": {
+      "foundedYear": 1987,
+      "licenses": [],
+      "ratings": [],
+      "credentials": []
+    },
+    "serviceArea": {
+      "description": "Proudly serving Independence, Otterville, Hazleton, Winthrop, Quasqueton, Rowley, Brandon, Jesup, Littleton, Fairbank and surrounding communities.",
+      "places": [
+        "Independence",
+        "Otterville",
+        "Hazleton",
+        "Winthrop",
+        "Quasqueton",
+        "Rowley",
+        "Brandon",
+        "Jesup",
+        "Littleton",
+        "Fairbank"
+      ]
+    }
   },
   "brand": {
     "extractedColors": [
@@ -69,7 +93,7 @@
         },
         {
           "id": "home-benefits",
-          "type": "richtext",
+          "type": "features",
           "content": {
             "heading": "Independence PHC Benefits",
             "items": [
@@ -214,7 +238,7 @@
           "type": "contact",
           "content": {
             "heading": "Contact Us",
-            "body": "Request an estimate or schedule service; after-hours, weekend and emergency needs by phone at 319-334-7008. Address block 'Independence PHC'. Form fields: Name (Required), Phone, Email (Required), Message (Required), Human Verification (math question); hidden honeypot 'Email' field. Button 'Send'. No map embed.",
+            "body": "Request an estimate or schedule service; after-hours, weekend and emergency needs by phone at 319-334-7008. Address block 'Independence PHC'. The form also has a hidden honeypot 'Email' field (not listed). No map embed.",
             "ctas": [
               {
                 "label": "509 20th Ave SW, Independence, IA 50644",
@@ -223,7 +247,21 @@
               },
               { "label": "319-334-7008 (Independence)", "href": "tel:3193347008", "kind": "call" },
               { "label": "319-827-6008 (Jesup)", "href": "tel:3198276008", "kind": "call" }
-            ]
+            ],
+            "form": {
+              "fields": [
+                { "label": "Name", "type": "text", "required": true },
+                { "label": "Phone", "type": "tel", "required": false },
+                { "label": "Email", "type": "email", "required": true },
+                { "label": "Message", "type": "textarea", "required": true },
+                {
+                  "label": "Human Verification (math question)",
+                  "type": "other",
+                  "required": false
+                }
+              ],
+              "submitLabel": "Send"
+            }
           },
           "confidence": 1
         }

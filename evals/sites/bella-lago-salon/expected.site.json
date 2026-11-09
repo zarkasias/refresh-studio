@@ -1,14 +1,14 @@
 {
   "id": "site_bella-lago-salon",
   "projectId": "proj_bella-lago-salon",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceUrl": "http://www.bellalagosalon.com/",
   "platform": "squarespace",
   "platformEvidence": [],
   "platformConfidence": 0,
   "business": {
     "name": "Bella Lago Salon & MedSpa",
-    "phone": "704-658-3330",
+    "phones": [{ "value": "704-658-3330" }],
     "address": "550 Brawley School Road  |  Mooresville, NC 28117",
     "hours": [
       {
@@ -19,7 +19,13 @@
     "socialLinks": [
       { "network": "facebook", "url": "https://www.facebook.com/BellaLago/" },
       { "network": "instagram", "url": "http://instagram.com/bellalagosalonandskincare" }
-    ]
+    ],
+    "trust": {
+      "licenses": [],
+      "ratings": [],
+      "credentials": [{ "kind": "award", "name": "Eight-time Top 200 salon" }]
+    },
+    "people": [{ "name": "Merissa Barnhardt" }, { "name": "Gabe Barnhardt" }]
   },
   "brand": {
     "extractedColors": [

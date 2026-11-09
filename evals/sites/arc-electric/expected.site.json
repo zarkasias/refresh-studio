@@ -1,14 +1,14 @@
 {
   "id": "site_arc-electric",
   "projectId": "proj_arc-electric",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceUrl": "https://www.arcelectric.co/",
   "platform": "wix",
   "platformEvidence": [],
   "platformConfidence": 0,
   "business": {
     "name": "Arc Electric",
-    "phone": "(515) 721-6258",
+    "phones": [{ "value": "(515) 721-6258" }],
     "address": "3301 SE Destination Dr, Suite 100, Grimes, IA 50111",
     "hours": [
       {
@@ -18,7 +18,50 @@
     ],
     "socialLinks": [
       { "network": "facebook", "url": "https://www.facebook.com/p/ARC-Electric-100087247617804/" }
-    ]
+    ],
+    "trust": {
+      "licenses": [{ "number": "EL080641EC", "authority": "State of Iowa" }],
+      "ratings": [{ "source": "Google", "value": 4.9, "count": 514 }],
+      "credentials": [
+        { "kind": "badge", "name": "100% Satisfaction Guaranteed" },
+        { "kind": "badge", "name": "Des Moines HBA" },
+        { "kind": "badge", "name": "Google review" },
+        { "kind": "badge", "name": "Generac" },
+        { "kind": "badge", "name": "BBB" },
+        { "kind": "badge", "name": "Lutron" },
+        { "kind": "badge", "name": "Dynasty Homes" }
+      ]
+    },
+    "serviceArea": {
+      "description": "Serving the Greater Des Moines Area",
+      "places": [
+        "Adel",
+        "Altoona",
+        "Ames",
+        "Ankeny",
+        "Clive",
+        "Des Moines",
+        "Grimes",
+        "Indianola",
+        "Johnston",
+        "Knoxville",
+        "Marshalltown",
+        "Maxwell",
+        "Monroe",
+        "Nevada",
+        "Norwalk",
+        "Oskaloosa",
+        "Pella",
+        "Pleasant Hill",
+        "Prairie City",
+        "Urbandale",
+        "Waukee",
+        "West Des Moines",
+        "Windsor Heights",
+        "Winterset"
+      ]
+    },
+    "people": [{ "name": "Rees Christensen", "role": "President" }]
   },
   "brand": {
     "extractedColors": [
@@ -126,7 +169,7 @@
         },
         {
           "id": "home-why",
-          "type": "richtext",
+          "type": "features",
           "content": {
             "heading": "WHY ARC",
             "body": "Rees Christensen, President. Badge: 100% Satisfaction Guaranteed.",
@@ -238,7 +281,16 @@
           "type": "contact",
           "content": {
             "heading": "Ready to Get Started?",
-            "body": "Form fields: First Name, Email, Last Name, Phone, How Can We Help You?. Button 'Send Message'"
+            "form": {
+              "fields": [
+                { "label": "First Name", "type": "text", "required": false },
+                { "label": "Email", "type": "email", "required": false },
+                { "label": "Last Name", "type": "text", "required": false },
+                { "label": "Phone", "type": "tel", "required": false },
+                { "label": "How Can We Help You?", "type": "textarea", "required": false }
+              ],
+              "submitLabel": "Send Message"
+            }
           },
           "confidence": 1
         },

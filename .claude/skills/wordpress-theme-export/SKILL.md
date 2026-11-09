@@ -20,6 +20,21 @@ Content stays in WordPress; we change styles and add patterns.
 Check the current `theme.json` schema version in the WordPress developer docs before
 generating; do not hard-code a version from memory.
 
+### Kadence Blocks (and other per-block style plugins)
+
+Seen on jolly-plumbing (`wp-block-kadence-*`, Kadence theme). Kadence Blocks keeps colors,
+fonts and spacing **on each block** (block attributes, output as per-block CSS keyed by a
+unique id), not in `theme.json` globals. A child theme's palette and typography won't restyle
+those blocks.
+
+- Map tokens into the Kadence **global palette** (`palette1`–`palette9`) and Kadence's global
+  typography settings as well as `theme.json`. Blocks that use palette references pick it up.
+- Blocks with hard-coded per-block values (hex colors, px sizes) won't change. List them in the
+  README with the page they're on, so the consultant can switch them to palette colors in the
+  editor. Don't write CSS that overrides them by unique id: those ids change when blocks are
+  edited.
+- Treat it as the classic-theme path plus a Kadence step in the guide, not as a pure block theme.
+
 ## Token mapping (block themes)
 
 - `color.*` → `settings.color.palette` entries with stable slugs (`primary`, `secondary`,

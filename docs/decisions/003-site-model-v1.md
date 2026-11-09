@@ -1,7 +1,7 @@
 # 003 — Site model v1
 
 - **Date:** 2026-11-09
-- **Status:** accepted
+- **Status:** accepted; business fields and locations amended by ADR-006 (site model v2)
 
 ## Context
 

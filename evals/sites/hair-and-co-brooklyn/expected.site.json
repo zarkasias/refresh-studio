@@ -1,15 +1,15 @@
 {
   "id": "site_hair-and-co-brooklyn",
   "projectId": "proj_hair-and-co-brooklyn",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceUrl": "https://hairandcobklyn.com/",
   "platform": "wordpress",
   "platformEvidence": [],
   "platformConfidence": 0,
   "business": {
     "name": "Hair & Co BKLYN",
-    "phone": "347-294-4600",
-    "email": "hello@hairandcobklyn.com",
+    "phones": [{ "value": "347-294-4600" }],
+    "emails": [{ "value": "hello@hairandcobklyn.com" }, { "value": "allyson@hairandcobklyn.com" }],
     "locations": [
       {
         "label": "Prospect Heights",
@@ -35,6 +35,34 @@
         "network": "googleplus",
         "url": "https://plus.google.com/b/116556049978277718667/116556049978277718667"
       }
+    ],
+    "people": [
+      { "name": "Allyson Hurley", "role": "Owner", "locations": ["Prospect Heights", "Bay Ridge"] },
+      { "name": "Stacy Ann", "role": "Lead 3", "locations": ["Prospect Heights"] },
+      { "name": "Hilary", "role": "Lead", "locations": ["Prospect Heights"] },
+      { "name": "Jessica", "role": "Lead", "locations": ["Prospect Heights"] },
+      {
+        "name": "Skye",
+        "role": "Assistant Team Lead - Lead Stylist",
+        "locations": ["Prospect Heights"]
+      },
+      { "name": "Ilicia", "role": "Senior", "locations": ["Prospect Heights"] },
+      { "name": "Ashley", "role": "Senior", "locations": ["Prospect Heights"] },
+      { "name": "Devon", "role": "Senior", "locations": ["Prospect Heights"] },
+      { "name": "Martha", "role": "Senior", "locations": ["Prospect Heights"] },
+      { "name": "Brianna", "role": "Senior", "locations": ["Prospect Heights"] },
+      { "name": "Nivie", "role": "Senior", "locations": ["Prospect Heights"] },
+      { "name": "Tiffani", "role": "Senior", "locations": ["Prospect Heights"] },
+      { "name": "Diana", "role": "Stylist", "locations": ["Prospect Heights"] },
+      { "name": "Nicole", "role": "Stylist", "locations": ["Prospect Heights"] },
+      { "name": "Berenice", "role": "Stylist 2", "locations": ["Prospect Heights", "Bay Ridge"] },
+      { "name": "Mindy", "role": "Lead", "locations": ["Bay Ridge"] },
+      { "name": "Lisa", "role": "Lead", "locations": ["Bay Ridge"] },
+      { "name": "Cathy", "role": "Lead", "locations": ["Bay Ridge"] },
+      { "name": "Antonello", "role": "Lead", "locations": ["Bay Ridge"] },
+      { "name": "Jess", "role": "Lead", "locations": ["Bay Ridge"] },
+      { "name": "Brianna", "role": "Stylist 2", "locations": ["Bay Ridge"] },
+      { "name": "Danni", "role": "Stylist", "locations": ["Bay Ridge"] }
     ]
   },
   "brand": {

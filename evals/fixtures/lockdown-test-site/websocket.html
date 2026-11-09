@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>WebSocket test page</title>
+  </head>
+  <body>
+    <script>
+      window.wsResult = new Promise((resolve) => {
+        const ws = new WebSocket('wss://example.com/socket');
+        ws.onopen = () => resolve('open');
+        ws.onclose = (e) => resolve('closed:' + e.code);
+      });
+    </script>
+  </body>
+</html>

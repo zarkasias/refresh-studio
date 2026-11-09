@@ -33,4 +33,39 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm lint
-      - run: pnpm test
+
+      # Chromium for the offline fixture/lockdown tests (M1 T4). Installing needs the network;
+      # the tests themselves must not.
+      - name: Read Playwright version
+        id: playwright
+        run: echo "version=$(pnpm --filter @srs/evals exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+
+      # --with-deps also installs the system libraries, which the cache doesn't hold.
+      - name: Install Chromium for Playwright
+        run: pnpm --filter @srs/evals exec playwright install --with-deps chromium
+
+      # Run the tests in a new network namespace with only loopback up, so "no external sockets"
+      # is enforced by the OS, not just by our code. Ubuntu 24.04 blocks unprivileged user
+      # namespaces through AppArmor by default, so allow them for this job first.
+      - name: Allow unprivileged user namespaces
+        run: |
+          if sysctl -n kernel.apparmor_restrict_unprivileged_userns >/dev/null 2>&1; then
+            sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          fi
+
+      - name: Test (network off)
+        run: |
+          unshare --map-root-user --net bash -euo pipefail -c '
+            ip link set lo up
+            if curl -sS --max-time 5 -o /dev/null https://example.com; then
+              echo "Network is still reachable inside the namespace" >&2
+              exit 1
+            fi
+            pnpm test
+          '

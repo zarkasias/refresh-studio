@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Lockdown test page</title>
+    <!-- A mapped platform asset: must be served from platform-assets/, never fetched. -->
+    <script src="https://static.wixstatic.com/media/app.js"></script>
+  </head>
+  <body>
+    <h1>Lockdown test page</h1>
+    <a href="/about/">About</a>
+    <!-- Real external URLs: every one must be aborted. -->
+    <img id="external-img" src="https://example.com/real-image.png" alt="" />
+    <img id="mapped-missing" src="https://static.wixstatic.com/media/not-there.png" alt="" />
+    <script>
+      window.externalFetch = fetch('https://www.google.com/generate_204').then(
+        () => 'loaded',
+        () => 'failed',
+      );
+    </script>
+  </body>
+</html>

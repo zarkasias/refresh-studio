@@ -10,8 +10,11 @@ export const HexColorSchema = z
   .regex(/^#[0-9a-f]{6}$/, 'Expected a lowercase hex color like #1a2b3c');
 export type HexColor = z.infer<typeof HexColorSchema>;
 
-/** ISO 8601 datetime in UTC (`Z` suffix), as produced by `Date.prototype.toISOString()`. */
-export const IsoDateTimeSchema = z.iso.datetime();
+/**
+ * ISO 8601 datetime in UTC (`Z` suffix) with millisecond precision, exactly as produced by
+ * `Date.prototype.toISOString()`, so values round-trip through Postgres `timestamptz` unchanged.
+ */
+export const IsoDateTimeSchema = z.iso.datetime({ precision: 3 });
 export type IsoDateTime = z.infer<typeof IsoDateTimeSchema>;
 
 /** A number from 0 to 1 inclusive. */

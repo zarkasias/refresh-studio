@@ -152,6 +152,7 @@ Comment {
   `HoursEntry.label`, `Asset.alt` (`''` = decorative) and `Version.note`.
 - **Hex colors are lowercase** 6-digit (`#1a2b3c`).
 - **Datetimes are UTC with a `Z` suffix** (`toISOString()` output); offsets like `+02:00` are rejected.
+  Datetimes are UTC with millisecond precision, as produced by `toISOString()`.
 - **Origin is bare.** `Consent.scope.origin` must equal `new URL(origin).origin`: no path,
   query, hash, trailing slash, default port or uppercase host. Path scoping is done only by
   `pathPrefix`.

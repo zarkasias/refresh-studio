@@ -49,6 +49,12 @@ migration so the tables match from day one); it is not in the approved plan text
 - **Text IDs.** The model does not fix an id format, so T5 uses `text` primary keys, not `uuid`.
 - **UTC timestamps.** Every datetime in the model is ISO 8601 with a `Z` suffix. T5 uses
   Drizzle `timestamptz` with `mode: 'date'` and converts with `.toISOString()` at the edge.
+  Datetimes are UTC with millisecond precision, as produced by `toISOString()`.
+- **Delete policy (T5).** Deleting a project cascades to its sites, assets and variants, and a
+  site cascades to its assets and variants. `versions.variant_id` and `comments.version_id`
+  are `ON DELETE RESTRICT`: versions and comments are the record of what the client saw and
+  approved (CLAUDE.md rule 4), so a variant that has versions cannot be deleted (and therefore
+  neither can its site or project) until that history is deliberately removed first.
 
 ### Constraints
 

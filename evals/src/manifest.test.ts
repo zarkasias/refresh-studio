@@ -24,7 +24,7 @@ function entry(overrides: Partial<ManifestEntry>): ManifestEntry {
   };
 }
 
-const RECORDED = '2026-11-09T00:00:00Z';
+const RECORDED = '2026-11-09T00:00:00.000Z';
 
 describe('evals/sites/manifest.json', () => {
   it('loads and validates against ManifestSchema', () => {
@@ -51,7 +51,7 @@ describe('selectNetworkEligible', () => {
   const data = {
     sites: [
       entry({ slug: 'own', consent: 'own-site', consentRecordedAt: RECORDED }),
-      entry({ slug: 'granted', consent: 'granted', consentRecordedAt: '2026-11-09T12:00:00Z' }),
+      entry({ slug: 'granted', consent: 'granted', consentRecordedAt: '2026-11-09T12:00:00.000Z' }),
       entry({ slug: 'requested', consent: 'requested' }),
       entry({ slug: 'none', consent: 'none' }),
     ],

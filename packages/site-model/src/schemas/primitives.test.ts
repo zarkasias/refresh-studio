@@ -42,6 +42,13 @@ describe('IsoDateTimeSchema', () => {
   it('accepts toISOString output', () => {
     expect(IsoDateTimeSchema.safeParse(new Date(0).toISOString()).success).toBe(true);
   });
+  it.each([
+    ['no milliseconds', '2026-11-09T12:00:00Z'],
+    ['microseconds', '2026-11-09T12:00:00.123456Z'],
+    ['one fractional digit', '2026-11-09T12:00:00.1Z'],
+  ])('rejects %s', (_label, v) => {
+    expect(IsoDateTimeSchema.safeParse(v).success).toBe(false);
+  });
   it.each(['2026-11-09', 'yesterday', '2026-11-09 12:00:00'])('rejects %s', (v) => {
     expect(IsoDateTimeSchema.safeParse(v).success).toBe(false);
   });

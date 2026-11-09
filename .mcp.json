@@ -2,7 +2,11 @@
   "mcpServers": {
     "playwright": {
       "command": "npx",
-      "args": ["@playwright/mcp@latest"]
+      "args": [
+        "@playwright/mcp@0.0.83",
+        "--isolated",
+        "--allowed-origins=http://localhost:3000;https://www.chambers-consulting.dev"
+      ]
     }
   }
 }

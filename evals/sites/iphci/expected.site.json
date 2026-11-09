@@ -1,7 +1,7 @@
 {
   "id": "site_iphci",
   "projectId": "proj_iphci",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceUrl": "https://www.iphci.com/",
   "platform": "wordpress",
   "platformEvidence": [],
@@ -55,7 +55,7 @@
       { "hex": "#ffffff", "role": "background" },
       { "hex": "#000000", "role": "surface" }
     ],
-    "extractedFonts": ["Almarai"]
+    "extractedFonts": [{ "family": "Almarai" }]
   },
   "pages": [
     {

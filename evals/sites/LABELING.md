@@ -46,11 +46,13 @@ About 15–20 minutes per site. You need 10 passing labels for the M0 gate.
        stays as the page shows it.
    - `socialLinks.network` and `cta.provider` are lowercase slugs (`facebook`, `toast`, `meevo`).
    - `brand.extractedColors`: 2–4 main colors as **lowercase** 6-digit hex (`#1a2b3c`). Use
-     your browser's color picker. `extractedFonts`: family names if you can tell (DevTools →
-     Computed → font-family); otherwise `[]`. Label fonts by their **real family name**
-     (`Avenir`, `DIN Next`), not the builder's internal name (`avenir-lt-w01_35-light1475496`).
+     your browser's color picker. `extractedFonts`: `{ "family": "..." }` objects if you can tell
+     (DevTools → Computed → font-family); otherwise `[]`. Label `family` by the **real family
+     name** (`Avenir`, `DIN Next`), not the builder's internal name
+     (`avenir-lt-w01_35-light1475496`). If you record the names as found, list them in `raw`
+     (non-empty, unique; leave `raw` out when it would equal `[family]`). One entry per family.
      A system font stack (`-apple-system, BlinkMacSystemFont, "Segoe UI", ...`) is labeled
-     `"system-ui"`.
+     `{ "family": "system-ui" }`.
    - `pages`: one entry per page, `path` starting with `/` (the contact page is usually
      `/contact`). One section per visible block, top to bottom. Section `type` is one of
      `nav hero services about testimonials gallery pricing faq team contact booking map cta

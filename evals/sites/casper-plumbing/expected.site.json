@@ -1,7 +1,7 @@
 {
   "id": "site_casper-plumbing",
   "projectId": "proj_casper-plumbing",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceUrl": "https://www.casperplumbing.com/",
   "platform": "wix",
   "platformEvidence": [],
@@ -26,7 +26,12 @@
       { "hex": "#ffffff", "role": "background" },
       { "hex": "#000000", "role": "surface" }
     ],
-    "extractedFonts": ["Futura", "Cormorant Garamond", "Bitter", "Georgia"]
+    "extractedFonts": [
+      { "family": "Futura" },
+      { "family": "Cormorant Garamond" },
+      { "family": "Bitter" },
+      { "family": "Georgia" }
+    ]
   },
   "pages": [
     {

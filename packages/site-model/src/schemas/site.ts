@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { ConfidenceSchema, HexColorSchema, IdSchema, SlugSchema, UrlSchema } from './primitives';
 import { PageSchema } from './page';
 
-export const SITE_SCHEMA_VERSION = 2;
+export const SITE_SCHEMA_VERSION = 3;
 
 export const PlatformSchema = z.enum([
   'wordpress',
@@ -21,6 +21,8 @@ export const KnownPageBuilderSchema = z.enum([
   'divi',
   'gutenberg',
   'wpbakery' /* v1 */,
+  'kadence-blocks' /* v3 (ADR-007) */,
+  'beaver-builder' /* v3 (ADR-007) */,
 ]);
 export type KnownPageBuilder = z.infer<typeof KnownPageBuilderSchema>;
 
@@ -186,12 +188,38 @@ export const ExtractedColorSchema = z.strictObject({
 });
 export type ExtractedColor = z.infer<typeof ExtractedColorSchema>;
 
+/**
+ * v3 (ADR-007): a font family the site uses. `family` is the normalized name (`Avenir`,
+ * `DIN Next`, `system-ui`). `raw` lists the names as found in computed styles
+ * (`avenir-lt-w01_35-light1475496`); it is non-empty, unique, and omitted when it would equal
+ * `[family]`.
+ */
+export const ExtractedFontSchema = z
+  .strictObject({
+    family: z.string().min(1),
+    raw: z.array(z.string().min(1)).min(1).optional(),
+  })
+  .superRefine((font, ctx) => {
+    const raw = font.raw;
+    if (!raw) return;
+    if (new Set(raw).size !== raw.length) {
+      ctx.addIssue({ code: 'custom', message: 'raw names must be unique', path: ['raw'] });
+    } else if (raw.length === 1 && raw[0] === font.family) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'omit raw when it would equal [family]',
+        path: ['raw'],
+      });
+    }
+  });
+export type ExtractedFont = z.infer<typeof ExtractedFontSchema>;
+
 /** What the current site uses. */
 export const BrandSchema = z.strictObject({
   logoAssetId: IdSchema.optional(),
   extractedColors: z.array(ExtractedColorSchema),
-  /** Font family names as found; not necessarily Google Fonts. */
-  extractedFonts: z.array(z.string().min(1)),
+  /** v3: font families as found, not necessarily Google Fonts. Families are unique per site. */
+  extractedFonts: z.array(ExtractedFontSchema),
 });
 export type Brand = z.infer<typeof BrandSchema>;
 
@@ -215,9 +243,21 @@ export const SiteObjectSchema = z.strictObject({
 
 /**
  * Site with cross-field rules: `Page.path` unique within the site, `Section.id` unique across
- * all pages, location labels unique, and every `people[].locations` entry names a location.
+ * all pages, location labels unique, font families unique, and every `people[].locations`
+ * entry names a location.
  */
 export const SiteSchema = SiteObjectSchema.superRefine((site, ctx) => {
+  const families = new Set<string>();
+  site.brand.extractedFonts.forEach((font, index) => {
+    if (families.has(font.family)) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `Duplicate font family ${font.family}`,
+        path: ['brand', 'extractedFonts', index, 'family'],
+      });
+    }
+    families.add(font.family);
+  });
   const locationLabels = new Set<string>();
   site.business.locations?.forEach((location, index) => {
     if (locationLabels.has(location.label)) {

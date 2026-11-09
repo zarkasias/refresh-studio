@@ -1,7 +1,7 @@
 {
   "id": "site_cafecito-santa-fe",
   "projectId": "proj_cafecito-santa-fe",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceUrl": "https://www.cafecitosantafe.com/",
   "platform": "squarespace",
   "platformEvidence": [],
@@ -40,7 +40,11 @@
       { "hex": "#f6f4f4", "role": "background" },
       { "hex": "#ffffff", "role": "surface" }
     ],
-    "extractedFonts": ["Roboto Slab", "Roboto", "Open Sans"]
+    "extractedFonts": [
+      { "family": "Roboto Slab" },
+      { "family": "Roboto" },
+      { "family": "Open Sans" }
+    ]
   },
   "pages": [
     {

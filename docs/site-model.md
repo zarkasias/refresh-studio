@@ -5,9 +5,10 @@ The single internal representation every phase reads or writes. Lives in
 them with `z.infer`. Each entity is exported as `XSchema` plus type `X`. Valid test fixtures
 live in `@srs/site-model/fixtures`.
 
-Current version: **v2** (`Site.schemaVersion: 2`). Fields marked `// v1` were added by the M0
+Current version: **v3** (`Site.schemaVersion: 3`). Fields marked `// v1` were added by the M0
 plan, section 2, or are user-approved additions recorded in ADR-003. Fields marked `// v2` came
-from the T9 labeling misfit review (ADR-006). All objects are strict:
+from the T9 labeling misfit review (ADR-006). Fields marked `// v3` are from M1 (ADR-007).
+All objects are strict:
 unknown keys are rejected. See **Constraints** below for the rules that apply across entities.
 
 ```ts
@@ -18,7 +19,7 @@ IsoDateTime = ISO 8601 datetime in UTC, e.g. 2026-11-09T12:00:00.000Z
 Confidence  = number, 0–1 inclusive
 Url         = absolute http(s) URL
 Origin      = bare http(s) origin, exactly new URL(v).origin, e.g. https://a.com  // v1
-Slug        = string matching ^[a-z0-9][a-z0-9-]*$, e.g. 'toast', 'beaver-builder'  // v1
+Slug        = string matching ^[a-z0-9][a-z0-9-]*$, e.g. 'toast', 'oxygen'          // v1
 
 Project {                                                                   // v1
   id, clientName, siteUrl: Url
@@ -40,7 +41,7 @@ Consent {                                                                   // v
 Site {
   id
   projectId
-  schemaVersion: 2                                                          // v2 (ADR-006)
+  schemaVersion: 3                                                          // v3 (ADR-007)
   sourceUrl: Url
   platform: 'wordpress' | 'squarespace' | 'wix' | 'godaddy' | 'webflow'
           | 'custom'                        // hand-coded
@@ -48,7 +49,9 @@ Site {
           | 'unknown'
   platformDetails?: {
     theme?: string                          // as found, not slugified
-    pageBuilder?: 'elementor' | 'divi' | 'gutenberg' | 'wpbakery' | Slug    // 'wpbakery' is v1
+    pageBuilder?: 'elementor' | 'divi' | 'gutenberg' | 'wpbakery'          // 'wpbakery' is v1
+                | 'kadence-blocks' | 'beaver-builder'                       // v3 (ADR-007)
+                | Slug
     builder?: Slug                          // v1: e.g. 'bentobox', 'chiroplanet'
   }
   platformEvidence: { signal: string; where: 'html' | 'header' | 'asset-url' | 'footer-text' }[]  // v1
@@ -69,12 +72,16 @@ Site {
   brand: {                                  // what the current site uses
     logoAssetId?
     extractedColors: { hex: HexColor; role?: string; share?: number 0–1 }[]  // v1: typed
-    extractedFonts: string[]                // family names as found
+    extractedFonts: ExtractedFont[]         // v3 (ADR-007); families unique; was string[] in v1/v2
   }
   pages: Page[]                             // Page.path unique; Section.id unique across all pages
 }
 
 HoursEntry { label?: string; text: string }                                 // v1
+ExtractedFont { family: string; raw?: string[] }                          // v3 (ADR-007): family is
+                                            // normalized ('Avenir', 'system-ui'); raw = names as
+                                            // found in computed styles, non-empty, unique, omitted
+                                            // when it would equal [family]
 ContactPoint { value: string; label?: string }                             // v2: as displayed
 Location { label, address, phone?, hours?: HoursEntry[], googleBusinessUrl?: Url }  // v2: label
                                             // and address required; labels unique per site
@@ -203,7 +210,9 @@ Comment {
   `'approved'`, `'shared'` or `'selected'` while it has an approved Version
   (`assertStatusAllowed`; not expressible in the Variant schema alone).
 - **Uniqueness:** `Page.path` is unique within a site; `Section.id` is unique across all pages
-  of a site; `Location.label` is unique within a site.
+  of a site; `Location.label` is unique within a site; `ExtractedFont.family` is unique within
+  a site (v3). `ExtractedFont.raw`, when present, is non-empty, has no duplicates and is not
+  just `[family]`.
 - **References:** every `Person.locations` entry is the label of a `business.locations` entry.
 - **Nav children** (one level) only appear in `nav` sections.
 - **Other narrowings:** `Page.path` and `pathPrefix` start with `/`; `maxPages` is an integer
@@ -220,10 +229,12 @@ with the refined schema.
 - `needsReview(section)`: true unless `section.confidence >= REVIEW_CONFIDENCE_THRESHOLD` (0.7),
   so NaN or unvalidated input is flagged.
 - `primaryPhone(business)` / `primaryEmail(business)`: the first entry, or undefined.
-- `migrateSiteDoc(doc)` / `parseStoredSite(doc)` (ADR-006): bring a stored v1 doc to v2 (then
-  validate). `phone`/`email` become one-entry arrays; a v1 location without a label or address
-  throws `SiteMigrationError`. The DB mappers migrate Sites and Version snapshots on read.
-- `SITE_SCHEMA_VERSION` (2), `MAX_CRAWL_PAGES` (25) and `APPROVAL_REQUIRED_STATUSES` are
+- `migrateSiteDoc(doc)` / `parseStoredSite(doc)` (ADR-006, ADR-007): bring a stored v1 or v2
+  doc to v3 (then validate). v1 -> v2: `phone`/`email` become one-entry arrays; a v1 location
+  without a label or address throws `SiteMigrationError`. v2 -> v3: `extractedFonts` strings
+  become `{ family }` objects, de-duplicated by family. The DB mappers migrate Sites and
+  Version snapshots on read.
+- `SITE_SCHEMA_VERSION` (3), `MAX_CRAWL_PAGES` (25) and `APPROVAL_REQUIRED_STATUSES` are
   exported constants.
 - Guards (`assertCrawlAllowed`, `assertShareable`, `resolveSharedVersion`, `assertStatusAllowed`,
   `assertExportable`, `assertVersionEditable`) are not part of the schemas; see T4 and ADR-005.

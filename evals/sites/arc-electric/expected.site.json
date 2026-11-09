@@ -1,7 +1,7 @@
 {
   "id": "site_arc-electric",
   "projectId": "proj_arc-electric",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceUrl": "https://www.arcelectric.co/",
   "platform": "wix",
   "platformEvidence": [],
@@ -70,7 +70,7 @@
       { "hex": "#ffffff", "role": "background" },
       { "hex": "#f6f6f6", "role": "surface" }
     ],
-    "extractedFonts": ["Avenir", "DIN Next", "Open Sans"]
+    "extractedFonts": [{ "family": "Avenir" }, { "family": "DIN Next" }, { "family": "Open Sans" }]
   },
   "pages": [
     {

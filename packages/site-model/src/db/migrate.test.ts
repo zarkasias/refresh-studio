@@ -138,6 +138,7 @@ describe('migrations on PGlite', () => {
       ...minimalSite(),
       schemaVersion: 1,
       business: { name: 'Example Plumbing', phone: '555-0100', socialLinks: [] },
+      brand: { extractedColors: [], extractedFonts: ['Lobster'] },
     };
     await db
       .update(sites)
@@ -145,8 +146,9 @@ describe('migrations on PGlite', () => {
       .where(eq(sites.id, row!.id));
     const [stored] = await db.select().from(sites);
     const site = rowToSite(stored!);
-    expect(site.schemaVersion).toBe(2);
+    expect(site.schemaVersion).toBe(3);
     expect(site.business.phones).toEqual([{ value: '555-0100' }]);
+    expect(site.brand.extractedFonts).toEqual([{ family: 'Lobster' }]);
   });
 
   it('migrates the v1 snapshot of a frozen approved version on read (ADR-005, ADR-006)', async () => {
@@ -164,13 +166,15 @@ describe('migrations on PGlite', () => {
         ...approved.snapshot.site,
         schemaVersion: 1,
         business: { name: 'Example Plumbing', email: 'a@example.com', socialLinks: [] },
+        brand: { extractedColors: [], extractedFonts: ['Lobster'] },
       },
     };
     await db.insert(versions).values({ ...row, snapshot: v1Snapshot as never });
     const [stored] = await db.select().from(versions);
     const version = rowToVersion(stored!);
-    expect(version.snapshot.site.schemaVersion).toBe(2);
+    expect(version.snapshot.site.schemaVersion).toBe(3);
     expect(version.snapshot.site.business.emails).toEqual([{ value: 'a@example.com' }]);
+    expect(version.snapshot.site.brand.extractedFonts).toEqual([{ family: 'Lobster' }]);
   });
 });
 

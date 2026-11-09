@@ -49,7 +49,7 @@ export function minimalSite(): Site {
   return {
     id: 'site_1',
     projectId: 'proj_1',
-    schemaVersion: 2,
+    schemaVersion: 3,
     sourceUrl: 'https://example-plumbing.com/',
     platform: 'unknown',
     platformEvidence: [],

@@ -1,7 +1,7 @@
 {
   "id": "site_northern-heights-dental",
   "projectId": "proj_northern-heights-dental",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceUrl": "https://www.northernheightsdental.com/",
   "platform": "squarespace",
   "platformEvidence": [],
@@ -49,7 +49,7 @@
       { "hex": "#313754", "role": "accent" },
       { "hex": "#ffffff", "role": "background" }
     ],
-    "extractedFonts": ["Playfair Display", "Open Sans"]
+    "extractedFonts": [{ "family": "Playfair Display" }, { "family": "Open Sans" }]
   },
   "pages": [
     {

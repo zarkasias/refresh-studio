@@ -60,7 +60,30 @@ function v1ToV2(doc: Json): Json {
   return { ...doc, business, schemaVersion: 2 };
 }
 
-const STEPS: Record<number, (doc: Json) => Json> = { 1: v1ToV2 };
+/**
+ * v2 -> v3 (ADR-007): `brand.extractedFonts: string[]` -> `[{ family }]`, de-duplicated by
+ * family (first occurrence wins, order kept). Everything else in v2 is valid v3.
+ */
+function v2ToV3(doc: Json): Json {
+  const brand = isObject(doc.brand) ? { ...doc.brand } : doc.brand;
+  if (isObject(brand) && Array.isArray(brand.extractedFonts)) {
+    const seen = new Set<string>();
+    const fonts: unknown[] = [];
+    for (const font of brand.extractedFonts) {
+      if (typeof font !== 'string') {
+        fonts.push(font);
+        continue;
+      }
+      if (seen.has(font)) continue;
+      seen.add(font);
+      fonts.push({ family: font });
+    }
+    brand.extractedFonts = fonts;
+  }
+  return { ...doc, brand, schemaVersion: 3 };
+}
+
+const STEPS: Record<number, (doc: Json) => Json> = { 1: v1ToV2, 2: v2ToV3 };
 
 /**
  * Bring a stored Site document to the current schema version. Does not validate the result;

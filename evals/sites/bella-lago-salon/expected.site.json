@@ -1,7 +1,7 @@
 {
   "id": "site_bella-lago-salon",
   "projectId": "proj_bella-lago-salon",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceUrl": "http://www.bellalagosalon.com/",
   "platform": "squarespace",
   "platformEvidence": [],
@@ -33,7 +33,11 @@
       { "hex": "#000000", "role": "accent" },
       { "hex": "#fbf9f9", "role": "background" }
     ],
-    "extractedFonts": ["Proxima Nova", "Raleway", "Bodoni"]
+    "extractedFonts": [
+      { "family": "Proxima Nova" },
+      { "family": "Raleway" },
+      { "family": "Bodoni" }
+    ]
   },
   "pages": [
     {

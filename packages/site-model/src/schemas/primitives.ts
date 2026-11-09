@@ -45,5 +45,5 @@ export type Origin = z.infer<typeof OriginSchema>;
 /** Lowercase slug for open-ended names (social network, provider, builder), e.g. `wp-bakery-custom`. */
 export const SlugSchema = z
   .string()
-  .regex(/^[a-z0-9][a-z0-9-]*$/, 'Expected a lowercase slug like toast or beaver-builder');
+  .regex(/^[a-z0-9][a-z0-9-]*$/, 'Expected a lowercase slug like toast or oxygen');
 export type Slug = z.infer<typeof SlugSchema>;

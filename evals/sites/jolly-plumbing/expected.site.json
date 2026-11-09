@@ -1,7 +1,7 @@
 {
   "id": "site_jolly-plumbing",
   "projectId": "proj_jolly-plumbing",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceUrl": "https://jollyplumbing.net/",
   "platform": "wordpress",
   "platformEvidence": [],
@@ -47,7 +47,7 @@
       { "hex": "#ffffff", "role": "background" },
       { "hex": "#f7f7f7", "role": "surface" }
     ],
-    "extractedFonts": ["Oswald", "Open Sans"]
+    "extractedFonts": [{ "family": "Oswald" }, { "family": "Open Sans" }]
   },
   "pages": [
     {

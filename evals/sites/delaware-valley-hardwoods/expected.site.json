@@ -1,7 +1,7 @@
 {
   "id": "site_delaware-valley-hardwoods",
   "projectId": "proj_delaware-valley-hardwoods",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceUrl": "https://delawarevalleyhardwoods.com/",
   "platform": "custom",
   "platformEvidence": [],
@@ -61,7 +61,7 @@
       { "hex": "#ffffff", "role": "background" },
       { "hex": "#f7f7f7", "role": "surface" }
     ],
-    "extractedFonts": ["Georgia", "system-ui"]
+    "extractedFonts": [{ "family": "Georgia" }, { "family": "system-ui" }]
   },
   "pages": [
     {

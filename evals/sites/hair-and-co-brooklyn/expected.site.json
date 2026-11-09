@@ -1,7 +1,7 @@
 {
   "id": "site_hair-and-co-brooklyn",
   "projectId": "proj_hair-and-co-brooklyn",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceUrl": "https://hairandcobklyn.com/",
   "platform": "wordpress",
   "platformEvidence": [],
@@ -71,7 +71,11 @@
       { "hex": "#131312", "role": "surface" },
       { "hex": "#ffffff", "role": "background" }
     ],
-    "extractedFonts": ["Raleway", "Open Sans", "Metropolis"]
+    "extractedFonts": [
+      { "family": "Raleway" },
+      { "family": "Open Sans" },
+      { "family": "Metropolis" }
+    ]
   },
   "pages": [
     {

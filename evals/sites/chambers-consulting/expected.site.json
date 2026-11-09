@@ -1,7 +1,7 @@
 {
   "id": "site_chambers-consulting",
   "projectId": "proj_chambers-consulting",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceUrl": "https://www.chambers-consulting.dev/",
   "platform": "custom",
   "platformEvidence": [],
@@ -23,7 +23,7 @@
       { "hex": "#ffffff", "role": "background" },
       { "hex": "#eff8fa", "role": "surface" }
     ],
-    "extractedFonts": ["DM Sans", "Inter"]
+    "extractedFonts": [{ "family": "DM Sans" }, { "family": "Inter" }]
   },
   "pages": [
     {

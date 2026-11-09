@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { omit } from '../test-utils';
 import { minimalSection, minimalSite } from '../fixtures';
 import {
+  KnownPageBuilderSchema,
   PageBuilderSchema,
   PlatformSchema,
   primaryEmail,
@@ -15,7 +16,7 @@ describe('SiteSchema', () => {
     expect(SiteSchema.safeParse(minimalSite()).success).toBe(true);
   });
 
-  it('accepts a fully populated v2 site', () => {
+  it('accepts a fully populated v3 site', () => {
     const site = {
       ...minimalSite(),
       platform: 'other-hosted',
@@ -59,15 +60,65 @@ describe('SiteSchema', () => {
       brand: {
         logoAssetId: 'asset_logo',
         extractedColors: [{ hex: '#aa0000', role: 'primary', share: 0.4 }, { hex: '#ffffff' }],
-        extractedFonts: ['Lobster', 'Open Sans'],
+        extractedFonts: [
+          { family: 'Lobster' },
+          { family: 'Avenir', raw: ['avenir-lt-w01_35-light1475496', 'avenir-lt-w01_55-roman'] },
+        ],
       },
     };
     expect(SiteSchema.safeParse(site).success).toBe(true);
   });
 
   describe('schemaVersion', () => {
-    it.each([0, 1, 3, '2', undefined])('rejects %s', (schemaVersion) => {
+    it.each([0, 1, 2, 4, '3', undefined])('rejects %s', (schemaVersion) => {
       expect(SiteSchema.safeParse({ ...minimalSite(), schemaVersion }).success).toBe(false);
+    });
+  });
+
+  describe('extractedFonts (v3)', () => {
+    const withFonts = (extractedFonts: unknown) => ({
+      ...minimalSite(),
+      brand: { extractedColors: [], extractedFonts },
+    });
+    it('rejects plain strings (v2 shape)', () => {
+      expect(SiteSchema.safeParse(withFonts(['Avenir'])).success).toBe(false);
+    });
+    it('rejects duplicate families, with the path of the second', () => {
+      const result = SiteSchema.safeParse(withFonts([{ family: 'Avenir' }, { family: 'Avenir' }]));
+      expect(result.success).toBe(false);
+      expect(result.error?.issues[0]?.path).toEqual(['brand', 'extractedFonts', 1, 'family']);
+    });
+    it('rejects duplicate families even when raw differs', () => {
+      const fonts = [
+        { family: 'Avenir', raw: ['a'] },
+        { family: 'Avenir', raw: ['b'] },
+      ];
+      expect(SiteSchema.safeParse(withFonts(fonts)).success).toBe(false);
+    });
+    it.each([[[]], [['']], [['a', 'a']], [['Avenir']]])('rejects raw %j', (raw) => {
+      expect(SiteSchema.safeParse(withFonts([{ family: 'Avenir', raw }])).success).toBe(false);
+    });
+    it('accepts raw that differs from [family], including one entry', () => {
+      expect(
+        SiteSchema.safeParse(withFonts([{ family: 'Avenir', raw: ['avenir-lt'] }])).success,
+      ).toBe(true);
+      expect(
+        SiteSchema.safeParse(withFonts([{ family: 'Avenir', raw: ['Avenir', 'avenir-lt'] }]))
+          .success,
+      ).toBe(true);
+    });
+    it('rejects an empty family and unknown keys', () => {
+      expect(SiteSchema.safeParse(withFonts([{ family: '' }])).success).toBe(false);
+      expect(SiteSchema.safeParse(withFonts([{ family: 'A', weight: 400 }])).success).toBe(false);
+    });
+  });
+
+  describe('page builders (v3)', () => {
+    it.each(['kadence-blocks', 'beaver-builder'])('%s is a known page builder', (b) => {
+      expect(KnownPageBuilderSchema.safeParse(b).success).toBe(true);
+      expect(
+        SiteSchema.safeParse({ ...minimalSite(), platformDetails: { pageBuilder: b } }).success,
+      ).toBe(true);
     });
   });
 
@@ -80,14 +131,19 @@ describe('SiteSchema', () => {
     expect(SiteSchema.safeParse({ ...minimalSite(), platform: 'bentobox' }).success).toBe(false);
   });
 
-  it.each(['elementor', 'divi', 'gutenberg', 'wpbakery', 'beaver-builder'])(
-    'accepts pageBuilder %s',
-    (pageBuilder) => {
-      expect(
-        SiteSchema.safeParse({ ...minimalSite(), platformDetails: { pageBuilder } }).success,
-      ).toBe(true);
-    },
-  );
+  it.each([
+    'elementor',
+    'divi',
+    'gutenberg',
+    'wpbakery',
+    'kadence-blocks',
+    'beaver-builder',
+    'oxygen',
+  ])('accepts pageBuilder %s', (pageBuilder) => {
+    expect(
+      SiteSchema.safeParse({ ...minimalSite(), platformDetails: { pageBuilder } }).success,
+    ).toBe(true);
+  });
   it('rejects an empty pageBuilder', () => {
     expect(
       SiteSchema.safeParse({ ...minimalSite(), platformDetails: { pageBuilder: '' } }).success,

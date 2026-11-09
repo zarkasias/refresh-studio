@@ -1,7 +1,7 @@
 {
   "id": "site_TODO-slug",
   "projectId": "proj_TODO-slug",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceUrl": "TODO https://www.example.com/",
   "platform": "unknown",
   "platformEvidence": [],
@@ -18,7 +18,7 @@
   },
   "brand": {
     "extractedColors": [{ "hex": "TODO #1a2b3c", "role": "TODO primary" }],
-    "extractedFonts": ["TODO font family"]
+    "extractedFonts": [{ "family": "TODO font family" }]
   },
   "pages": [
     {

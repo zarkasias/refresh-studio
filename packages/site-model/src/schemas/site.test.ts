@@ -1,14 +1,21 @@
 import { describe, expect, it } from 'vitest';
 import { omit } from '../test-utils';
 import { minimalSection, minimalSite } from '../fixtures';
-import { PageBuilderSchema, PlatformSchema, SiteObjectSchema, SiteSchema } from './site';
+import {
+  PageBuilderSchema,
+  PlatformSchema,
+  primaryEmail,
+  primaryPhone,
+  SiteObjectSchema,
+  SiteSchema,
+} from './site';
 
 describe('SiteSchema', () => {
   it('accepts the minimal site', () => {
     expect(SiteSchema.safeParse(minimalSite()).success).toBe(true);
   });
 
-  it('accepts a fully populated v1 site', () => {
+  it('accepts a fully populated v2 site', () => {
     const site = {
       ...minimalSite(),
       platform: 'other-hosted',
@@ -20,8 +27,11 @@ describe('SiteSchema', () => {
       platformConfidence: 0.95,
       business: {
         name: "Ramsey's Diner",
-        phone: '(555) 555-0100',
-        email: 'hello@example.com',
+        phones: [{ value: '(555) 555-0100' }, { value: '555-0199', label: 'Emergency' }],
+        emails: [
+          { value: 'hello@example.com' },
+          { value: 'billing@example.com', label: 'Billing' },
+        ],
         address: '1 Main St',
         hours: [{ label: 'Mon–Fri', text: '7am–3pm' }, { text: 'Closed Sundays' }],
         googleBusinessUrl: 'https://maps.google.com/?cid=1',
@@ -29,6 +39,22 @@ describe('SiteSchema', () => {
         locations: [
           { label: 'Downtown', address: '2 Main St', phone: '555-0101', hours: [{ text: '8–2' }] },
         ],
+        trust: {
+          foundedYear: 1955,
+          licenses: [{ number: 'EL080641EC', authority: 'State of Iowa' }, { number: 'PC.1' }],
+          ratings: [
+            { source: 'Google', value: 4.9, count: 514 },
+            { source: 'Yelp', value: 4 },
+          ],
+          credentials: [
+            { kind: 'certification', name: 'Bona Certified', url: 'https://bona.com/x' },
+            { kind: 'membership', name: 'ADA' },
+            { kind: 'award', name: 'Top 200 salon' },
+            { kind: 'badge', name: 'BBB' },
+          ],
+        },
+        serviceArea: { description: 'Greater Des Moines', places: ['Ames'], radiusMiles: 10 },
+        people: [{ name: 'Pat', role: 'Owner', locations: ['Downtown'] }, { name: 'Sam' }],
       },
       brand: {
         logoAssetId: 'asset_logo',
@@ -40,7 +66,7 @@ describe('SiteSchema', () => {
   });
 
   describe('schemaVersion', () => {
-    it.each([0, 2, '1', undefined])('rejects %s', (schemaVersion) => {
+    it.each([0, 1, 3, '2', undefined])('rejects %s', (schemaVersion) => {
       expect(SiteSchema.safeParse({ ...minimalSite(), schemaVersion }).success).toBe(false);
     });
   });
@@ -171,15 +197,81 @@ describe('SiteSchema', () => {
   });
 
   describe('locations', () => {
+    const withBusiness = (extra: Record<string, unknown>) => {
+      const site = minimalSite();
+      return { ...site, business: { ...site.business, ...extra } };
+    };
     it('rejects an empty location {}', () => {
-      const site = minimalSite();
-      const business = { ...site.business, locations: [{}] };
-      expect(SiteSchema.safeParse({ ...site, business }).success).toBe(false);
+      expect(SiteSchema.safeParse(withBusiness({ locations: [{}] })).success).toBe(false);
     });
-    it('accepts a location with only a label', () => {
+    it('rejects a location without an address (v2)', () => {
+      expect(SiteSchema.safeParse(withBusiness({ locations: [{ label: 'East' }] })).success).toBe(
+        false,
+      );
+    });
+    it('rejects duplicate location labels', () => {
+      const loc = { label: 'East', address: '1 A St' };
+      const result = SiteSchema.safeParse(withBusiness({ locations: [loc, loc] }));
+      expect(result.success).toBe(false);
+      expect(result.error?.issues[0]?.path).toEqual(['business', 'locations', 1, 'label']);
+    });
+  });
+
+  describe('business v2 fields', () => {
+    const withBusiness = (extra: Record<string, unknown>) => {
       const site = minimalSite();
-      const business = { ...site.business, locations: [{ label: 'East' }] };
-      expect(SiteSchema.safeParse({ ...site, business }).success).toBe(true);
+      return { ...site, business: { ...site.business, ...extra } };
+    };
+    it('rejects the v1 phone and email fields', () => {
+      expect(SiteSchema.safeParse(withBusiness({ phone: '555' })).success).toBe(false);
+      expect(SiteSchema.safeParse(withBusiness({ email: 'a@b.c' })).success).toBe(false);
+    });
+    it('rejects an empty phone value', () => {
+      expect(SiteSchema.safeParse(withBusiness({ phones: [{ value: '' }] })).success).toBe(false);
+    });
+    it('primaryPhone and primaryEmail return the first entry', () => {
+      const b = { phones: [{ value: '1' }, { value: '2' }], emails: [] };
+      expect(primaryPhone(b)).toBe('1');
+      expect(primaryEmail(b)).toBeUndefined();
+      expect(primaryPhone({})).toBeUndefined();
+    });
+    it('rejects a person at an unknown location', () => {
+      const result = SiteSchema.safeParse(
+        withBusiness({
+          locations: [{ label: 'East', address: '1 A St' }],
+          people: [{ name: 'Pat', locations: ['East', 'West'] }],
+        }),
+      );
+      expect(result.success).toBe(false);
+      expect(result.error?.issues[0]?.path).toEqual(['business', 'people', 0, 'locations', 1]);
+    });
+    it('rejects an empty service area', () => {
+      expect(SiteSchema.safeParse(withBusiness({ serviceArea: { places: [] } })).success).toBe(
+        false,
+      );
+    });
+    it('accepts a service area with only places', () => {
+      expect(
+        SiteSchema.safeParse(withBusiness({ serviceArea: { places: ['Ames'] } })).success,
+      ).toBe(true);
+    });
+    it('rejects an unknown credential kind', () => {
+      const trust = { licenses: [], ratings: [], credentials: [{ kind: 'partner', name: 'X' }] };
+      expect(SiteSchema.safeParse(withBusiness({ trust })).success).toBe(false);
+    });
+    it('rejects a fractional review count and a non-integer founded year', () => {
+      const ratings = [{ source: 'Google', value: 4.9, count: 1.5 }];
+      expect(
+        SiteSchema.safeParse(withBusiness({ trust: { licenses: [], ratings, credentials: [] } }))
+          .success,
+      ).toBe(false);
+      expect(
+        SiteSchema.safeParse(
+          withBusiness({
+            trust: { foundedYear: 1955.5, licenses: [], ratings: [], credentials: [] },
+          }),
+        ).success,
+      ).toBe(false);
     });
   });
 

@@ -1,0 +1,327 @@
+{
+  "id": "site_northern-heights-dental",
+  "projectId": "proj_northern-heights-dental",
+  "schemaVersion": 2,
+  "sourceUrl": "https://www.northernheightsdental.com/",
+  "platform": "squarespace",
+  "platformEvidence": [],
+  "platformConfidence": 0,
+  "business": {
+    "name": "Northern Heights Dental",
+    "phones": [{ "value": "928-774-5050" }],
+    "emails": [{ "value": "northernheightsdental@gmail.com" }],
+    "address": "1100 N San Francisco Street Suite D, Flagstaff, AZ, 86001, United States",
+    "hours": [
+      {
+        "label": "Footer",
+        "text": "Mon 8am-5pm, Tue 8am-5pm, Wed 8am-5pm, Thu 8am-5pm, Fri 8am-2pm"
+      },
+      {
+        "label": "Office Hours (contact page)",
+        "text": "Monday–Thursday 8:00AM- 5:00PM, Friday 8:00AM- 2:00PM"
+      }
+    ],
+    "socialLinks": [
+      { "network": "instagram", "url": "http://instagram.com/northernheightsdental" },
+      { "network": "facebook", "url": "https://www.facebook.com/northernheightsdental/" }
+    ],
+    "trust": {
+      "licenses": [],
+      "ratings": [],
+      "credentials": [
+        { "kind": "membership", "name": "ADA" },
+        { "kind": "membership", "name": "AAID" },
+        { "kind": "membership", "name": "AGD" },
+        { "kind": "membership", "name": "FACES" },
+        { "kind": "membership", "name": "Invisalign" },
+        {
+          "kind": "membership",
+          "name": "Flagstaff Chamber of Commerce",
+          "url": "https://business.flagstaffchamber.com/list/Member/northern-heights-dental-18642"
+        }
+      ]
+    },
+    "people": [{ "name": "Dr. Jacob Williams", "role": "DMD" }]
+  },
+  "brand": {
+    "extractedColors": [
+      { "hex": "#16315f", "role": "primary" },
+      { "hex": "#313754", "role": "accent" },
+      { "hex": "#ffffff", "role": "background" }
+    ],
+    "extractedFonts": ["Playfair Display", "Open Sans"]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Dentist in Flagstaff, AZ | Northern Heights Dental",
+      "metaDescription": "Serving Flagstaff for over 20 years, Northern Heights Dental provides advanced cosmetic and restorative dentistry including dental implants, Invisalign, and custom crowns, along with comprehensive care for your overall dental health.",
+      "sections": [
+        {
+          "id": "home-nav",
+          "type": "nav",
+          "content": {
+            "items": [
+              { "title": "Home", "link": "https://www.northernheightsdental.com/" },
+              { "title": "About" },
+              {
+                "title": "Smile Gallery",
+                "link": "https://www.northernheightsdental.com/before-and-after-photos"
+              },
+              { "title": "Services" },
+              { "title": "New Patients" }
+            ],
+            "ctas": [
+              {
+                "label": "Request an Appointment",
+                "href": "https://www.northernheightsdental.com/contact",
+                "kind": "book"
+              },
+              { "label": "928-774-5050", "href": "tel:9287745050", "kind": "call" },
+              {
+                "label": "Pay Online",
+                "href": "https://bcpay.online/?Profile=northernheightsWEB",
+                "kind": "pay"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "content": {
+            "heading": "Flagstaff Dentist — Northern Heights Dental",
+            "subheading": "A Flagstaff dental practice providing thoughtful care for over 20 years.",
+            "body": "★★★★★ 200+ 5-Star Reviews - Accepting New Patients - Same-Day Emergency Appointments Available",
+            "ctas": [
+              {
+                "label": "Request an Appointment",
+                "href": "https://www.northernheightsdental.com/contact",
+                "kind": "book"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-intro",
+          "type": "richtext",
+          "content": {
+            "heading": "Advanced Dentistry Focused on Long-Term Health, Comfort, and Confidence",
+            "body": "Tailored, clear dentistry with advanced technology.",
+            "ctas": [
+              {
+                "label": "restorative",
+                "href": "https://www.northernheightsdental.com/restorative-dentistry-flagstaff-az",
+                "kind": "link"
+              },
+              {
+                "label": "implant",
+                "href": "https://www.northernheightsdental.com/dental-implants-flagstaff-az",
+                "kind": "link"
+              },
+              {
+                "label": "cosmetic dentistry",
+                "href": "https://www.northernheightsdental.com/cosmetic-dentist-flagstaff",
+                "kind": "link"
+              },
+              {
+                "label": "laser dentistry",
+                "href": "https://www.northernheightsdental.com/laser-dentistry-flagstaff",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-team",
+          "type": "team",
+          "content": {
+            "heading": "Meet Dr. Jacob Williams",
+            "body": "12+ years' experience; unhurried, thoughtful care.",
+            "ctas": [
+              {
+                "label": "Learn more about Dr. Williams",
+                "href": "https://www.northernheightsdental.com/jacobwilliamsdmd",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-about",
+          "type": "about",
+          "content": {
+            "heading": "About Our Office",
+            "body": "Across from Flagstaff Medical Center; 20+ years in the community."
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-services",
+          "type": "services",
+          "content": {
+            "heading": "Care Designed Around Your Needs",
+            "items": [
+              {
+                "title": "General & Preventative Care",
+                "link": "https://www.northernheightsdental.com/general-dentist-flagstaff-az"
+              },
+              {
+                "title": "Restorative Dentistry",
+                "link": "https://www.northernheightsdental.com/restorative-dentistry-flagstaff-az"
+              },
+              {
+                "title": "Cosmetic Dentistry",
+                "link": "https://www.northernheightsdental.com/cosmetic-dentist-flagstaff"
+              },
+              {
+                "title": "Same-Day Emergency Dental Care",
+                "link": "https://www.northernheightsdental.com/emergency-dentist-flagstaff"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-testimonials",
+          "type": "testimonials",
+          "content": {
+            "heading": "What Our Patients Are Saying",
+            "subheading": "Flagstaff Dentist Reviews",
+            "items": [
+              {
+                "title": "Mark M",
+                "body": "Orthopedic surgeon: best practice he has experienced.",
+                "link": "https://www.northernheightsdental.com/flagstaff-dentist-reviews/mark-m"
+              },
+              {
+                "title": "Daphne S",
+                "body": "Emergency, uninsured, treated with care.",
+                "link": "https://www.northernheightsdental.com/flagstaff-dentist-reviews/daphne-s"
+              },
+              {
+                "title": "Ted F",
+                "body": "Little pain, treated like family.",
+                "link": "https://www.northernheightsdental.com/flagstaff-dentist-reviews/ted-f"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-cta",
+          "type": "cta",
+          "content": {
+            "heading": "Ready to get started?",
+            "subheading": "We're here to help you smile with confidence.",
+            "body": "'Request an Appointment' appears here as text with no link.",
+            "ctas": [{ "label": "Call Now to Schedule", "href": "tel:9287745050", "kind": "call" }]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-memberships",
+          "type": "gallery",
+          "content": {
+            "body": "Membership logos only, no links: ADA, AAID, AGD, FACES, Invisalign."
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-footer",
+          "type": "footer",
+          "content": {
+            "heading": "Northern Heights Dental",
+            "body": "Thoughtful, high-quality dentistry focused on long-term health, comfort, and confidence. · 200+ 5-Star Reviews from patients in Flagstaff · Services: Dental Implants, Invisalign, Same-Day Crowns, Same-Day Emergency Dental Care · 1100 N San Francisco St Suite D Flagstaff, AZ 86001 · Mon 8am-5pm … Fri 8am-2pm · @ Northern Heights Dental",
+            "items": [
+              {
+                "title": "Articles",
+                "link": "https://www.northernheightsdental.com/flagstaff-northernheightsdental-articles"
+              },
+              {
+                "title": "Privacy Policy",
+                "link": "https://www.northernheightsdental.com/privacy-policy"
+              },
+              {
+                "title": "Accessibility",
+                "link": "https://www.northernheightsdental.com/accessibility"
+              }
+            ],
+            "ctas": [
+              { "label": "928-774-5050", "href": "tel:928-774-5050", "kind": "call" },
+              { "label": "(928) 774-5050", "href": "tel:9287745050", "kind": "call" },
+              {
+                "label": "northernheightsdental@gmail.com",
+                "href": "mailto:northernheightsdental@gmail.com",
+                "kind": "email"
+              },
+              {
+                "label": "Flagstaff Chamber of Commerce Member",
+                "href": "https://business.flagstaffchamber.com/list/Member/northern-heights-dental-18642",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    },
+    {
+      "path": "/contact",
+      "title": "Request an Appointment | Northern Heights Dental",
+      "sections": [
+        {
+          "id": "contact-main",
+          "type": "contact",
+          "content": {
+            "heading": "Request an Appointment",
+            "body": "Simple, comfortable, never rushed; the team will reach out to confirm and schedule. Says 'Fill out the form below'.",
+            "form": {
+              "fields": [
+                { "label": "Name", "type": "text", "required": false },
+                { "label": "Last Name", "type": "text", "required": false },
+                { "label": "Email Address", "type": "email", "required": false },
+                { "label": "Phone", "type": "tel", "required": false },
+                { "label": "Subject", "type": "text", "required": false },
+                { "label": "Tell Us More", "type": "textarea", "required": false }
+              ],
+              "submitLabel": "REQUEST APPOINTMENT"
+            }
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-call",
+          "type": "cta",
+          "content": {
+            "heading": "Prefer to call to schedule?",
+            "ctas": [{ "label": "928-774-5050", "href": "tel:9287745050", "kind": "call" }]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-hours",
+          "type": "richtext",
+          "content": {
+            "heading": "Office Hours",
+            "body": "Monday–Thursday 8:00AM- 5:00PM, Friday 8:00AM- 2:00PM. If you contact us outside office hours, we will follow up as soon as we are back in the office."
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-visit",
+          "type": "contact",
+          "content": {
+            "heading": "Visit our Office",
+            "body": "1100 N San Francisco St, Suite D, Flagstaff, AZ 86001. Conveniently located across from Flagstaff Medical Center. Google Maps link, no embed."
+          },
+          "confidence": 1
+        }
+      ]
+    }
+  ]
+}

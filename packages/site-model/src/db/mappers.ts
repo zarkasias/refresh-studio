@@ -4,6 +4,7 @@
  */
 import { ProjectSchema, type Project } from '../schemas/project';
 import { SiteSchema, type Site } from '../schemas/site';
+import { migrateSiteDoc, parseStoredSite } from '../migrations/site';
 import { VariantSchema, type Variant } from '../schemas/variant';
 import { AssetSchema, type Asset } from '../schemas/asset';
 import { CommentSchema, type Comment } from '../schemas/comment';
@@ -89,13 +90,18 @@ export function siteToRow(
   };
 }
 
-/** The `doc` column is the source of truth; id, project_id and schema_version must agree with it. */
+/**
+ * The `doc` column is the source of truth; id, project_id and schema_version must agree with
+ * it. Older docs are migrated on read (ADR-006); the row's schema_version is compared with the
+ * version the doc was stored at.
+ */
 export function rowToSite(row: SiteRow): Site {
-  const site = SiteSchema.parse(row.doc);
+  const storedVersion = (row.doc as { schemaVersion?: unknown } | null)?.schemaVersion;
+  const site = parseStoredSite(row.doc);
   if (
     site.id !== row.id ||
     site.projectId !== row.projectId ||
-    site.schemaVersion !== row.schemaVersion
+    storedVersion !== row.schemaVersion
   ) {
     throw new Error(`Site row ${row.id} disagrees with its doc (id, project_id or schema_version)`);
   }
@@ -145,8 +151,6 @@ export function variantToRow(variant: Variant): Insert<typeof variants> {
     status: v.status,
     tokens: v.tokens,
     templates: v.templates,
-    approvedAt: v.approvedAt ? new Date(v.approvedAt) : null,
-    approvedBy: orNull(v.approvedBy),
   };
 }
 
@@ -159,8 +163,6 @@ export function rowToVariant(row: VariantRow): Variant {
     tokens: row.tokens,
     templates: row.templates,
     status: row.status,
-    approvedAt: isoOrUndef(row.approvedAt),
-    approvedBy: orUndef(row.approvedBy),
   });
 }
 
@@ -171,21 +173,34 @@ export function versionToRow(version: Version): Insert<typeof versions> {
   return {
     id: v.id,
     variantId: v.variantId,
+    number: v.number,
     snapshot: v.snapshot,
     createdBy: v.createdBy,
     note: v.note,
     createdAt: new Date(v.createdAt),
+    approvedAt: v.approvedAt ? new Date(v.approvedAt) : null,
+    approvedBy: orNull(v.approvedBy),
   };
+}
+
+function migrateSnapshot(snapshot: unknown): unknown {
+  if (typeof snapshot !== 'object' || snapshot === null) return snapshot;
+  const s = snapshot as { site?: unknown };
+  return { ...s, site: migrateSiteDoc(s.site) };
 }
 
 export function rowToVersion(row: VersionRow): Version {
   return VersionSchema.parse({
     id: row.id,
     variantId: row.variantId,
-    snapshot: row.snapshot,
+    number: row.number,
+    // Snapshots of approved versions are frozen in the DB, so they are migrated on read.
+    snapshot: migrateSnapshot(row.snapshot),
     createdBy: row.createdBy,
     createdAt: iso(row.createdAt),
     note: row.note,
+    approvedAt: isoOrUndef(row.approvedAt),
+    approvedBy: orUndef(row.approvedBy),
   });
 }
 

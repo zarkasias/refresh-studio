@@ -5,8 +5,9 @@ The single internal representation every phase reads or writes. Lives in
 them with `z.infer`. Each entity is exported as `XSchema` plus type `X`. Valid test fixtures
 live in `@srs/site-model/fixtures`.
 
-Current version: **v1** (`Site.schemaVersion: 1`). Fields marked `// v1` were added by the M0
-plan, section 2, or are user-approved additions recorded in ADR-003. All objects are strict:
+Current version: **v2** (`Site.schemaVersion: 2`). Fields marked `// v1` were added by the M0
+plan, section 2, or are user-approved additions recorded in ADR-003. Fields marked `// v2` came
+from the T9 labeling misfit review (ADR-006). All objects are strict:
 unknown keys are rejected. See **Constraints** below for the rules that apply across entities.
 
 ```ts
@@ -39,7 +40,7 @@ Consent {                                                                   // v
 Site {
   id
   projectId
-  schemaVersion: 1                                                          // v1
+  schemaVersion: 2                                                          // v2 (ADR-006)
   sourceUrl: Url
   platform: 'wordpress' | 'squarespace' | 'wix' | 'godaddy' | 'webflow'
           | 'custom'                        // hand-coded
@@ -53,11 +54,17 @@ Site {
   platformEvidence: { signal: string; where: 'html' | 'header' | 'asset-url' | 'footer-text' }[]  // v1
   platformConfidence: Confidence                                            // v1
   business: {
-    name, phone?, email?, address?
+    name
+    phones?: ContactPoint[]                 // v2: first = primary; replaces v1 phone
+    emails?: ContactPoint[]                 // v2: first = primary; replaces v1 email
+    address?
     hours?: HoursEntry[]                    // v1: raw text, not parsed
     googleBusinessUrl?: Url
     socialLinks: { network: Slug; url: Url }[]                              // v1: typed
-    locations?: Location[]                  // v1: extra locations; top-level fields = primary
+    locations?: Location[]                  // top-level fields = primary location
+    trust?: Trust                                                           // v2
+    serviceArea?: ServiceArea                                               // v2
+    people?: Person[]                                                       // v2
   }
   brand: {                                  // what the current site uses
     logoAssetId?
@@ -68,8 +75,18 @@ Site {
 }
 
 HoursEntry { label?: string; text: string }                                 // v1
-Location { label?, address?, phone?, hours?: HoursEntry[], googleBusinessUrl?: Url }  // v1
-                                            // at least one field required ({} is rejected)
+ContactPoint { value: string; label?: string }                             // v2: as displayed
+Location { label, address, phone?, hours?: HoursEntry[], googleBusinessUrl?: Url }  // v2: label
+                                            // and address required; labels unique per site
+Trust {                                                                     // v2
+  foundedYear?: integer 1600–2100
+  licenses: { number; authority? }[]
+  ratings: { source; value: number >= 0; count?: integer >= 0 }[]          // e.g. Google 4.9 (514)
+  credentials: { kind: 'certification' | 'membership' | 'award' | 'badge'; name; url?: Url }[]
+}
+ServiceArea { description?; places: string[]; radiusMiles?: number > 0 }   // v2: not all empty
+Person { name; role?; locations?: string[] }                               // v2: locations are
+                                            // business.locations labels
 
 Page {
   path                                      // starts with '/'; unique within the site
@@ -82,15 +99,29 @@ Section {
   type: 'nav' | 'hero' | 'services' | 'about' | 'testimonials' | 'gallery' | 'pricing'
       | 'faq' | 'team' | 'contact' | 'booking' | 'map' | 'cta' | 'footer' | 'richtext'
       | 'menu'                              // v1: restaurant menus (not pricing)
+      | 'features' | 'process'              // v2: benefits list; numbered steps
   content: {
     heading?, subheading?, body?,          // plain text or minimal markdown
-    items?: { title?, body?, imageAssetId?, link? }[]
+    items?: {
+      title?, body?, imageAssetId?, link?
+      children?: { title?, body?, imageAssetId?, link? }[]   // v2: nav dropdowns, one level,
+    }[]                                                      // only in 'nav' sections
     ctas?: {
       label, href                           // href as found: tel:, mailto:, relative all allowed
-      kind: 'call' | 'email' | 'book' | 'link' | 'order'   // 'order' is v1
+      kind: 'call' | 'email' | 'book' | 'link' | 'order' | 'pay'   // 'order' v1, 'pay' v2
       provider?: Slug                       // v1: e.g. 'toast', 'meevo', 'phorest'
     }[]
     imageAssetIds?: string[]
+    form?: {                                                                // v2
+      fields: {                             // at least one; visible fields only (no honeypots)
+        label                               // as displayed
+        type: 'text' | 'email' | 'tel' | 'url' | 'number' | 'date' | 'textarea'
+            | 'select' | 'radio' | 'checkbox' | 'file' | 'other'
+        required: boolean
+        options?: string[]                  // only on select, radio, checkbox
+      }[]
+      submitLabel?, confirmation?
+    }
   }
   sourceSelector?: string                  // where it came from in the original DOM
   confidence: Confidence                   // mapper confidence; needsReview() when < 0.7
@@ -113,9 +144,9 @@ Variant {
   tokens: DesignTokens
   templates: Record<SectionId, TemplateId>  // which template renders each section
   status: 'draft' | 'approved' | 'shared' | 'selected'
-  approvedAt?: IsoDateTime                  // v1: consultant approval (CLAUDE rule 4)
-  approvedBy?: string                       // v1
-}                                           // approval invariant: see Constraints
+                                            // approval lives on Version (ADR-005); 'approved',
+                                            // 'shared', 'selected' need an approved Version
+}
 
 DesignTokens {
   color: { primary, secondary, accent, background, surface, text, mutedText }  // all HexColor
@@ -127,13 +158,16 @@ DesignTokens {
 
 GoogleFont { family: string; weights: integer 1–1000, at least one }       // v1
 
-Version {
+Version {                                   // immutable once approved (ADR-005)
   id, variantId
+  number: integer >= 1                      // ADR-005: 1, 2, 3, ... per variant; unique per variant
   snapshot: { site: Site; variant: Variant }                                // v1: typed
   createdBy
   createdAt: IsoDateTime                                                    // v1 (user-approved)
   note                                      // may be ''
-}
+  approvedAt?: IsoDateTime                  // ADR-005: consultant approval (CLAUDE rule 4)
+  approvedBy?: string                       // ADR-005
+}                                           // approval invariant: see Constraints
 
 Comment {
   id, versionId, sectionId?, x?, y?
@@ -148,8 +182,10 @@ Comment {
 - **Strings are non-empty** unless noted. Exceptions (text copied from the client site, which
   may legitimately be empty): `Page.title`, `Page.metaDescription`, all `Section.content` text
   (`heading`, `subheading`, `body`, item `title`/`body`/`link`, cta `label`/`href`),
-  `Section.sourceSelector`, `business.phone`/`email`/`address`, `Location` text fields,
-  `HoursEntry.label`, `Asset.alt` (`''` = decorative) and `Version.note`.
+  `Section.sourceSelector`, `business.address`, `Location.phone`, `HoursEntry.label`,
+  `FormField.label`, `form.submitLabel`/`confirmation`, `Asset.alt` (`''` = decorative) and
+  `Version.note`. `ContactPoint.value`/`label`, `Location.label`/`address` and all v2 trust,
+  service-area and person strings are non-empty.
 - **Hex colors are lowercase** 6-digit (`#1a2b3c`).
 - **Datetimes are UTC with a `Z` suffix** (`toISOString()` output); offsets like `+02:00` are rejected.
   Datetimes are UTC with millisecond precision, as produced by `toISOString()`.
@@ -159,26 +195,41 @@ Comment {
 - **Slugs are lowercase** (`^[a-z0-9][a-z0-9-]*$`): `socialLinks.network`, `cta.provider`,
   `platformDetails.builder`, and any `pageBuilder` outside the known list.
   `platformDetails.theme` stays as found.
-- **Approval invariant** (CLAUDE rule 4): `approvedAt` and `approvedBy` are both present or both
-  absent, and `status` `'approved'`, `'shared'` or `'selected'` requires both. A `'draft'` may
-  keep a previous approval.
+- **Approval is per version** (CLAUDE rule 4, ADR-005): on a Version, `approvedAt` and
+  `approvedBy` are both present or both absent, `approvedAt >= createdAt`, and
+  `snapshot.variant.id === variantId`. An approved Version is never changed or deleted (a
+  database trigger enforces this); any edit after approval is a new, unapproved Version. The
+  client share link shows the newest approved Version. A Variant may only have `status`
+  `'approved'`, `'shared'` or `'selected'` while it has an approved Version
+  (`assertStatusAllowed`; not expressible in the Variant schema alone).
 - **Uniqueness:** `Page.path` is unique within a site; `Section.id` is unique across all pages
-  of a site.
+  of a site; `Location.label` is unique within a site.
+- **References:** every `Person.locations` entry is the label of a `business.locations` entry.
+- **Nav children** (one level) only appear in `nav` sections.
 - **Other narrowings:** `Page.path` and `pathPrefix` start with `/`; `maxPages` is an integer
-  1–25; GoogleFont weights are integers 1–1000; a `Location` has at least one field.
+  1–25; GoogleFont weights are integers 1–1000; a `ServiceArea` has a description, a place
+  or a radius; a form has at least one field.
 
-`SiteSchema` and `VariantSchema` carry cross-field refinements, and Zod 4 does not allow
-`.pick`/`.omit`/`.extend` on refined objects. Derive from `SiteObjectSchema` /
-`VariantObjectSchema` (same fields, no refinement), but always validate with the refined schema.
+`SiteSchema`, `SectionSchema` and `VersionSchema` carry cross-field refinements, and Zod 4 does
+not allow `.pick`/`.omit`/`.extend` on refined objects. Derive from `SiteObjectSchema` /
+`SectionObjectSchema` / `VersionObjectSchema` (same fields, no refinement), but always validate
+with the refined schema.
 
 ## Helpers
 
 - `needsReview(section)`: true unless `section.confidence >= REVIEW_CONFIDENCE_THRESHOLD` (0.7),
   so NaN or unvalidated input is flagged.
-- `SITE_SCHEMA_VERSION` (1), `MAX_CRAWL_PAGES` (25) and `APPROVAL_REQUIRED_STATUSES` are
+- `primaryPhone(business)` / `primaryEmail(business)`: the first entry, or undefined.
+- `migrateSiteDoc(doc)` / `parseStoredSite(doc)` (ADR-006): bring a stored v1 doc to v2 (then
+  validate). `phone`/`email` become one-entry arrays; a v1 location without a label or address
+  throws `SiteMigrationError`. The DB mappers migrate Sites and Version snapshots on read.
+- `SITE_SCHEMA_VERSION` (2), `MAX_CRAWL_PAGES` (25) and `APPROVAL_REQUIRED_STATUSES` are
   exported constants.
-- Guards (`assertCrawlAllowed`, `assertShareable`, `assertExportable`) are not part of the
-  schemas; see T4.
+- Guards (`assertCrawlAllowed`, `assertShareable`, `resolveSharedVersion`, `assertStatusAllowed`,
+  `assertExportable`, `assertVersionEditable`) are not part of the schemas; see T4 and ADR-005.
+- Version history (ADR-005): `latestVersion`, `latestApprovedVersion`, `createVersion`,
+  `saveEdit` (updates the newest version while it is unapproved, otherwise creates a new one)
+  and `approveVersion` (newest version only, once).
 
 ## Rules
 
@@ -188,4 +239,6 @@ Comment {
 - Tokens must pass AA contrast for `text` on `background` and `surface` before save.
 - Exporters only consume `Site` + one `Variant` with `status: 'selected'`.
 - Stored JSONB Sites and Version snapshots must be migrated to the current `schemaVersion`
-  before validation, because strict objects reject unknown keys (ADR-003).
+  before validation, because strict objects reject unknown keys (ADR-003). Use
+  `parseStoredSite`; approved Version snapshots are frozen, so they are migrated on every read
+  (ADR-006).

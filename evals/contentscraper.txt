@@ -1,0 +1,24 @@
+(() => {
+  const t = s => (s || '').replace(/\s+/g, ' ').trim();
+  const vis = el => el.offsetParent !== null || getComputedStyle(el).position === 'fixed';
+  console.log('URL:', location.href);
+  console.log('Title:', document.title);
+  console.log('Meta description:', document.querySelector('meta[name="description"]')?.content || '(none)');
+  console.log('Generator:', document.querySelector('meta[name="generator"]')?.content || '(none)');
+  console.log('Platform hints:', {
+    wordpress: !!document.querySelector('link[href*="wp-content"],script[src*="wp-content"]'),
+    elementor: !!document.querySelector('[class*="elementor"]'),
+    divi: !!document.querySelector('[class*="et_pb_"]'),
+    wpbakery: !!document.querySelector('[class*="vc_"]'),
+    squarespace: !!document.querySelector('[src*="squarespace"]'),
+    wix: !!document.querySelector('[src*="wixstatic"]'),
+    godaddy: !!document.querySelector('[src*="wsimg.com"]'),
+    webflow: !!document.querySelector('[data-wf-site]'),
+  });
+  console.log('Headings (top to bottom):');
+  console.table([...document.querySelectorAll('h1,h2,h3,h4,h5,h6')].filter(vis).map(h => ({ tag: h.tagName, text: t(h.innerText) })));
+  console.log('Links and buttons (visible):');
+  console.table([...document.querySelectorAll('a[href]')].filter(vis).map(a => ({ label: t(a.innerText) || a.getAttribute('aria-label') || '(image/icon)', href: a.getAttribute('href') })));
+  console.log('Form fields:');
+  console.table([...document.querySelectorAll('input,textarea,select')].filter(el => el.type !== 'hidden' && vis(el)).map(el => ({ label: t(el.labels?.[0]?.innerText) || el.getAttribute('aria-label') || el.placeholder || '(no label)', type: el.type })));
+})();

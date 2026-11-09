@@ -14,23 +14,64 @@
       ],
       "whyUseful": "Header tel: href doesn't match the displayed number. Tests CTA href vs. display and NAP consistency.",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "pages.sections.content",
+          "note": "Contact form fields (First Name, Last Name, Email, Message) only fit in body text. Same gap as chambers-consulting.",
+          "resolution": "schema-change"
+        }
+      ]
     },
     {
       "slug": "jolly-plumbing",
-      "url": "https://jollyplumbingco.wixsite.com/jollyplumbing",
+      "url": "https://jollyplumbing.net/",
       "businessType": "Plumbing & heating",
-      "platform": "wix",
+      "platform": "wordpress",
+      "pageBuilder": "kadence-blocks",
       "platformConfidence": 0.9,
       "evidence": [
+        { "signal": "meta generator: WordPress", "where": "html" },
+        { "signal": "/wp-content/uploads/ image paths", "where": "asset-url" },
         {
-          "signal": "Proudly created with Wix.com",
-          "where": "footer-text"
-        }
+          "signal": "jQuery Migrate script loaded (JQMIGRATE console message)",
+          "where": "asset-url"
+        },
+        { "signal": "body class wp-theme-kadence; wp-block-kadence-* blocks", "where": "html" }
       ],
-      "whyUseful": "Wix free subdomain: shared host with path-scoped site (pathPrefix), Wix ad banner, leftover Lorem Ipsum, conflicting years-in-business claims.",
+      "whyUseful": "Live WordPress trades site (classic theme). Emergency tel: link contains an encoded zero-width space; same number in three href formats; two phones, two emails, licence numbers; typo in a section heading; yellow-on-white contrast risk. An old Wix copy (jollyplumbingco.wixsite.com/jollyplumbing) is still public.",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business.phone",
+          "note": "Main line plus a separate emergency call-or-text number (719-491-8104). Only one phone field.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "business.email",
+          "note": "Two emails on the contact page (Steven@, service@). Only one email field.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "business",
+          "note": "No field for licence numbers (PC.0000533, MP.00188865), a key trust signal for trades.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "business",
+          "note": "No field for founding year ('since 1955').",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "pages.sections.type",
+          "note": "No type for a features/benefits list. Labeled richtext; same gap as chambers-consulting.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "pages.sections.content",
+          "note": "Contact form fields only fit in body text. Same gap as the other sites.",
+          "resolution": "schema-change"
+        }
+      ]
     },
     {
       "slug": "arc-electric",
@@ -46,7 +87,33 @@
       ],
       "whyUseful": "Control case: well built. Proves we don't invent problems.",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business",
+          "note": "Service area is a list of 24 towns with no field; labeled as richtext. Same gap as chambers-consulting.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "business",
+          "note": "Licence number (EL080641EC) has no field. Same gap as jolly-plumbing.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "business",
+          "note": "Aggregate rating ('4.9 stars from 514 Google reviews') has no field, though it's a key trust signal.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "business.locations",
+          "note": "Satellite office in Harlan, Iowa is mentioned in the FAQ with no address.",
+          "resolution": "accepted"
+        },
+        {
+          "field": "pages.sections.content",
+          "note": "Contact form fields only fit in body text. Same gap as the other sites.",
+          "resolution": "schema-change"
+        }
+      ]
     },
     {
       "slug": "cafecito-santa-fe",
@@ -62,7 +129,23 @@
       ],
       "whyUseful": "Header/footer hours conflict, menu page, Toast ordering, email domain differs from site domain, missing alt.",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business.hours",
+          "note": "Three conflicting Fri/Sat closing times (4pm homepage, 3pm Find Us, 9pm footer). Hours entries can't say which is current or flag the conflict.",
+          "resolution": "accepted"
+        },
+        {
+          "field": "pages.sections.type",
+          "note": "No type for an hours block or a 'getting here' directions block; both labeled richtext.",
+          "resolution": "accepted"
+        },
+        {
+          "field": "pages",
+          "note": "No contact page; 'Find Us' (an SEO-keyword slug) acts as one. The mapper must recognize contact content by what's on the page, not by URL.",
+          "resolution": "accepted"
+        }
+      ]
     },
     {
       "slug": "northern-heights-dental",
@@ -78,7 +161,38 @@
       ],
       "whyUseful": "Mixed tel: formats, announcement bar, many service pages (25-page cap prioritization).",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "pages.sections.content.items",
+          "note": "Nav has dropdown menus (About, Services, New Patients) with 16 child pages. Items can't nest, so children are left out.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "business",
+          "note": "Practitioner (Dr. Jacob Williams, DMD) has no field. Key for dental and medical sites.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "business",
+          "note": "Aggregate rating ('200+ 5-Star Reviews') and status claims ('Accepting New Patients', 'Same-Day Emergency') have no fields. Rating gap recurs from arc-electric.",
+          "resolution": "accepted"
+        },
+        {
+          "field": "business",
+          "note": "Professional memberships (ADA, AAID, AGD) have no field. Same as BBB/HomeAdvisor badges on jolly-plumbing.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "pages.sections.content.ctas.kind",
+          "note": "No CTA kind for payments ('Pay Online' via bcpay.online); labeled as link.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "pages.sections.content",
+          "note": "Contact form fields only fit in body text. Same gap as the other sites.",
+          "resolution": "schema-change"
+        }
+      ]
     },
     {
       "slug": "bella-lago-salon",
@@ -94,13 +208,40 @@
       ],
       "whyUseful": "Meevo booking, sister site on another domain (must not be crawled), script display font.",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business.locations",
+          "note": "Meta description names two locations (Mooresville, Birkdale) but only Mooresville appears on the site, and all booking links use one Meevo locationId.",
+          "resolution": "accepted"
+        },
+        {
+          "field": "business",
+          "note": "Award claim ('eight-time Top 200 salon') has no field. Same gap as memberships and badges on other sites.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "business.name",
+          "note": "Name varies: 'Bella Lago Salon & Spa' (title, meta) vs 'Bella Lago Salon & MedSpa' (footer). MedSpa is also a separate domain.",
+          "resolution": "accepted"
+        },
+        {
+          "field": "pages",
+          "note": "No contact page; footer 'Contact' links to /about.",
+          "resolution": "accepted"
+        },
+        {
+          "field": "pages.sections.content.items",
+          "note": "Nav has dropdown folders (Salon, Spa, Our Team, Gift Cards) with ~25 child pages; items can't nest. Same as northern-heights-dental.",
+          "resolution": "schema-change"
+        }
+      ]
     },
     {
       "slug": "iphci",
-      "url": "https://iphci.com/",
+      "url": "https://www.iphci.com/",
       "businessType": "Plumbing/HVAC",
       "platform": "wordpress",
+      "pageBuilder": "beaver-builder",
       "platformConfidence": 0.9,
       "evidence": [
         {
@@ -110,11 +251,37 @@
       ],
       "whyUseful": "Two offices, two phones (locations[]), 24/7 CTA, agency-built WP for the child-theme path.",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business.phone",
+          "note": "Two numbers for two towns (Independence, Jesup) but only one address; Jesup may be a second office with no address shown.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "business.email",
+          "note": "Email is Cloudflare-obfuscated in the HTML ('[email protected]'); capture must run JS or decode it to find info@iphci.com.",
+          "resolution": "accepted"
+        },
+        {
+          "field": "business",
+          "note": "Service area (10 named towns) has no field. Same gap as chambers-consulting and arc-electric.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "pages.sections",
+          "note": "Plumbing/Heating/Cooling blocks appear twice in the markup (slider clones). Labeled once; the mapper must de-duplicate.",
+          "resolution": "accepted"
+        },
+        {
+          "field": "pages.sections.content",
+          "note": "Contact form fields only fit in body text. Same gap as the other sites.",
+          "resolution": "schema-change"
+        }
+      ]
     },
     {
       "slug": "hair-and-co-brooklyn",
-      "url": "http://hairandcobklyn.com/",
+      "url": "https://hairandcobklyn.com/",
       "businessType": "Salon (2 locations)",
       "platform": "wordpress",
       "pageBuilder": "wpbakery",
@@ -131,7 +298,33 @@
       ],
       "whyUseful": "Page-builder WP (style-guide path), Phorest booking, dated parts (© 2021, Google+ icon).",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business.locations",
+          "note": "Location count conflicts: nav/footer show 2 (Prospect Heights, Bay Ridge); contact page lists 3 (adds Clinton Hill) while its text says '2 locations'. No way to mark a location as possibly closed.",
+          "resolution": "accepted"
+        },
+        {
+          "field": "pages.sections.content.ctas.provider",
+          "note": "Two booking systems: Phorest in the nav, mylocalsalon on the contact page. Likely a retired system still linked.",
+          "resolution": "accepted"
+        },
+        {
+          "field": "business",
+          "note": "Practitioners (24 stylists, some at both locations) only fit as team section items; no structured staff-per-location field. Same gap as northern-heights-dental.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "pages.sections",
+          "note": "Bay Ridge team block appears three times and the nav twice in the markup. Labeled once; the mapper must de-duplicate. Same as iphci.",
+          "resolution": "accepted"
+        },
+        {
+          "field": "pages.sections.content.items",
+          "note": "Nav has dropdowns (About, Locations, Services, SHOP, Book Now) with ~15 child links; items can't nest.",
+          "resolution": "schema-change"
+        }
+      ]
     },
     {
       "slug": "delaware-valley-hardwoods",
@@ -147,7 +340,33 @@
       ],
       "whyUseful": "Custom path, JS-loaded content (render waits).",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business",
+          "note": "Service area given as a radius ('~10 miles from Wilmington') plus a town list; no field for either. Same gap as chambers-consulting, arc-electric, iphci.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "business",
+          "note": "Certification (Bona Certified Craftsman, with verification link) has no field. Same gap as licences, memberships and awards on other sites.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "business",
+          "note": "Owners/practitioners (Jim and Andrea Kramer, with roles) have no field. Same as northern-heights-dental and hair-and-co-brooklyn.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "pages.sections",
+          "note": "Recent Projects is an Instagram feed loaded by JavaScript; without waiting for it, capture sees only 'Loading recent projects...'.",
+          "resolution": "accepted"
+        },
+        {
+          "field": "pages.sections.content",
+          "note": "Contact form fields, including a required select with options, only fit in body text.",
+          "resolution": "schema-change"
+        }
+      ]
     },
     {
       "slug": "chambers-consulting",
@@ -164,7 +383,23 @@
       "whyUseful": "The only site with guaranteed consent. First real crawl in M1.",
       "consent": "own-site",
       "consentRecordedAt": "2026-11-09T00:00:00.000Z",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business.address",
+          "note": "Site gives a service area ('Based in Northern Virginia, working with businesses anywhere'), not an address. No field for service area.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "pages.sections.type",
+          "note": "Numbered 'How it works' steps have no section type; labeled as richtext.",
+          "resolution": "schema-change"
+        },
+        {
+          "field": "pages.sections.content",
+          "note": "Contact form fields only fit in body text. The audit's form-works check will need them structured.",
+          "resolution": "schema-change"
+        }
+      ]
     },
     {
       "slug": "williamsburg-chiro-ny",

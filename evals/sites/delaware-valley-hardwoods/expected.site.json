@@ -1,0 +1,366 @@
+{
+  "id": "site_delaware-valley-hardwoods",
+  "projectId": "proj_delaware-valley-hardwoods",
+  "schemaVersion": 2,
+  "sourceUrl": "https://delawarevalleyhardwoods.com/",
+  "platform": "custom",
+  "platformEvidence": [],
+  "platformConfidence": 0,
+  "business": {
+    "name": "Delaware Valley Hardwoods",
+    "phones": [{ "value": "(302) 396-4560" }],
+    "emails": [{ "value": "info@delawarevalleyhardwoods.com" }],
+    "address": "2116 Peachtree Dr, Wilmington, DE 19805",
+    "hours": [
+      { "label": "Footer", "text": "Mon–Fri: 9AM–5PM" },
+      {
+        "label": "Business Hours (contact page)",
+        "text": "Monday – Friday: 9AM – 5PM · Saturday – Sunday: Closed"
+      }
+    ],
+    "googleBusinessUrl": "https://share.google/lArV2tZRTRZy0wrVZ",
+    "socialLinks": [
+      { "network": "facebook", "url": "https://www.facebook.com/DelawareValleyHardwoods/" },
+      { "network": "instagram", "url": "https://www.instagram.com/delaware.valley.hardwoods.jim/" }
+    ],
+    "trust": {
+      "foundedYear": 1998,
+      "licenses": [],
+      "ratings": [],
+      "credentials": [
+        {
+          "kind": "certification",
+          "name": "Bona Certified Craftsman",
+          "url": "https://www.bona.com/en-us/homeowner/find-a-contractor/contractor-details/?storeid=83311"
+        }
+      ]
+    },
+    "serviceArea": {
+      "description": "Northern Delaware & Nearby PA",
+      "places": [
+        "Wilmington",
+        "Newark",
+        "Hockessin",
+        "Pike Creek",
+        "Greenville",
+        "Claymont",
+        "Bear",
+        "Middletown"
+      ],
+      "radiusMiles": 10
+    },
+    "people": [
+      { "name": "Jim Kramer", "role": "Owner and Bona Certified Craftsman" },
+      { "name": "Andrea Kramer", "role": "Certified Sales Advisor" }
+    ]
+  },
+  "brand": {
+    "extractedColors": [
+      { "hex": "#cc4400", "role": "primary" },
+      { "hex": "#1a1a1a", "role": "accent" },
+      { "hex": "#ffffff", "role": "background" },
+      { "hex": "#f7f7f7", "role": "surface" }
+    ],
+    "extractedFonts": ["Georgia", "system-ui"]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Hardwood Floor Refinishing & Installation Wilmington DE",
+      "metaDescription": "Family-owned hardwood floor refinishing & installation in northern Delaware. Bona Certified Craftsman. Dustless sanding, expert craftsmanship. Free estimates.",
+      "sections": [
+        {
+          "id": "home-nav",
+          "type": "nav",
+          "content": {
+            "items": [
+              { "title": "Refinishing", "link": "https://delawarevalleyhardwoods.com/refinishing" },
+              { "title": "Dustless", "link": "https://delawarevalleyhardwoods.com/dustless" },
+              {
+                "title": "Installation",
+                "link": "https://delawarevalleyhardwoods.com/installation"
+              },
+              { "title": "Cost & Value", "link": "https://delawarevalleyhardwoods.com/cost" },
+              { "title": "Care & FAQs", "link": "https://delawarevalleyhardwoods.com/care" },
+              { "title": "About", "link": "https://delawarevalleyhardwoods.com/about" },
+              { "title": "Contact", "link": "https://delawarevalleyhardwoods.com/contact" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "content": {
+            "heading": "Excellence in Wooden Floors",
+            "subheading": "Serving Wilmington and surrounding areas since 1998",
+            "body": "Bona Certified craftsman: refinishing, repair and installation. Photo carousel of 9 slides.",
+            "ctas": [
+              {
+                "label": "Get Your Free Quote",
+                "href": "https://delawarevalleyhardwoods.com/contact",
+                "kind": "link"
+              },
+              { "label": "Call (302) 396-4560", "href": "tel:302-396-4560", "kind": "call" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-why",
+          "type": "about",
+          "content": {
+            "heading": "Why Choose Delaware Valley Hardwoods",
+            "subheading": "Certified by the Industry's Highest Standard.",
+            "body": "Work Directly with the Owners: Jim Kramer (Owner and Bona Certified Craftsman) leads every crew; Andrea Kramer (Certified Sales Advisor) handles inquiries. Bona Certified Craftsman credential with listed certification requirements.",
+            "items": [
+              { "title": "25+ Years Experience", "body": "Family business since 1998." },
+              { "title": "One Project at a Time", "body": "Undivided attention start to finish." },
+              { "title": "Dustless Technology", "body": "Dust captured at the source." },
+              { "title": "Licensed and Insured", "body": "Fully licensed and insured." }
+            ],
+            "ctas": [
+              {
+                "label": "Bona Certified Craftsman",
+                "href": "https://www.bona.com/en-us/homeowner/find-a-contractor/contractor-details/?storeid=83311",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-services",
+          "type": "services",
+          "content": {
+            "heading": "Our Services",
+            "subheading": "Hardwood flooring services focused on quality, precision, and long-term performance",
+            "items": [
+              {
+                "title": "Dustless Floor Refinishing",
+                "body": "Dust-controlled sanding.",
+                "link": "https://delawarevalleyhardwoods.com/refinishing"
+              },
+              {
+                "title": "Hardwood Installation",
+                "body": "Solid and engineered; wide-plank and custom layouts.",
+                "link": "https://delawarevalleyhardwoods.com/installation"
+              },
+              { "title": "Floor Repairs", "body": "Boards, squeaks and gaps." }
+            ],
+            "ctas": [
+              {
+                "label": "Explore the Process →",
+                "href": "https://delawarevalleyhardwoods.com/refinishing",
+                "kind": "link"
+              },
+              {
+                "label": "About Dustless Sanding →",
+                "href": "https://delawarevalleyhardwoods.com/dustless",
+                "kind": "link"
+              },
+              {
+                "label": "Learn More About Hardwood Installation →",
+                "href": "https://delawarevalleyhardwoods.com/installation",
+                "kind": "link"
+              },
+              {
+                "label": "Request a Repair Estimate →",
+                "href": "https://delawarevalleyhardwoods.com/contact",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-projects",
+          "type": "gallery",
+          "content": {
+            "heading": "Recent Projects",
+            "subheading": "See what we're working on right now.",
+            "body": "Instagram feed of recent project photos, loaded with JavaScript (shows 'Loading recent projects...' until it loads).",
+            "ctas": [
+              {
+                "label": "Follow on Instagram",
+                "href": "https://www.instagram.com/delaware.valley.hardwoods.jim/",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-testimonials",
+          "type": "testimonials",
+          "content": {
+            "heading": "What Our Clients Say",
+            "subheading": "Real reviews from real customers",
+            "items": [
+              {
+                "title": "Laura Thompson Alvarez",
+                "body": "Quick response, excellent work on damaged floors."
+              },
+              { "title": "T.J. Haas", "body": "Dedicated tradesman, always improving." },
+              {
+                "title": "David Wolfe",
+                "body": "Mixed-wood floors refinished to one consistent look."
+              },
+              { "title": "Joel Camacho", "body": "Rescued a job after a cheaper refinisher." },
+              {
+                "title": "Ang Church",
+                "body": "Linseed finish and color correction for older home."
+              },
+              { "title": "Dave R.", "body": "Brought out the natural grain." }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-faq",
+          "type": "faq",
+          "content": {
+            "heading": "Frequently Asked Questions",
+            "subheading": "Common questions about hardwood floor refinishing and installation",
+            "items": [
+              { "title": "How long does floor refinishing take?" },
+              { "title": "Do I need to leave my home during refinishing?" },
+              { "title": "How \"dustless\" is your dustless sanding?" },
+              { "title": "Can all hardwood floors be refinished?" },
+              { "title": "What's your warranty or guarantee?" },
+              { "title": "How far in advance should I book?" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-cta",
+          "type": "cta",
+          "content": {
+            "heading": "Ready to Transform Your Floors?",
+            "body": "Free, no-obligation consultation and estimate.",
+            "ctas": [
+              {
+                "label": "Get Your Free Quote",
+                "href": "https://delawarevalleyhardwoods.com/contact",
+                "kind": "link"
+              },
+              { "label": "Call", "href": "tel:302-396-4560", "kind": "call" },
+              {
+                "label": "Get Estimate",
+                "href": "https://delawarevalleyhardwoods.com/contact",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-footer",
+          "type": "footer",
+          "content": {
+            "heading": "Excellence in Wooden Floors",
+            "body": "Family-owned hardwood flooring specialists. One project at a time since 1998. · Northern Delaware & Nearby PA · Wilmington, Newark, Hockessin, Pike Creek, Greenville, Claymont, Bear, Middletown, and surrounding areas. · Mon–Fri: 9AM–5PM · © 2026 Delaware Valley Hardwoods. All rights reserved. | Bona Certified Craftsman - Hand-Selected · Site design by Kevin Kahn",
+            "ctas": [
+              {
+                "label": "2116 Peachtree Dr, Wilmington, DE 19805",
+                "href": "https://www.google.com/maps/place/Delaware+Valley+Hardwoods+Inc",
+                "kind": "link"
+              },
+              { "label": "(302) 396-4560", "href": "tel:302-396-4560", "kind": "call" },
+              {
+                "label": "info@delawarevalleyhardwoods.com",
+                "href": "mailto:info@delawarevalleyhardwoods.com",
+                "kind": "email"
+              },
+              {
+                "label": "Request a Quote →",
+                "href": "https://delawarevalleyhardwoods.com/contact",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    },
+    {
+      "path": "/contact",
+      "title": "Free Flooring Estimate | Delaware Valley Hardwoods DE",
+      "sections": [
+        {
+          "id": "contact-intro",
+          "type": "contact",
+          "content": {
+            "heading": "Get in Touch",
+            "subheading": "Bona Certified Craftsman • Family-Owned Since 1998",
+            "body": "Call (Recommended). Service Area: Northern Delaware, Wilmington & Nearby PA (~10 miles). Response Time: Within 24 hours.",
+            "ctas": [
+              { "label": "(302) 396-4560", "href": "tel:302-396-4560", "kind": "call" },
+              {
+                "label": "info@delawarevalleyhardwoods.com",
+                "href": "mailto:info@delawarevalleyhardwoods.com",
+                "kind": "email"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-form",
+          "type": "contact",
+          "content": {
+            "heading": "Request a Consultation",
+            "form": {
+              "fields": [
+                { "label": "Name", "type": "text", "required": true },
+                { "label": "Phone", "type": "tel", "required": true },
+                { "label": "Email", "type": "email", "required": true },
+                {
+                  "label": "Service",
+                  "type": "select",
+                  "required": true,
+                  "options": ["Refinishing", "Installation", "Both", "Consultation"]
+                },
+                { "label": "Project Details", "type": "textarea", "required": true }
+              ],
+              "submitLabel": "Send Request"
+            }
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-area",
+          "type": "map",
+          "content": {
+            "heading": "Service Area",
+            "body": "Northern Delaware and nearby Pennsylvania. Google Map embed."
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-info",
+          "type": "contact",
+          "content": {
+            "heading": "Contact Information",
+            "body": "2116 Peachtree Dr, Wilmington, DE 19805 · Monday – Friday: 9AM – 5PM, Saturday – Sunday: Closed · Service Radius: ~10 miles from Wilmington",
+            "ctas": [
+              {
+                "label": "View on Google",
+                "href": "https://share.google/lArV2tZRTRZy0wrVZ",
+                "kind": "link"
+              },
+              { "label": "Call", "href": "tel:302-396-4560", "kind": "call" },
+              {
+                "label": "Get Estimate",
+                "href": "https://delawarevalleyhardwoods.com/contact",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    }
+  ]
+}

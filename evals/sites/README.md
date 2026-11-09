@@ -48,6 +48,10 @@ re-verify every entry.
 
 ## Labeling guidance (T8)
 
+Step-by-step instructions: [`LABELING.md`](LABELING.md). Blank template:
+`_template/expected.site.json`. Check labels with `pnpm eval:conformance`; check the M0 gate
+(10 passing labels, no open misfits) with `pnpm gate:m0`.
+
 - Look at each site in a normal browser, the way any visitor would. Do not crawl, script or
   save pages for `none` sites.
 - Hex colors must be lowercase 6-digit, e.g. `#1a2b3c` (the site model rejects `#1A2B3C`

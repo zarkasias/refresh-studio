@@ -1,0 +1,152 @@
+{
+  "id": "site_casper-plumbing",
+  "projectId": "proj_casper-plumbing",
+  "schemaVersion": 2,
+  "sourceUrl": "https://www.casperplumbing.com/",
+  "platform": "wix",
+  "platformEvidence": [],
+  "platformConfidence": 0,
+  "business": {
+    "name": "Casper Plumbing",
+    "phones": [{ "value": "307-441-4444" }],
+    "emails": [{ "value": "infocasperplumbing@gmail.com" }],
+    "address": "1700 E Yellowstone Hwy, Casper, WY 82609",
+    "hours": [
+      {
+        "label": "Opening Hours",
+        "text": "Monday, Friday, Tuesday, Thursday, Wednesday, Saturday, Sunday: 7:00 am – 7:00 pm"
+      }
+    ],
+    "socialLinks": []
+  },
+  "brand": {
+    "extractedColors": [
+      { "hex": "#2da0bd", "role": "primary" },
+      { "hex": "#ff6161", "role": "accent" },
+      { "hex": "#ffffff", "role": "background" },
+      { "hex": "#000000", "role": "surface" }
+    ],
+    "extractedFonts": ["Futura", "Cormorant Garamond", "Bitter", "Georgia"]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Home | Casper Plumbing",
+      "sections": [
+        {
+          "id": "home-nav",
+          "type": "nav",
+          "content": {
+            "items": [
+              { "title": "Home", "link": "https://www.casperplumbing.com" },
+              { "title": "Services", "link": "https://www.casperplumbing.com/services-4" },
+              { "title": "Contact", "link": "https://www.casperplumbing.com/contact-5" }
+            ],
+            "ctas": [{ "label": "307-441-4444", "href": "tel:3074738448", "kind": "call" }]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "content": {
+            "heading": "YOUR PLUMBING EXPERTS",
+            "subheading": "Professional Plumbing Services in Casper, Wyoming",
+            "body": "20+ years serving Casper; residential and commercial plumbing, repairs, drain cleaning, water treatment."
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-about",
+          "type": "about",
+          "content": {
+            "heading": "ABOUT"
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-cta",
+          "type": "cta",
+          "content": {
+            "heading": "Call Us Today - 307-441-4444"
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-testimonials",
+          "type": "testimonials",
+          "content": {
+            "heading": "What our Customers say:",
+            "items": [
+              {
+                "title": "Brittney H.",
+                "body": "Quick scheduling, friendly, knowledgeable service."
+              },
+              { "title": "Chris C.", "body": "Fast response; technician arrived in 30 minutes." },
+              {
+                "title": "David M.",
+                "body": "Timely, professional fix and outdoor faucet install."
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-footer",
+          "type": "footer",
+          "content": {
+            "body": "1700 E Yellowstone Hwy, Casper, WY 82609 · www.casperplumbing.com · 307-441-4444 (not linked)",
+            "ctas": [
+              {
+                "label": "www.casperplumbing.com",
+                "href": "http://www.casperplumbing.com",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    },
+    {
+      "path": "/contact-5",
+      "title": "Contact | Casper Plumbing",
+      "sections": [
+        {
+          "id": "contact-call",
+          "type": "cta",
+          "content": {
+            "heading": "Call Us Today - 307-441-4444"
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-main",
+          "type": "contact",
+          "content": {
+            "heading": "Contact",
+            "body": "Address 1700 E Yellowstone Hwy, Casper, WY 82609. Phone 307-441-4444 (not linked). Opening Hours listed per day, all 7:00 am – 7:00 pm.",
+            "ctas": [
+              {
+                "label": "infocasperplumbing@gmail.com",
+                "href": "mailto:infocasperplumbing@gmail.com",
+                "kind": "email"
+              }
+            ],
+            "form": {
+              "fields": [
+                { "label": "First Name", "type": "text", "required": false },
+                { "label": "Last Name", "type": "text", "required": false },
+                { "label": "Email", "type": "email", "required": false },
+                { "label": "Message", "type": "textarea", "required": false }
+              ],
+              "submitLabel": "Send",
+              "confirmation": "Thanks for submitting!"
+            }
+          },
+          "confidence": 1
+        }
+      ]
+    }
+  ]
+}

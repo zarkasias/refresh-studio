@@ -20,15 +20,12 @@ import {
   pgTable,
   text,
   timestamp,
+  unique,
 } from 'drizzle-orm/pg-core';
 import { AssetKindSchema } from '../schemas/asset';
 import { CommentAuthorSchema } from '../schemas/comment';
 import { ConsentMethodSchema, MAX_CRAWL_PAGES } from '../schemas/project';
-import {
-  VariantStatusSchema,
-  VariantStyleSchema,
-  APPROVAL_REQUIRED_STATUSES,
-} from '../schemas/variant';
+import { VariantStatusSchema, VariantStyleSchema } from '../schemas/variant';
 import type { DesignTokens } from '../schemas/tokens';
 import type { Site } from '../schemas/site';
 import type { VersionSnapshot } from '../schemas/version';
@@ -128,20 +125,12 @@ export const variants = pgTable(
     tokens: jsonb('tokens').$type<DesignTokens>().notNull(),
     /** Section id -> template id. */
     templates: jsonb('templates').$type<Record<string, string>>().notNull(),
-    approvedAt: tstz('approved_at'),
-    approvedBy: text('approved_by'),
+    // Approval lives on versions, not here (ADR-005).
   },
   (t) => [
     index('variants_site_id_idx').on(t.siteId),
     check('variants_style_values', inList('style', VariantStyleSchema.options)),
     check('variants_status_values', inList('status', VariantStatusSchema.options)),
-    // Rule 4, defense in depth: mirrors VariantSchema.
-    check('variants_approved_by_nonempty', sql`${t.approvedBy} IS NULL OR ${t.approvedBy} <> ''`),
-    check('variants_approval_pair', sql`(${t.approvedAt} IS NULL) = (${t.approvedBy} IS NULL)`),
-    check(
-      'variants_approval_required',
-      sql`${t.status} NOT IN (${sql.raw(APPROVAL_REQUIRED_STATUSES.map((s) => `'${s}'`).join(', '))}) OR (${t.approvedAt} IS NOT NULL AND ${t.approvedBy} IS NOT NULL)`,
-    ),
   ],
 );
 
@@ -152,12 +141,28 @@ export const versions = pgTable(
     variantId: text('variant_id')
       .notNull()
       .references(() => variants.id, { onDelete: 'restrict' }),
+    /** 1, 2, 3, ... per variant (ADR-005). */
+    number: integer('number').notNull(),
     snapshot: jsonb('snapshot').$type<VersionSnapshot>().notNull(),
     createdBy: text('created_by').notNull(),
     note: text('note').notNull(),
     createdAt: tstz('created_at').notNull(),
+    /** Consultant approval (rule 4). Set once; the trigger in migration 0002 freezes the row. */
+    approvedAt: tstz('approved_at'),
+    approvedBy: text('approved_by'),
   },
-  (t) => [index('versions_variant_id_idx').on(t.variantId)],
+  (t) => [
+    index('versions_variant_id_idx').on(t.variantId),
+    unique('versions_variant_number_unique').on(t.variantId, t.number),
+    check('versions_number_positive', sql`${t.number} >= 1`),
+    // Rule 4, defense in depth: mirrors VersionSchema.
+    check('versions_approved_by_nonempty', sql`${t.approvedBy} IS NULL OR ${t.approvedBy} <> ''`),
+    check('versions_approval_pair', sql`(${t.approvedAt} IS NULL) = (${t.approvedBy} IS NULL)`),
+    check(
+      'versions_approved_after_created',
+      sql`${t.approvedAt} IS NULL OR ${t.approvedAt} >= ${t.createdAt}`,
+    ),
+  ],
 );
 
 export const comments = pgTable(

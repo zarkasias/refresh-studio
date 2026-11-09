@@ -1,0 +1,172 @@
+{
+  "id": "site_chambers-consulting",
+  "projectId": "proj_chambers-consulting",
+  "schemaVersion": 2,
+  "sourceUrl": "https://www.chambers-consulting.dev/",
+  "platform": "custom",
+  "platformEvidence": [],
+  "platformConfidence": 0,
+  "business": {
+    "name": "Chambers Consulting",
+    "emails": [{ "value": "david@chambers-consulting.dev" }],
+    "socialLinks": [{ "network": "linkedin", "url": "https://linkedin.com/in/davidmachambers" }],
+    "serviceArea": {
+      "description": "Based in Northern Virginia, working with businesses anywhere.",
+      "places": []
+    },
+    "people": [{ "name": "David Chambers", "role": "Website specialist" }]
+  },
+  "brand": {
+    "extractedColors": [
+      { "hex": "#16324b", "role": "primary" },
+      { "hex": "#c5202e", "role": "accent" },
+      { "hex": "#ffffff", "role": "background" },
+      { "hex": "#eff8fa", "role": "surface" }
+    ],
+    "extractedFonts": ["DM Sans", "Inter"]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Chambers Consulting | Website Redesigns for Small Businesses",
+      "metaDescription": "I help small businesses modernize the websites they already have, with better design, mobile fixes, and faster pages, without starting over.",
+      "sections": [
+        {
+          "id": "home-nav",
+          "type": "nav",
+          "content": {
+            "items": [
+              { "title": "What I fix", "link": "https://www.chambers-consulting.dev/#services" },
+              { "title": "About", "link": "https://www.chambers-consulting.dev/#about" },
+              { "title": "How it works", "link": "https://www.chambers-consulting.dev/#process" },
+              { "title": "Contact", "link": "https://www.chambers-consulting.dev/#contact" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "content": {
+            "heading": "A better website for your small business, without starting over.",
+            "subheading": "I'm David Chambers, a website specialist with 27+ years of experience. I help small businesses modernize how their sites look, fix problems on phones, and make it easier for customers to call, book, or get in touch.",
+            "items": [
+              { "title": "I work with your existing site." },
+              { "title": "Based in Northern Virginia, working with businesses anywhere." },
+              { "title": "Looks current" },
+              { "title": "Works on phones" },
+              { "title": "Easy to contact" }
+            ],
+            "ctas": [{ "label": "Tell me about your site", "href": "#contact", "kind": "link" }]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-services",
+          "type": "services",
+          "content": {
+            "heading": "Not happy with how your site feels or performs?",
+            "items": [
+              {
+                "title": "Your site looks outdated",
+                "body": "Refresh layout, typography and color without rebuilding."
+              },
+              {
+                "title": "Visitors struggle to find information",
+                "body": "Simplify navigation and page structure."
+              },
+              {
+                "title": "Your site doesn't work well on mobile",
+                "body": "Fix layouts, menus and buttons for phones."
+              },
+              {
+                "title": "Your site is slow or hard for some people to use",
+                "body": "Improve loading speed and accessibility."
+              },
+              {
+                "title": "Updating your site has become difficult",
+                "body": "Clean up behind the scenes so changes are simpler."
+              }
+            ],
+            "ctas": [
+              { "label": "Tell me what's bothering you.", "href": "#contact", "kind": "link" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-about",
+          "type": "about",
+          "content": {
+            "heading": "You'll work directly with me.",
+            "body": "David Chambers, 27+ years, Northern Virginia; no account manager or handoff; plain-English recommendations."
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-process",
+          "type": "process",
+          "content": {
+            "heading": "Simple from start to finish.",
+            "items": [
+              { "title": "Let's Talk", "body": "Tell me about your site and what's not working." },
+              { "title": "Make a Plan", "body": "Recommend the approach and agree on the work." },
+              { "title": "Make It Better", "body": "Make, test and ship the improvements." }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-contact",
+          "type": "contact",
+          "content": {
+            "heading": "Have a site that isn't working for you?",
+            "body": "Reply within one business day, no obligation.",
+            "ctas": [
+              {
+                "label": "david@chambers-consulting.dev",
+                "href": "mailto:david@chambers-consulting.dev",
+                "kind": "email"
+              }
+            ],
+            "form": {
+              "fields": [
+                { "label": "Your name", "type": "text", "required": true },
+                { "label": "Email", "type": "email", "required": true },
+                { "label": "Website address", "type": "url", "required": false },
+                { "label": "What would you like to improve?", "type": "textarea", "required": true }
+              ]
+            }
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-footer",
+          "type": "footer",
+          "content": {
+            "body": "Helping small businesses improve the websites they already have. Based in Northern Virginia, working with businesses anywhere. © 2026 Chambers Consulting. All rights reserved.",
+            "items": [
+              {
+                "title": "Privacy Policy",
+                "link": "https://www.chambers-consulting.dev/privacy-policy"
+              },
+              {
+                "title": "Terms of Use",
+                "link": "https://www.chambers-consulting.dev/terms-conditions"
+              }
+            ],
+            "ctas": [
+              {
+                "label": "LinkedIn",
+                "href": "https://linkedin.com/in/davidmachambers",
+                "kind": "link"
+              },
+              { "label": "Email", "href": "mailto:david@chambers-consulting.dev", "kind": "email" }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    }
+  ]
+}

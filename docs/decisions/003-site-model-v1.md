@@ -1,7 +1,7 @@
 # 003 — Site model v1
 
 - **Date:** 2026-11-09
-- **Status:** accepted
+- **Status:** accepted; business fields and locations amended by ADR-006 (site model v2)
 
 ## Context
 
@@ -68,7 +68,8 @@ migration so the tables match from day one); it is not in the approved plan text
   boundary, so `/jolly` does not admit `/jollyplumbing`.
 - **Slug rule.** `socialLinks.network`, `cta.provider`, `platformDetails.builder` and the open
   branch of `pageBuilder` match `^[a-z0-9][a-z0-9-]*$`. `platformDetails.theme` stays as found.
-- **Approval invariant** (CLAUDE.md rule 4). `approvedAt` and `approvedBy` are both present or
+- **Approval invariant** (CLAUDE.md rule 4). *Superseded by ADR-005: approval moved from
+  Variant to Version.* `approvedAt` and `approvedBy` are both present or
   both absent, and `status` `approved`, `shared` or `selected` requires both. A `draft` may
   keep an earlier approval. Because Zod 4 does not allow `.pick/.omit/.extend` on refined
   objects, the package also exports `VariantObjectSchema` (and `SiteObjectSchema`) without the

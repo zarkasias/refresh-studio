@@ -1,0 +1,319 @@
+{
+  "id": "site_jolly-plumbing",
+  "projectId": "proj_jolly-plumbing",
+  "schemaVersion": 2,
+  "sourceUrl": "https://jollyplumbing.net/",
+  "platform": "wordpress",
+  "platformEvidence": [],
+  "platformConfidence": 0,
+  "business": {
+    "name": "Jolly Plumbing & Heating, Inc.",
+    "phones": [
+      { "value": "719-473-8545", "label": "Schedule an Appointment" },
+      { "value": "719-491-8104", "label": "Emergency Services" }
+    ],
+    "emails": [{ "value": "Steven@jollyplumbing.net" }, { "value": "service@jollyplumbing.net" }],
+    "address": "905 Yuma St, Colorado Springs, CO 80909",
+    "hours": [
+      { "label": "Header", "text": "Monday – Friday 7:30a – 4:00p" },
+      { "label": "Office Hours", "text": "Mon-Fri 07:30 AM – 04:00 PM" },
+      { "label": "Emergency Services", "text": "24/7" }
+    ],
+    "socialLinks": [
+      { "network": "instagram", "url": "https://www.instagram.com/coloradospringsplumber/?hl=en" },
+      {
+        "network": "linkedin",
+        "url": "https://www.linkedin.com/company/jolly-plumbing-&-heating-inc-"
+      },
+      {
+        "network": "yelp",
+        "url": "https://www.yelp.com/biz/jolly-plumbing-and-heating-colorado-springs-2"
+      }
+    ],
+    "trust": {
+      "foundedYear": 1955,
+      "licenses": [{ "number": "PC.0000533" }, { "number": "MP.00188865" }],
+      "ratings": [],
+      "credentials": [
+        { "kind": "badge", "name": "BBB" },
+        { "kind": "badge", "name": "HomeAdvisor" }
+      ]
+    }
+  },
+  "brand": {
+    "extractedColors": [
+      { "hex": "#ffd000", "role": "primary" },
+      { "hex": "#444342", "role": "accent" },
+      { "hex": "#ffffff", "role": "background" },
+      { "hex": "#f7f7f7", "role": "surface" }
+    ],
+    "extractedFonts": ["Oswald", "Open Sans"]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Jolly Plumbing Colorado Springs Best Plumber | Call for Quote",
+      "metaDescription": "Looking for Colorado Springs' best plumber? Jolly Plumbing provides reliable plumbing repairs, installations, and maintenance with trusted local service.",
+      "sections": [
+        {
+          "id": "home-nav",
+          "type": "nav",
+          "content": {
+            "body": "PC License #: PC.0000533 · MP License #: MP.00188865 · Schedule an Appointment 719-473-8545 (not linked) · Monday – Friday 7:30a – 4:00p · 905 Yuma St, Colorado Springs, CO 80909",
+            "items": [
+              {
+                "title": "Plumbing Services",
+                "link": "https://jollyplumbing.net/plumbing-services/"
+              },
+              {
+                "title": "Water Heater Services",
+                "link": "https://jollyplumbing.net/water-heater-services/"
+              },
+              {
+                "title": "Heating Services",
+                "link": "https://jollyplumbing.net/heating-services/"
+              },
+              { "title": "About Us", "link": "https://jollyplumbing.net/about/" },
+              { "title": "Featured Blogs", "link": "https://jollyplumbing.net/featured-blogs/" },
+              { "title": "Contact Us", "link": "https://jollyplumbing.net/contact/" }
+            ],
+            "ctas": [
+              {
+                "label": "Have a Plumbing emergency? Call or Text 719-491-8104",
+                "href": "tel:719-491-8104",
+                "kind": "call"
+              },
+              {
+                "label": "Request A Quote",
+                "href": "https://jollyplumbing.net/contact/",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "content": {
+            "heading": "Colorado Spring’s Best Plumber",
+            "subheading": "Locally Owned & Operated Since 1955",
+            "body": "Experience the Jolly difference with our team of non-commissioned, licensed plumbers focused on you solving your plumbing problems."
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-pricing",
+          "type": "cta",
+          "content": {
+            "heading": "Offering No-Hassle, Straightforward, Pricing.",
+            "ctas": [
+              {
+                "label": "Request A Quote",
+                "href": "https://jollyplumbing.net/contact/",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-about",
+          "type": "about",
+          "content": {
+            "heading": "Jolly Plumbing & Heating, Inc.",
+            "body": "Family-owned Colorado Springs plumber since 1955; honest, dependable work."
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-features",
+          "type": "features",
+          "content": {
+            "items": [
+              { "title": "Licensed Plumbers", "body": "Licensed and insured." },
+              { "title": "One Year Warranty", "body": "On all services." },
+              { "title": "Emergency Services", "body": "Available 24/7." }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-team",
+          "type": "cta",
+          "content": {
+            "heading": "OUR EMERGENCY COLORADO SPRINGS PLUMBING TEAM",
+            "body": "Technicians arrive promptly and fully prepared.",
+            "ctas": [
+              {
+                "label": "Request A Quote!",
+                "href": "https://jollyplumbing.net/contact/",
+                "kind": "link"
+              },
+              { "label": "Call To Schedule", "href": "tel:719-473-8545", "kind": "call" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-services",
+          "type": "services",
+          "content": {
+            "heading": "Our Services",
+            "items": [
+              { "title": "Plumbing", "body": "Fast service across the Colorado Springs area." },
+              { "title": "Water Heaters", "body": "Repair and replacement." },
+              { "title": "Heating", "body": "Repair and installation." },
+              {
+                "title": "Emergency Services",
+                "body": "24/7: burst pipes, clogged drains, water heater failures."
+              },
+              { "title": "Remodleing", "body": "Kitchen, bathroom and system upgrades." }
+            ],
+            "ctas": [
+              {
+                "label": "View Plumbing Services",
+                "href": "https://jollyplumbing.net/plumbing-services/",
+                "kind": "link"
+              },
+              {
+                "label": "View Water Heater Services",
+                "href": "https://jollyplumbing.net/water-heater-services/",
+                "kind": "link"
+              },
+              {
+                "label": "View Heating Services",
+                "href": "https://jollyplumbing.net/heating-services/",
+                "kind": "link"
+              },
+              {
+                "label": "Contact Emergency Services",
+                "href": "tel:+1%E2%80%8B719-491-8104",
+                "kind": "call"
+              },
+              {
+                "label": "View Remodeling Services",
+                "href": "https://jollyplumbing.net/bathroom-remodeling/",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-testimonials",
+          "type": "testimonials",
+          "content": {
+            "heading": "Why People are Choosing us.",
+            "items": [
+              {
+                "title": "Luke Wellman",
+                "body": "Bathroom remodel; professional, would hire again."
+              },
+              { "title": "Cassandra Holland", "body": "Fair pricing, one-day turnaround." },
+              { "title": "Joe Szeredy", "body": "Next-day water heater install; repeat customer." }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-partners",
+          "type": "gallery",
+          "content": {
+            "heading": "Our Trusted Partners"
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-contact",
+          "type": "contact",
+          "content": {
+            "body": "Location 905 Yuma St, Colorado Springs, CO 80909 · Office Hours Mon-Fri 07:30 AM – 04:00 PM · BBB and HomeAdvisor badges",
+            "ctas": [
+              { "label": "Call Us Now: 719-473-8545", "href": "tel:719-473-8545", "kind": "call" },
+              {
+                "label": "Email Us At: Steven@jollyplumbing.net",
+                "href": "mailto:Steven@jollyplumbing.net",
+                "kind": "email"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-footer",
+          "type": "footer",
+          "content": {
+            "heading": "Quick Links",
+            "body": "No copyright line.",
+            "items": [
+              {
+                "title": "Plumbing Services",
+                "link": "https://jollyplumbing.net/plumbing-services/"
+              },
+              {
+                "title": "Water Heater Services",
+                "link": "https://jollyplumbing.net/water-heater-services/"
+              },
+              {
+                "title": "Heating Services",
+                "link": "https://jollyplumbing.net/heating-services/"
+              },
+              { "title": "About Us", "link": "https://jollyplumbing.net/about/" },
+              { "title": "Featured Blogs", "link": "https://jollyplumbing.net/featured-blogs/" },
+              { "title": "Contact Us", "link": "https://jollyplumbing.net/contact/" }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    },
+    {
+      "path": "/contact/",
+      "title": "Contact | jollyplumbing.net",
+      "sections": [
+        {
+          "id": "contact-intro",
+          "type": "about",
+          "content": {
+            "heading": "Contact Us",
+            "subheading": "about our company",
+            "body": "Family-run El Paso County business since 1955. Open Monday – Friday from 7: 30 am to 4: 00 pm. Schedule a Appointment 719-473-8545.",
+            "ctas": [
+              {
+                "label": "More about us",
+                "href": "https://jollyplumbing.net/about/",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-main",
+          "type": "contact",
+          "content": {
+            "heading": "Contact us",
+            "body": "Email Us: Steven@jollyplumbing.net, service@jollyplumbing.net. Address: 905 Yuma St, Colorado Springs, CO 80909. Call us: Schedule an Appointment 719-473-8545; Emergency Services 719-491-8104. The form requires JavaScript. No map.",
+            "ctas": [
+              { "label": "Call Us Now: 719-473-8545", "href": "tel:719-473-8545", "kind": "call" },
+              {
+                "label": "Email Us At: Steven@jollyplumbing.net",
+                "href": "mailto:Steven@jollyplumbing.net",
+                "kind": "email"
+              }
+            ],
+            "form": {
+              "fields": [
+                { "label": "Message", "type": "textarea", "required": false },
+                { "label": "Email", "type": "email", "required": false }
+              ],
+              "submitLabel": "Send A Message"
+            }
+          },
+          "confidence": 1
+        }
+      ]
+    }
+  ]
+}

@@ -15,7 +15,9 @@
     "test": "vitest run",
     "test:e2e": "pnpm --filter @srs/web test:e2e",
     "eval:mapper": "pnpm --filter @srs/evals eval:mapper",
-    "eval:auditor": "pnpm --filter @srs/evals eval:auditor"
+    "eval:auditor": "pnpm --filter @srs/evals eval:auditor",
+    "eval:conformance": "vitest run --project evals conformance",
+    "gate:m0": "SRS_M0_GATE=1 vitest run --project evals conformance"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

@@ -1,7 +1,6 @@
 import { defineConfig } from 'vitest/config';
 
 const dirs = [
-  'apps/web',
   'packages/site-model',
   'packages/capture',
   'packages/audit',

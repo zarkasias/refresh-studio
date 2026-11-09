@@ -13,3 +13,12 @@
     letter-spacing: -0.025em;
   }
 }
+
+/* Visible focus for every interactive element, like .btn-cta:focus-visible on the source site.
+   Layered so Tailwind outline utilities can still override it. */
+@layer base {
+  :focus-visible {
+    outline: 3px solid var(--color-studio-ring);
+    outline-offset: 2px;
+  }
+}

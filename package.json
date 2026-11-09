@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
-    "test:e2e": "echo \"no e2e tests until T12\"",
+    "test:e2e": "pnpm --filter @srs/web test:e2e",
     "eval:mapper": "pnpm --filter @srs/evals eval:mapper",
     "eval:auditor": "pnpm --filter @srs/evals eval:auditor"
   },

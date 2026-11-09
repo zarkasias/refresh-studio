@@ -1,0 +1,287 @@
+{
+  "id": "site_arc-electric",
+  "projectId": "proj_arc-electric",
+  "schemaVersion": 1,
+  "sourceUrl": "https://www.arcelectric.co/",
+  "platform": "wix",
+  "platformEvidence": [],
+  "platformConfidence": 0,
+  "business": {
+    "name": "Arc Electric",
+    "phone": "(515) 721-6258",
+    "address": "3301 SE Destination Dr, Suite 100, Grimes, IA 50111",
+    "hours": [
+      {
+        "label": "Office (FAQ)",
+        "text": "Our office is open Monday through Friday, 8 AM to 4:30 PM"
+      }
+    ],
+    "socialLinks": [
+      { "network": "facebook", "url": "https://www.facebook.com/p/ARC-Electric-100087247617804/" }
+    ]
+  },
+  "brand": {
+    "extractedColors": [
+      { "hex": "#2950af", "role": "primary" },
+      { "hex": "#000000", "role": "accent" },
+      { "hex": "#ffffff", "role": "background" },
+      { "hex": "#f6f6f6", "role": "surface" }
+    ],
+    "extractedFonts": ["Avenir", "DIN Next", "Open Sans"]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Arc Electric | Des Moines Electricians | Grimes, IA",
+      "metaDescription": "Licensed Des Moines electricians for panel upgrades, EV chargers, generators, remodels, and repairs. Free quotes, on time and on budget. Call (515) 721-6258.",
+      "sections": [
+        {
+          "id": "home-nav",
+          "type": "nav",
+          "content": {
+            "items": [
+              { "title": "HOME", "link": "https://www.arcelectric.co" },
+              { "title": "SERVICES", "link": "https://www.arcelectric.co/services" },
+              { "title": "REVIEWS", "link": "https://www.arcelectric.co/reviews" },
+              { "title": "ABOUT", "link": "https://www.arcelectric.co/about" },
+              { "title": "JOIN OUR TEAM", "link": "https://www.arcelectric.co/joinourteam" },
+              {
+                "title": "GET A QUOTE",
+                "link": "https://www.arcelectric.co/?se_action=eyJ0eXBlIjoic2Utc2hvdy1tb2RhbCJ9"
+              }
+            ],
+            "ctas": [
+              { "label": "(515) 721-6258", "href": "tel:515-721-6258", "kind": "call" },
+              {
+                "label": "SCHEDULE ONLINE",
+                "href": "https://www.arcelectric.co/?se_action=eyJ0eXBlIjoic2Utc2hvdy1tb2RhbCJ9",
+                "kind": "book",
+                "provider": "scheduleengine"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "content": {
+            "heading": "Des Moines Electricians",
+            "body": "Commercial and residential electricians; on time and on budget for any size project. Rated 4.9 stars from 514 Google reviews.",
+            "ctas": [
+              {
+                "label": "SCHEDULE A FREE QUOTE",
+                "href": "https://www.arcelectric.co/?se_action=eyJ0eXBlIjoic2Utc2hvdy1tb2RhbCJ9",
+                "kind": "book",
+                "provider": "scheduleengine"
+              },
+              {
+                "label": "Read Our Reviews!",
+                "href": "https://www.arcelectric.co/reviews",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-services",
+          "type": "services",
+          "content": {
+            "heading": "Electrical Services",
+            "items": [
+              {
+                "title": "New Home Construction",
+                "body": "Single-family and multifamily homes for Des Moines builders.",
+                "link": "https://www.arcelectric.co/newconstruction"
+              },
+              {
+                "title": "Panel Services",
+                "body": "Panel updates for safe household power.",
+                "link": "https://www.arcelectric.co/electrical-panels"
+              },
+              {
+                "title": "Remodel Wiring",
+                "body": "Basements, bathroom remodels, additions.",
+                "link": "https://www.arcelectric.co/remodel"
+              },
+              {
+                "title": "Install Services",
+                "body": "Light fixtures, TV power, extra outlets.",
+                "link": "https://www.arcelectric.co/install"
+              },
+              {
+                "title": "Repair Services",
+                "body": "Switches, lights, plugs that aren't working.",
+                "link": "https://www.arcelectric.co/electricalproblems"
+              },
+              {
+                "title": "Safety Services",
+                "body": "Code-compliance checks and evaluations.",
+                "link": "https://www.arcelectric.co/safety-inspections"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-why",
+          "type": "richtext",
+          "content": {
+            "heading": "WHY ARC",
+            "body": "Rees Christensen, President. Badge: 100% Satisfaction Guaranteed.",
+            "items": [
+              {
+                "title": "Professional",
+                "body": "Scheduled appointments, communication, upfront pricing."
+              },
+              { "title": "Reliable", "body": "Quick, thorough service." },
+              { "title": "Safe", "body": "Safe, satisfied and up to code every time." }
+            ],
+            "ctas": [
+              {
+                "label": "Why Hire An Electrician",
+                "href": "https://www.arcelectric.co/_files/ugd/6fbf59_ac72cf90e98d41b198e876c5d46b8a9d.pdf?index=true",
+                "kind": "link"
+              },
+              { "label": "CALL TODAY", "href": "tel:515-721-6258", "kind": "call" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-popular",
+          "type": "services",
+          "content": {
+            "heading": "Popular Residential Services",
+            "items": [
+              {
+                "title": "Electric Car Charging",
+                "body": "Discuss location, quote, satisfaction guaranteed.",
+                "link": "https://www.arcelectric.co/electric-car-charger-installation"
+              },
+              {
+                "title": "Safety Inspections",
+                "body": "Examine systems, report findings, satisfaction guaranteed."
+              },
+              {
+                "title": "Hot Tub/Pool Wiring",
+                "body": "Placement, quote, satisfaction guaranteed.",
+                "link": "https://www.arcelectric.co/hot-tubs"
+              },
+              {
+                "title": "Panel/Circuit Breakers",
+                "body": "Assess upgrade, quote, satisfaction guaranteed.",
+                "link": "https://www.arcelectric.co/electrical-panels"
+              },
+              {
+                "title": "Whole Home Generators",
+                "body": "Requirements and location, quote, satisfaction guaranteed.",
+                "link": "https://www.arcelectric.co/generators"
+              },
+              {
+                "title": "Electrical Problems",
+                "body": "Troubleshoot outlets, fans, lighting, panels, breakers, smoke detectors."
+              }
+            ],
+            "ctas": [
+              {
+                "label": "Financing Available!",
+                "href": "https://www.arcelectric.co/financing",
+                "kind": "link"
+              },
+              {
+                "label": "EV Chargers",
+                "href": "https://www.arcelectric.co/electric-car-charger-installation",
+                "kind": "link"
+              },
+              {
+                "label": "Safe Electric",
+                "href": "https://www.arcelectric.co/safety-inspections",
+                "kind": "link"
+              },
+              {
+                "label": "Spa Wiring",
+                "href": "https://www.arcelectric.co/hot-tubs",
+                "kind": "link"
+              },
+              {
+                "label": "Panel Repair",
+                "href": "https://www.arcelectric.co/electrical-panels",
+                "kind": "link"
+              },
+              {
+                "label": "Generators",
+                "href": "https://www.arcelectric.co/generators",
+                "kind": "link"
+              },
+              {
+                "label": "Electrical Issues",
+                "href": "https://www.arcelectric.co/electricalproblems",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-area",
+          "type": "richtext",
+          "content": {
+            "heading": "Serving the Greater Des Moines Area",
+            "body": "24 communities served from the Grimes office: Adel, Altoona, Ames, Ankeny, Clive, Des Moines, Grimes, Indianola, Johnston, Knoxville, Marshalltown, Maxwell, Monroe, Nevada, Norwalk, Oskaloosa, Pella, Pleasant Hill, Prairie City, Urbandale, Waukee, West Des Moines, Windsor Heights, Winterset."
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-contact",
+          "type": "contact",
+          "content": {
+            "heading": "Ready to Get Started?",
+            "body": "Form fields: First Name, Email, Last Name, Phone, How Can We Help You?. Button 'Send Message'"
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-faq",
+          "type": "faq",
+          "content": {
+            "heading": "Frequently Asked Questions",
+            "subheading": "Questions About Hiring an Electrician in Des Moines",
+            "items": [
+              { "title": "What areas does Arc Electric serve?" },
+              { "title": "Is Arc Electric licensed and insured?" },
+              { "title": "What electrical services do you offer?" },
+              {
+                "title": "How much does it cost to hire an electrician, and do you offer free estimates?"
+              },
+              { "title": "How do I schedule service, and what are your hours?" },
+              { "title": "Do you install EV chargers and whole-home generators?" },
+              { "title": "Do you do commercial electrical work?" },
+              { "title": "Do you pull permits for electrical work?" },
+              { "title": "When should I upgrade my electrical panel?" },
+              { "title": "Do you offer financing?" },
+              { "title": "Is your work guaranteed?" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-footer",
+          "type": "footer",
+          "content": {
+            "body": "Arc Electric · 3301 SE Destination Dr, Suite 100, Grimes, IA 50111 · State of Iowa Electrical Contractor License: EL080641EC · Badges: Des Moines HBA, Google review, Generac, BBB, Lutron, Dynasty Homes. No copyright line.",
+            "ctas": [
+              {
+                "label": "Electrical Contractor Resources",
+                "href": "https://www.arcelectric.co/blog",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    }
+  ]
+}

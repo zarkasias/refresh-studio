@@ -77,7 +77,28 @@
       ],
       "whyUseful": "Control case: well built. Proves we don't invent problems.",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business",
+          "note": "Service area is a list of 24 towns with no field; labeled as richtext. Same gap as chambers-consulting."
+        },
+        {
+          "field": "business",
+          "note": "Licence number (EL080641EC) has no field. Same gap as jolly-plumbing."
+        },
+        {
+          "field": "business",
+          "note": "Aggregate rating ('4.9 stars from 514 Google reviews') has no field, though it's a key trust signal."
+        },
+        {
+          "field": "business.locations",
+          "note": "Satellite office in Harlan, Iowa is mentioned in the FAQ with no address."
+        },
+        {
+          "field": "pages.sections.content",
+          "note": "Contact form fields only fit in body text. Same gap as the other sites."
+        }
+      ]
     },
     {
       "slug": "cafecito-santa-fe",

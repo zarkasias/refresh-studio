@@ -113,9 +113,9 @@ Variant {
   tokens: DesignTokens
   templates: Record<SectionId, TemplateId>  // which template renders each section
   status: 'draft' | 'approved' | 'shared' | 'selected'
-  approvedAt?: IsoDateTime                  // v1: consultant approval (CLAUDE rule 4)
-  approvedBy?: string                       // v1
-}                                           // approval invariant: see Constraints
+                                            // approval lives on Version (ADR-005); 'approved',
+                                            // 'shared', 'selected' need an approved Version
+}
 
 DesignTokens {
   color: { primary, secondary, accent, background, surface, text, mutedText }  // all HexColor
@@ -127,13 +127,16 @@ DesignTokens {
 
 GoogleFont { family: string; weights: integer 1–1000, at least one }       // v1
 
-Version {
+Version {                                   // immutable once approved (ADR-005)
   id, variantId
+  number: integer >= 1                      // ADR-005: 1, 2, 3, ... per variant; unique per variant
   snapshot: { site: Site; variant: Variant }                                // v1: typed
   createdBy
   createdAt: IsoDateTime                                                    // v1 (user-approved)
   note                                      // may be ''
-}
+  approvedAt?: IsoDateTime                  // ADR-005: consultant approval (CLAUDE rule 4)
+  approvedBy?: string                       // ADR-005
+}                                           // approval invariant: see Constraints
 
 Comment {
   id, versionId, sectionId?, x?, y?
@@ -159,17 +162,21 @@ Comment {
 - **Slugs are lowercase** (`^[a-z0-9][a-z0-9-]*$`): `socialLinks.network`, `cta.provider`,
   `platformDetails.builder`, and any `pageBuilder` outside the known list.
   `platformDetails.theme` stays as found.
-- **Approval invariant** (CLAUDE rule 4): `approvedAt` and `approvedBy` are both present or both
-  absent, and `status` `'approved'`, `'shared'` or `'selected'` requires both. A `'draft'` may
-  keep a previous approval.
+- **Approval is per version** (CLAUDE rule 4, ADR-005): on a Version, `approvedAt` and
+  `approvedBy` are both present or both absent, `approvedAt >= createdAt`, and
+  `snapshot.variant.id === variantId`. An approved Version is never changed or deleted (a
+  database trigger enforces this); any edit after approval is a new, unapproved Version. The
+  client share link shows the newest approved Version. A Variant may only have `status`
+  `'approved'`, `'shared'` or `'selected'` while it has an approved Version
+  (`assertStatusAllowed`; not expressible in the Variant schema alone).
 - **Uniqueness:** `Page.path` is unique within a site; `Section.id` is unique across all pages
   of a site.
 - **Other narrowings:** `Page.path` and `pathPrefix` start with `/`; `maxPages` is an integer
   1–25; GoogleFont weights are integers 1–1000; a `Location` has at least one field.
 
-`SiteSchema` and `VariantSchema` carry cross-field refinements, and Zod 4 does not allow
+`SiteSchema` and `VersionSchema` carry cross-field refinements, and Zod 4 does not allow
 `.pick`/`.omit`/`.extend` on refined objects. Derive from `SiteObjectSchema` /
-`VariantObjectSchema` (same fields, no refinement), but always validate with the refined schema.
+`VersionObjectSchema` (same fields, no refinement), but always validate with the refined schema.
 
 ## Helpers
 
@@ -177,8 +184,11 @@ Comment {
   so NaN or unvalidated input is flagged.
 - `SITE_SCHEMA_VERSION` (1), `MAX_CRAWL_PAGES` (25) and `APPROVAL_REQUIRED_STATUSES` are
   exported constants.
-- Guards (`assertCrawlAllowed`, `assertShareable`, `assertExportable`) are not part of the
-  schemas; see T4.
+- Guards (`assertCrawlAllowed`, `assertShareable`, `resolveSharedVersion`, `assertStatusAllowed`,
+  `assertExportable`, `assertVersionEditable`) are not part of the schemas; see T4 and ADR-005.
+- Version history (ADR-005): `latestVersion`, `latestApprovedVersion`, `createVersion`,
+  `saveEdit` (updates the newest version while it is unapproved, otherwise creates a new one)
+  and `approveVersion` (newest version only, once).
 
 ## Rules
 

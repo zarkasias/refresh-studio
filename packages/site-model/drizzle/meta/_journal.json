@@ -8,6 +8,20 @@
       "when": 1794243284141,
       "tag": "0000_brief_boomer",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794244252000,
+      "tag": "0001_approval_per_version",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794244259459,
+      "tag": "0002_freeze_approved_versions",
+      "breakpoints": true
     }
   ]
 }

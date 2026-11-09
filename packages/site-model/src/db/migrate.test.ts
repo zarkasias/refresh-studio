@@ -112,17 +112,17 @@ describe('migrations on PGlite', () => {
     expect(rowToComment(c!)).toEqual(minimalComment());
   });
 
-  it('round-trips an approved variant with its approval timestamp in UTC', async () => {
+  it('round-trips an approved version with its approval timestamp in UTC', async () => {
     await seedSite();
+    await db.insert(variants).values(variantToRow(minimalVariant()));
     const approved = {
-      ...minimalVariant(),
-      status: 'approved' as const,
+      ...minimalVersion(),
       approvedAt: '2026-11-09T15:30:00.000Z',
       approvedBy: 'consultant',
     };
-    await db.insert(variants).values(variantToRow(approved));
-    const [row] = await db.select().from(variants);
-    expect(rowToVariant(row!)).toEqual(approved);
+    await db.insert(versions).values(versionToRow(approved));
+    const [row] = await db.select().from(versions);
+    expect(rowToVersion(row!)).toEqual(approved);
   });
 
   it('rejects a doc/row mismatch when reading a site', async () => {
@@ -169,25 +169,91 @@ describe('constraints', () => {
     await rejectsOn(db.insert(projects).values(row), 'projects_consent_method_values');
   });
 
-  it.each(['approved', 'shared', 'selected'] as const)(
-    'rejects a %s variant without approved_at/approved_by (rule 4)',
-    async (status) => {
+  describe('versions (rule 4, ADR-005)', () => {
+    async function seedVariant() {
       await seedSite();
-      const row = { ...variantToRow(minimalVariant()), status };
-      await rejectsOn(db.insert(variants).values(row), 'variants_approval_required');
-    },
-  );
+      await db.insert(variants).values(variantToRow(minimalVariant()));
+    }
 
-  it('rejects approved_at without approved_by', async () => {
-    await seedSite();
-    const row = { ...variantToRow(minimalVariant()), approvedAt: at };
-    await rejectsOn(db.insert(variants).values(row), 'variants_approval_pair');
+    it('rejects approved_at without approved_by', async () => {
+      await seedVariant();
+      const row = { ...versionToRow(minimalVersion()), approvedAt: at };
+      await rejectsOn(db.insert(versions).values(row), 'versions_approval_pair');
+    });
+
+    it('rejects an empty approved_by', async () => {
+      await seedVariant();
+      const row = { ...versionToRow(minimalVersion()), approvedAt: at, approvedBy: '' };
+      await rejectsOn(db.insert(versions).values(row), 'versions_approved_by_nonempty');
+    });
+
+    it('rejects approval before creation', async () => {
+      await seedVariant();
+      const row = {
+        ...versionToRow(minimalVersion()),
+        approvedAt: new Date('2026-11-09T11:00:00.000Z'),
+        approvedBy: 'consultant',
+      };
+      await rejectsOn(db.insert(versions).values(row), 'versions_approved_after_created');
+    });
+
+    it('rejects a duplicate version number for the same variant', async () => {
+      await seedVariant();
+      await db.insert(versions).values(versionToRow(minimalVersion()));
+      const dup = { ...versionToRow(minimalVersion()), id: 'ver_2' };
+      await rejectsOn(db.insert(versions).values(dup), 'versions_variant_number_unique');
+    });
+
+    it('rejects version number 0', async () => {
+      await seedVariant();
+      const row = { ...versionToRow(minimalVersion()), number: 0 };
+      await rejectsOn(db.insert(versions).values(row), 'versions_number_positive');
+    });
+
+    it('allows editing and then approving an unapproved version', async () => {
+      await seedVariant();
+      await db.insert(versions).values(versionToRow(minimalVersion()));
+      await db.update(versions).set({ note: 'edited' }).where(eq(versions.id, 'ver_1'));
+      await db
+        .update(versions)
+        .set({ approvedAt: at, approvedBy: 'consultant' })
+        .where(eq(versions.id, 'ver_1'));
+      const [row] = await db.select().from(versions);
+      expect(rowToVersion(row!)).toMatchObject({ note: 'edited', approvedBy: 'consultant' });
+    });
+
+    it('freezes an approved version: no update', async () => {
+      await seedVariant();
+      const approved = { ...minimalVersion(), approvedAt: at.toISOString(), approvedBy: 'c' };
+      await db.insert(versions).values(versionToRow(approved));
+      await rejectsOn(
+        db.update(versions).set({ note: 'sneaky edit' }).where(eq(versions.id, 'ver_1')),
+        'versions_freeze_approved',
+      );
+      await rejectsOn(
+        db
+          .update(versions)
+          .set({ approvedAt: null, approvedBy: null })
+          .where(eq(versions.id, 'ver_1')),
+        'versions_freeze_approved',
+      );
+    });
+
+    it('freezes an approved version: no delete', async () => {
+      await seedVariant();
+      const approved = { ...minimalVersion(), approvedAt: at.toISOString(), approvedBy: 'c' };
+      await db.insert(versions).values(versionToRow(approved));
+      await rejectsOn(
+        db.delete(versions).where(eq(versions.id, 'ver_1')),
+        'versions_freeze_approved',
+      );
+    });
   });
 
-  it('rejects an empty approved_by', async () => {
+  it('allows any variant status at the database level (checked by assertStatusAllowed)', async () => {
     await seedSite();
-    const row = { ...variantToRow(minimalVariant()), approvedAt: at, approvedBy: '' };
-    await rejectsOn(db.insert(variants).values(row), 'variants_approved_by_nonempty');
+    const row = { ...variantToRow(minimalVariant()), status: 'shared' };
+    await expect(db.insert(variants).values(row)).resolves.toBeDefined();
   });
 
   it('allows a draft variant without approval', async () => {

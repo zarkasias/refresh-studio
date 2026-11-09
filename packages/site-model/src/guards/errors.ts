@@ -6,7 +6,10 @@ export type GuardErrorCode =
   | 'outside-path'
   | 'page-limit'
   | 'not-approved'
-  | 'not-selected';
+  | 'not-selected'
+  | 'already-approved'
+  | 'not-latest'
+  | 'version-locked';
 
 /** Thrown by the guards. Callers branch on `code`; `message` is plain English for the consultant. */
 export class GuardError extends Error {

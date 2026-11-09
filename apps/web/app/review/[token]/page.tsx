@@ -3,8 +3,9 @@ export const metadata = {
   robots: { index: false, follow: false }, // private share link
 };
 
-// TODO(rule 4): once review links are real, validate the token and gate the variant with
-// assertShareable (packages/site-model guards) so nothing without `approvedAt` is shown.
+// TODO(rule 4, ADR-005): once review links are real, validate the token, load the variant's
+// version history and render only `resolveSharedVersion(history)` (packages/site-model guards):
+// the newest approved version, never a newer unapproved edit.
 //
 // M2 NOTE: the variant canvas will render inside an <iframe> so studio CSS never reaches
 // client previews, and the client's design tokens from packages/sections apply only inside

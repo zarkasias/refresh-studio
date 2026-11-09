@@ -106,6 +106,7 @@ export function minimalVersion(): Version {
   return {
     id: 'ver_1',
     variantId: 'var_1',
+    number: 1,
     snapshot: { site: minimalSite(), variant: minimalVariant() },
     createdBy: 'consultant',
     createdAt: '2026-11-09T12:00:00.000Z',

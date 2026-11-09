@@ -145,8 +145,6 @@ export function variantToRow(variant: Variant): Insert<typeof variants> {
     status: v.status,
     tokens: v.tokens,
     templates: v.templates,
-    approvedAt: v.approvedAt ? new Date(v.approvedAt) : null,
-    approvedBy: orNull(v.approvedBy),
   };
 }
 
@@ -159,8 +157,6 @@ export function rowToVariant(row: VariantRow): Variant {
     tokens: row.tokens,
     templates: row.templates,
     status: row.status,
-    approvedAt: isoOrUndef(row.approvedAt),
-    approvedBy: orUndef(row.approvedBy),
   });
 }
 
@@ -171,10 +167,13 @@ export function versionToRow(version: Version): Insert<typeof versions> {
   return {
     id: v.id,
     variantId: v.variantId,
+    number: v.number,
     snapshot: v.snapshot,
     createdBy: v.createdBy,
     note: v.note,
     createdAt: new Date(v.createdAt),
+    approvedAt: v.approvedAt ? new Date(v.approvedAt) : null,
+    approvedBy: orNull(v.approvedBy),
   };
 }
 
@@ -182,10 +181,13 @@ export function rowToVersion(row: VersionRow): Version {
   return VersionSchema.parse({
     id: row.id,
     variantId: row.variantId,
+    number: row.number,
     snapshot: row.snapshot,
     createdBy: row.createdBy,
     createdAt: iso(row.createdAt),
     note: row.note,
+    approvedAt: isoOrUndef(row.approvedAt),
+    approvedBy: orUndef(row.approvedBy),
   });
 }
 

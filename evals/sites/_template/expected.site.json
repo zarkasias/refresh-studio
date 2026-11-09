@@ -1,0 +1,91 @@
+{
+  "id": "site_TODO-slug",
+  "projectId": "proj_TODO-slug",
+  "schemaVersion": 1,
+  "sourceUrl": "TODO https://www.example.com/",
+  "platform": "unknown",
+  "platformEvidence": [],
+  "platformConfidence": 0,
+  "business": {
+    "name": "TODO business name",
+    "phone": "TODO phone as displayed",
+    "email": "TODO email as displayed",
+    "address": "TODO address as displayed",
+    "hours": [{ "label": "TODO label", "text": "TODO hours text as displayed" }],
+    "socialLinks": [{ "network": "TODO facebook", "url": "TODO https://www.facebook.com/example" }]
+  },
+  "brand": {
+    "extractedColors": [{ "hex": "TODO #1a2b3c", "role": "TODO primary" }],
+    "extractedFonts": ["TODO font family"]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "TODO browser tab title",
+      "metaDescription": "",
+      "sections": [
+        {
+          "id": "home-nav",
+          "type": "nav",
+          "content": {
+            "items": [{ "title": "TODO menu label", "link": "TODO /about" }],
+            "ctas": [{ "label": "TODO Call now", "href": "TODO tel:+15555550100", "kind": "call" }]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "content": {
+            "heading": "TODO main headline",
+            "subheading": "TODO",
+            "ctas": [
+              {
+                "label": "TODO Book online",
+                "href": "TODO https://booking.example.com/",
+                "kind": "book",
+                "provider": "TODO meevo"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-services",
+          "type": "services",
+          "content": {
+            "heading": "TODO",
+            "items": [{ "title": "TODO service name", "body": "TODO one-line summary" }]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-footer",
+          "type": "footer",
+          "content": {
+            "body": "TODO footer text, e.g. (c) 2021 Example Co."
+          },
+          "confidence": 1
+        }
+      ]
+    },
+    {
+      "path": "/contact",
+      "title": "TODO browser tab title",
+      "sections": [
+        {
+          "id": "contact-main",
+          "type": "contact",
+          "content": {
+            "heading": "TODO",
+            "body": "TODO what the contact section says (form fields, address, map note)",
+            "ctas": [
+              { "label": "TODO Email us", "href": "TODO mailto:hello@example.com", "kind": "email" }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    }
+  ]
+}

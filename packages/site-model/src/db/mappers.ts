@@ -7,17 +7,27 @@ import { SiteSchema, type Site } from '../schemas/site';
 import { migrateSiteDoc, parseStoredSite } from '../migrations/site';
 import { VariantSchema, type Variant } from '../schemas/variant';
 import { AssetSchema, type Asset } from '../schemas/asset';
+import {
+  CaptureRunSchema,
+  CapturedPageSchema,
+  type CaptureRun,
+  type CapturedPage,
+} from '../schemas/capture';
 import { CommentSchema, type Comment } from '../schemas/comment';
 import { VersionSchema, type Version } from '../schemas/version';
 import type {
   AssetRow,
+  CapturedPageRow,
   CommentRow,
+  CrawlRow,
   ProjectRow,
   SiteRow,
   VariantRow,
   VersionRow,
   assets,
+  capturedPages,
   comments,
+  crawls,
   projects,
   sites,
   variants,
@@ -232,5 +242,83 @@ export function rowToComment(row: CommentRow): Comment {
     body: row.body,
     resolved: row.resolved,
     createdAt: iso(row.createdAt),
+  });
+}
+
+// Capture run (table `crawls`)
+
+export function crawlToRow(run: CaptureRun): Insert<typeof crawls> {
+  const r = CaptureRunSchema.parse(run);
+  return {
+    id: r.id,
+    projectId: r.projectId,
+    siteId: orNull(r.siteId),
+    startUrl: r.startUrl,
+    status: r.status,
+    blockedReason: orNull(r.blockedReason),
+    userAgent: r.userAgent,
+    robots: r.robots,
+    planned: r.planned,
+    skipped: r.skipped,
+    startedAt: new Date(r.startedAt),
+    finishedAt: r.finishedAt ? new Date(r.finishedAt) : null,
+  };
+}
+
+export function rowToCrawl(row: CrawlRow): CaptureRun {
+  return CaptureRunSchema.parse({
+    id: row.id,
+    projectId: row.projectId,
+    siteId: orUndef(row.siteId),
+    startUrl: row.startUrl,
+    status: row.status,
+    blockedReason: orUndef(row.blockedReason),
+    userAgent: row.userAgent,
+    robots: row.robots,
+    planned: row.planned,
+    skipped: row.skipped,
+    startedAt: iso(row.startedAt),
+    finishedAt: isoOrUndef(row.finishedAt),
+  });
+}
+
+// Captured page
+
+export function capturedPageToRow(page: CapturedPage): Insert<typeof capturedPages> {
+  const p = CapturedPageSchema.parse(page);
+  return {
+    id: p.id,
+    captureRunId: p.captureRunId,
+    url: p.url,
+    finalUrl: p.finalUrl,
+    redirectChain: p.redirectChain,
+    httpStatus: p.httpStatus,
+    fetchedAt: new Date(p.fetchedAt),
+    htmlAssetId: p.htmlAssetId,
+    screenshotMobileAssetId: p.screenshots.mobile,
+    screenshotDesktopAssetId: p.screenshots.desktop,
+    facts: p.facts,
+    axe: orNull(p.axe),
+    pendingContent: p.pendingContent,
+  };
+}
+
+export function rowToCapturedPage(row: CapturedPageRow): CapturedPage {
+  return CapturedPageSchema.parse({
+    id: row.id,
+    captureRunId: row.captureRunId,
+    url: row.url,
+    finalUrl: row.finalUrl,
+    redirectChain: row.redirectChain,
+    httpStatus: row.httpStatus,
+    fetchedAt: iso(row.fetchedAt),
+    htmlAssetId: row.htmlAssetId,
+    screenshots: {
+      mobile: row.screenshotMobileAssetId,
+      desktop: row.screenshotDesktopAssetId,
+    },
+    facts: row.facts,
+    axe: orUndef(row.axe),
+    pendingContent: row.pendingContent,
   });
 }

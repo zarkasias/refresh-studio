@@ -184,6 +184,76 @@ Comment {
 }
 ```
 
+## Capture records
+
+Stored next to the Site, not inside it (tables `crawls` and `captured_pages`; no Site
+`schemaVersion` change). The Site is what capture concluded; these records are what it saw.
+Schemas: `packages/site-model/src/schemas/capture.ts`.
+
+```
+CaptureRun {                                                    // table crawls
+  id, projectId, siteId?, startUrl: Url
+  status: 'queued' | 'running' | 'done' | 'failed' | 'blocked'
+  blockedReason?: GuardErrorCode | 'robots-disallowed' | 'bot-challenge'
+  userAgent
+  robots: { fetchedAt, status: 'ok' | 'missing' | 'error', crawlDelaySec? >= 0 }
+  planned: Url[]                                                // at most 25
+  skipped: { url: string, reason: 'robots' | 'cross-origin' | 'outside-path' | 'page-limit'
+             | 'non-html' | 'bot-challenge' | 'error' }[]
+  startedAt, finishedAt?
+}
+CapturedPage {                                                  // table captured_pages
+  id, captureRunId, url, finalUrl, redirectChain: Url[], httpStatus: integer 100-599, fetchedAt
+  htmlAssetId                                                   // Asset kind 'document'
+  screenshots: { mobile: Id; desktop: Id }                      // Asset kind 'screenshot', full page
+  facts: { mobile: PageFacts; desktop: PageFacts }
+  axe?: { mobile: AxeSummary; desktop: AxeSummary }             // filled in by the axe runner
+  pendingContent: { selector, placeholderText }[]               // still "Loading..." at the wait cap
+}
+AxeSummary { violations: { ruleId, impact?: 'minor'|'moderate'|'serious'|'critical', help,
+                           nodes: { selector, box: Box }[] (max 10) }[] }
+Box = { x, y, w, h: number >= 0 }          // CSS px in that viewport's full-page screenshot
+Region = 'header' | 'nav' | 'main' | 'footer'
+PageFacts {
+  viewport: { width, height: positive integers }; documentWidth: number >= 0
+  hasViewportMeta; protocol: 'http' | 'https'; title; metaDescription?
+  headings: { level: 1-6; text; selector }[]
+  links: { href (as found); resolved?: Url; text; selector; region; box; isToggle; targetExists? }[]
+  phoneTexts: { text; digits; selector; region; insideTelLink }[]
+  emails: { value; source: 'mailto' | 'text' | 'cfemail'; selector }[]
+  hoursBlocks: { text; selector; region; heading? }[]
+  jsonLd: Record<string, unknown>[]                  // parsed, not trusted
+  iframes: { src: Url; srcOrigin: Origin; title?; box; provider?: Slug }[]
+  forms: { selector; fields: { label?; type; required; hasLabel }[]; submitLabel? }[]
+  images: { src: Url; bytes?: integer >= 0; natural: {w,h}; rendered: {w,h}; alt: string | null; selector }[]
+  fonts: { raw; family; share: 0-1 }[]
+  colors: { hex: HexColor; kind: 'text' | 'background'; share: 0-1 }[]
+  interactive: { selector; box; kind: 'link' | 'button' | 'input' }[]   // mobile only
+  footerText; copyrightYears: integer[]
+  platformSignals: { generator?; bodyClasses: string[]; assetUrls: string[];
+                     headers: Record<string,string>; footerText }
+}
+```
+
+Constraints and policies:
+
+- **CaptureRun** (`CaptureRunSchema`; `CaptureRunObjectSchema` is the same fields without the
+  refinement): `planned` has at most 25 entries (Zod and the `crawls_planned_max` CHECK);
+  `finishedAt >= startedAt` (Zod and the `crawls_finished_after_started` CHECK); a `blocked` run
+  has a `blockedReason` and no other status has one; `done` and `failed` runs have a `finishedAt`
+  (these two status rules are Zod only).
+- **CapturedPage:** `httpStatus` is 100 to 599 (Zod and CHECK); `(captureRunId, url)` is unique
+  (`captured_pages_run_url_unique`). Hidden copies and slider clones are dropped at extraction,
+  not by the schema.
+- **Numbers:** every `Box` value is >= 0; every `share` is 0 to 1; hex colors are lowercase.
+- **Emails:** `emails[].value` rejects the `[email protected]` placeholder, so an obfuscated
+  address must be decoded before it is stored.
+- **Foreign keys:** `crawls.project_id` cascades from `projects`; `captured_pages.capture_run_id`
+  cascades from `crawls` (so deleting a project removes both). `crawls.site_id` is optional and
+  `ON DELETE SET NULL`: deleting a site keeps the crawl and clears `siteId`. Asset ids on
+  `captured_pages` are not foreign keys.
+- **Mappers:** `crawlToRow` / `rowToCrawl` and `capturedPageToRow` / `rowToCapturedPage`.
+
 ## Constraints
 
 - **Strings are non-empty** unless noted. Exceptions (text copied from the client site, which
@@ -191,7 +261,10 @@ Comment {
   (`heading`, `subheading`, `body`, item `title`/`body`/`link`, cta `label`/`href`),
   `Section.sourceSelector`, `business.address`, `Location.phone`, `HoursEntry.label`,
   `FormField.label`, `form.submitLabel`/`confirmation`, `Asset.alt` (`''` = decorative) and
-  `Version.note`. `ContactPoint.value`/`label`, `Location.label`/`address` and all v2 trust,
+  `Version.note`. In capture records these may be empty: `PageFacts.title`, `metaDescription`,
+  heading, link, phone and hours `text`, link `href`, hours `heading`, form field `label` and
+  `submitLabel`, `footerText`, `placeholderText`. Derived strings (font `raw`/`family`, phone
+  `digits`, form field `type`, axe `help`, `platformSignals.generator`) are non-empty. `ContactPoint.value`/`label`, `Location.label`/`address` and all v2 trust,
   service-area and person strings are non-empty.
 - **Hex colors are lowercase** 6-digit (`#1a2b3c`).
 - **Datetimes are UTC with a `Z` suffix** (`toISOString()` output); offsets like `+02:00` are rejected.

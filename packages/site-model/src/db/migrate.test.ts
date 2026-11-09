@@ -10,6 +10,8 @@ import { migrate } from 'drizzle-orm/pglite/migrator';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import {
   minimalAsset,
+  minimalCaptureRun,
+  minimalCapturedPage,
   minimalComment,
   minimalProject,
   minimalSite,
@@ -21,11 +23,17 @@ import { ProjectSchema, SiteSchema, VariantSchema } from '../schemas';
 import {
   assetToRow,
   assets,
+  capturedPageToRow,
+  capturedPages,
   commentToRow,
   comments,
+  crawlToRow,
+  crawls,
   projects,
   projectToRow,
   rowToAsset,
+  rowToCapturedPage,
+  rowToCrawl,
   rowToComment,
   rowToProject,
   rowToSite,
@@ -53,7 +61,9 @@ beforeAll(async () => {
   await migrate(db, { migrationsFolder });
 });
 beforeEach(async () => {
-  await db.execute(sql`TRUNCATE projects, sites, assets, variants, versions, comments CASCADE`);
+  await db.execute(
+    sql`TRUNCATE projects, sites, assets, variants, versions, comments, crawls, captured_pages CASCADE`,
+  );
 });
 afterAll(async () => {
   await client.close();
@@ -123,6 +133,95 @@ describe('migrations on PGlite', () => {
     await db.insert(versions).values(versionToRow(approved));
     const [row] = await db.select().from(versions);
     expect(rowToVersion(row!)).toEqual(approved);
+  });
+
+  it('round-trips a capture run with two captured pages', async () => {
+    await db.insert(projects).values(projectToRow(minimalProject()));
+    const run = {
+      ...minimalCaptureRun(),
+      skipped: [{ url: 'https://other.example/', reason: 'cross-origin' as const }],
+    };
+    const pages = [
+      minimalCapturedPage(),
+      {
+        ...minimalCapturedPage(),
+        id: 'cp_2',
+        url: 'https://example-plumbing.com/contact',
+        finalUrl: 'https://example-plumbing.com/contact/',
+        redirectChain: ['https://example-plumbing.com/contact'],
+        axe: {
+          mobile: {
+            violations: [
+              {
+                ruleId: 'color-contrast',
+                impact: 'serious' as const,
+                help: 'Elements must have sufficient color contrast',
+                nodes: [{ selector: 'h2', box: { x: 0, y: 10, w: 100, h: 20 } }],
+              },
+            ],
+          },
+          desktop: { violations: [] },
+        },
+        pendingContent: [{ selector: '#reviews', placeholderText: 'Loading...' }],
+      },
+    ];
+    await db.insert(crawls).values(crawlToRow(run));
+    await db.insert(capturedPages).values(pages.map(capturedPageToRow));
+    const [crawlRow] = await db.select().from(crawls);
+    const pageRows = await db.select().from(capturedPages).orderBy(capturedPages.id);
+    expect(rowToCrawl(crawlRow!)).toEqual(run);
+    expect(pageRows.map(rowToCapturedPage)).toEqual(pages);
+  });
+
+  it('round-trips a blocked run with siteId and crawlDelaySec; set-null on site delete', async () => {
+    await seedSite();
+    const run = {
+      ...omit(minimalCaptureRun(), 'finishedAt'),
+      siteId: minimalSite().id,
+      status: 'blocked' as const,
+      blockedReason: 'robots-disallowed' as const,
+      robots: { fetchedAt: '2026-11-09T12:00:00.000Z', status: 'ok' as const, crawlDelaySec: 2.5 },
+    };
+    await db.insert(crawls).values(crawlToRow(run));
+    const [row] = await db.select().from(crawls);
+    expect(rowToCrawl(row!)).toEqual(run);
+    await db.delete(sites).where(eq(sites.id, minimalSite().id));
+    const [after] = await db.select().from(crawls);
+    expect(rowToCrawl(after!)).toEqual(omit(run, 'siteId'));
+    await db.delete(projects).where(eq(projects.id, 'proj_1'));
+    expect(await db.select().from(crawls)).toHaveLength(0);
+  });
+
+  it('rejects a second captured page with the same run and url', async () => {
+    await db.insert(projects).values(projectToRow(minimalProject()));
+    await db.insert(crawls).values(crawlToRow(minimalCaptureRun()));
+    await db.insert(capturedPages).values(capturedPageToRow(minimalCapturedPage()));
+    const dup = { ...capturedPageToRow(minimalCapturedPage()), id: 'cp_dup' };
+    await rejectsOn(db.insert(capturedPages).values(dup), 'captured_pages_run_url_unique');
+  });
+
+  it('rejects finished_at before started_at in the database', async () => {
+    await db.insert(projects).values(projectToRow(minimalProject()));
+    const bad = {
+      ...crawlToRow(minimalCaptureRun()),
+      finishedAt: new Date('2026-11-09T11:00:00Z'),
+    };
+    await rejectsOn(db.insert(crawls).values(bad), 'crawls_finished_after_started');
+  });
+
+  it('cascades capture records from the project and rejects a 26-entry plan', async () => {
+    await db.insert(projects).values(projectToRow(minimalProject()));
+    await db.insert(crawls).values(crawlToRow(minimalCaptureRun()));
+    await db.insert(capturedPages).values(capturedPageToRow(minimalCapturedPage()));
+    const tooMany = {
+      ...crawlToRow(minimalCaptureRun()),
+      id: 'crawl_big',
+      planned: Array.from({ length: 26 }, (_, i) => `https://example-plumbing.com/p${i}`),
+    };
+    await rejectsOn(db.insert(crawls).values(tooMany), 'crawls_planned_max');
+    await db.delete(projects).where(eq(projects.id, 'proj_1'));
+    expect(await db.select().from(crawls)).toHaveLength(0);
+    expect(await db.select().from(capturedPages)).toHaveLength(0);
   });
 
   it('rejects a doc/row mismatch when reading a site', async () => {

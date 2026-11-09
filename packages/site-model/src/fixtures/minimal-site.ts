@@ -4,9 +4,12 @@
  */
 import type {
   Asset,
+  CaptureRun,
+  CapturedPage,
   Comment,
   Consent,
   DesignTokens,
+  PageFacts,
   Project,
   Section,
   Site,
@@ -122,5 +125,68 @@ export function minimalComment(): Comment {
     body: 'Can the phone number be bigger?',
     resolved: false,
     createdAt: '2026-11-09T12:30:00.000Z',
+  };
+}
+
+export function minimalPageFacts(): PageFacts {
+  return {
+    viewport: { width: 390, height: 844 },
+    documentWidth: 390,
+    hasViewportMeta: true,
+    protocol: 'https',
+    title: 'Example Plumbing',
+    headings: [{ level: 1, text: 'Plumbing you can trust', selector: 'main > h1' }],
+    links: [],
+    phoneTexts: [],
+    emails: [],
+    hoursBlocks: [],
+    jsonLd: [],
+    iframes: [],
+    forms: [],
+    images: [],
+    fonts: [{ raw: '"Open Sans", sans-serif', family: 'Open Sans', share: 1 }],
+    colors: [{ hex: '#1a2b3c', kind: 'text', share: 1 }],
+    interactive: [],
+    footerText: '',
+    copyrightYears: [],
+    platformSignals: { bodyClasses: [], assetUrls: [], headers: {}, footerText: '' },
+  };
+}
+
+export function minimalCaptureRun(): CaptureRun {
+  return {
+    id: 'crawl_1',
+    projectId: 'proj_1',
+    startUrl: 'https://example-plumbing.com/',
+    status: 'done',
+    userAgent: 'SiteRefreshStudioBot/1.0',
+    robots: { fetchedAt: '2026-11-09T12:00:00.000Z', status: 'ok' },
+    planned: ['https://example-plumbing.com/', 'https://example-plumbing.com/contact'],
+    skipped: [],
+    startedAt: '2026-11-09T12:00:00.000Z',
+    finishedAt: '2026-11-09T12:01:00.000Z',
+  };
+}
+
+export function minimalCapturedPage(): CapturedPage {
+  return {
+    id: 'cp_1',
+    captureRunId: 'crawl_1',
+    url: 'https://example-plumbing.com/',
+    finalUrl: 'https://example-plumbing.com/',
+    redirectChain: [],
+    httpStatus: 200,
+    fetchedAt: '2026-11-09T12:00:10.000Z',
+    htmlAssetId: 'asset_html_1',
+    screenshots: { mobile: 'asset_shot_m1', desktop: 'asset_shot_d1' },
+    facts: {
+      mobile: minimalPageFacts(),
+      desktop: {
+        ...minimalPageFacts(),
+        viewport: { width: 1440, height: 900 },
+        documentWidth: 1440,
+      },
+    },
+    pendingContent: [],
   };
 }

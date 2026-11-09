@@ -23,6 +23,13 @@ import {
   unique,
 } from 'drizzle-orm/pg-core';
 import { AssetKindSchema } from '../schemas/asset';
+import {
+  CaptureStatusSchema,
+  type AxeSummary,
+  type PageFacts,
+  type RobotsInfo,
+  type SkippedUrl,
+} from '../schemas/capture';
 import { CommentAuthorSchema } from '../schemas/comment';
 import { ConsentMethodSchema, MAX_CRAWL_PAGES } from '../schemas/project';
 import { VariantStatusSchema, VariantStyleSchema } from '../schemas/variant';
@@ -187,9 +194,75 @@ export const comments = pgTable(
   ],
 );
 
+export const crawls = pgTable(
+  'crawls',
+  {
+    id: text('id').primaryKey(),
+    projectId: text('project_id')
+      .notNull()
+      .references(() => projects.id, { onDelete: 'cascade' }),
+    /** Optional: set once capture has produced a Site. */
+    siteId: text('site_id').references(() => sites.id, { onDelete: 'set null' }),
+    startUrl: text('start_url').notNull(),
+    status: text('status').notNull(),
+    /** A GuardErrorCode, 'robots-disallowed' or 'bot-challenge'; validated by the mapper. */
+    blockedReason: text('blocked_reason'),
+    userAgent: text('user_agent').notNull(),
+    robots: jsonb('robots').$type<RobotsInfo>().notNull(),
+    planned: jsonb('planned').$type<string[]>().notNull(),
+    skipped: jsonb('skipped').$type<SkippedUrl[]>().notNull(),
+    startedAt: tstz('started_at').notNull(),
+    finishedAt: tstz('finished_at'),
+  },
+  (t) => [
+    index('crawls_project_id_idx').on(t.projectId),
+    check('crawls_status_values', inList('status', CaptureStatusSchema.options)),
+    check(
+      'crawls_planned_max',
+      sql`jsonb_typeof(${t.planned}) = 'array' AND jsonb_array_length(${t.planned}) <= ${sql.raw(String(MAX_CRAWL_PAGES))}`,
+    ),
+    check(
+      'crawls_finished_after_started',
+      sql`${t.finishedAt} IS NULL OR ${t.finishedAt} >= ${t.startedAt}`,
+    ),
+  ],
+);
+
+export const capturedPages = pgTable(
+  'captured_pages',
+  {
+    id: text('id').primaryKey(),
+    /** Cascades via the crawl, which cascades from the project. */
+    captureRunId: text('capture_run_id')
+      .notNull()
+      .references(() => crawls.id, { onDelete: 'cascade' }),
+    url: text('url').notNull(),
+    finalUrl: text('final_url').notNull(),
+    redirectChain: jsonb('redirect_chain').$type<string[]>().notNull(),
+    httpStatus: integer('http_status').notNull(),
+    fetchedAt: tstz('fetched_at').notNull(),
+    /** Not FKs: assets belong to a site, which may not exist when the page is captured. */
+    htmlAssetId: text('html_asset_id').notNull(),
+    screenshotMobileAssetId: text('screenshot_mobile_asset_id').notNull(),
+    screenshotDesktopAssetId: text('screenshot_desktop_asset_id').notNull(),
+    facts: jsonb('facts').$type<{ mobile: PageFacts; desktop: PageFacts }>().notNull(),
+    axe: jsonb('axe').$type<{ mobile: AxeSummary; desktop: AxeSummary }>(),
+    pendingContent: jsonb('pending_content')
+      .$type<{ selector: string; placeholderText: string }[]>()
+      .notNull(),
+  },
+  (t) => [
+    index('captured_pages_capture_run_id_idx').on(t.captureRunId),
+    unique('captured_pages_run_url_unique').on(t.captureRunId, t.url),
+    check('captured_pages_http_status_range', sql`${t.httpStatus} BETWEEN 100 AND 599`),
+  ],
+);
+
 export type ProjectRow = typeof projects.$inferSelect;
 export type SiteRow = typeof sites.$inferSelect;
 export type AssetRow = typeof assets.$inferSelect;
 export type VariantRow = typeof variants.$inferSelect;
 export type VersionRow = typeof versions.$inferSelect;
 export type CommentRow = typeof comments.$inferSelect;
+export type CrawlRow = typeof crawls.$inferSelect;
+export type CapturedPageRow = typeof capturedPages.$inferSelect;

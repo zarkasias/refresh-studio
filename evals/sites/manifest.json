@@ -184,7 +184,25 @@
       ],
       "whyUseful": "Meevo booking, sister site on another domain (must not be crawled), script display font.",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business.locations",
+          "note": "Meta description names two locations (Mooresville, Birkdale) but only Mooresville appears on the site, and all booking links use one Meevo locationId."
+        },
+        {
+          "field": "business",
+          "note": "Award claim ('eight-time Top 200 salon') has no field. Same gap as memberships and badges on other sites."
+        },
+        {
+          "field": "business.name",
+          "note": "Name varies: 'Bella Lago Salon & Spa' (title, meta) vs 'Bella Lago Salon & MedSpa' (footer). MedSpa is also a separate domain."
+        },
+        { "field": "pages", "note": "No contact page; footer 'Contact' links to /about." },
+        {
+          "field": "pages.sections.content.items",
+          "note": "Nav has dropdown folders (Salon, Spa, Our Team, Gift Cards) with ~25 child pages; items can't nest. Same as northern-heights-dental."
+        }
+      ]
     },
     {
       "slug": "iphci",

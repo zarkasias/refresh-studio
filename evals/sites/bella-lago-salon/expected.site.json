@@ -1,0 +1,169 @@
+{
+  "id": "site_bella-lago-salon",
+  "projectId": "proj_bella-lago-salon",
+  "schemaVersion": 1,
+  "sourceUrl": "http://www.bellalagosalon.com/",
+  "platform": "squarespace",
+  "platformEvidence": [],
+  "platformConfidence": 0,
+  "business": {
+    "name": "Bella Lago Salon & MedSpa",
+    "phone": "704-658-3330",
+    "address": "550 Brawley School Road  |  Mooresville, NC 28117",
+    "hours": [
+      {
+        "label": "HOURS (about page)",
+        "text": "MONDAY | 9AM-8PM · TUESDAY | 9AM-8PM · WEDNESDAY | 9AM-5PM · THURSDAY | 9AM-8PM · FRIDAY | 9AM-7PM · SATURDAY | 8AM-4PM · SUNDAY | CLOSED"
+      }
+    ],
+    "socialLinks": [
+      { "network": "facebook", "url": "https://www.facebook.com/BellaLago/" },
+      { "network": "instagram", "url": "http://instagram.com/bellalagosalonandskincare" }
+    ]
+  },
+  "brand": {
+    "extractedColors": [
+      { "hex": "#7c9194", "role": "primary" },
+      { "hex": "#000000", "role": "accent" },
+      { "hex": "#fbf9f9", "role": "background" }
+    ],
+    "extractedFonts": ["Proxima Nova", "Raleway", "Bodoni"]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Bella Lago Salon & Spa | Book Your Beauty Experience",
+      "metaDescription": "Discover premium hair, skincare, and spa services at Bella Lago Salon & Spa. Enhance your look with personalized treatments at our Mooresville and Birkdale locations.",
+      "sections": [
+        {
+          "id": "home-nav",
+          "type": "nav",
+          "content": {
+            "items": [
+              { "title": "HOME", "link": "/" },
+              { "title": "MEDSPA", "link": "https://www.bellalagomedspa.com" },
+              { "title": "TREAT NOW PAY LATER", "link": "/treat-now-pay-later" },
+              { "title": "ABOUT", "link": "/about" },
+              { "title": "CAREERS", "link": "/careers-1" }
+            ],
+            "ctas": [
+              {
+                "label": "BOOK ONLINE",
+                "href": "https://login.meevo.com/bellalago/ob?locationId=501471",
+                "kind": "book",
+                "provider": "meevo"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "content": {
+            "heading": "Bella Lago",
+            "subheading": "Lake Norman's Premier Salon + Med Spa"
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-booking",
+          "type": "cta",
+          "content": {
+            "heading": "Online Booking",
+            "ctas": [
+              {
+                "label": "BOOK NOW",
+                "href": "https://login.meevo.com/bellalago/ob?locationId=501471",
+                "kind": "book",
+                "provider": "meevo"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-intro",
+          "type": "services",
+          "content": {
+            "heading": "EXPERIENCE THE DIFFERENCE",
+            "items": [{ "title": "Salon" }, { "title": "Spa" }, { "title": "Medspa" }],
+            "body": "Eight-time Top 200 salon; skilled team offering hair, skincare and spa services with personalized care and top products.",
+            "ctas": [{ "label": "MEET THE TEAM", "href": "/our-team-1", "kind": "link" }]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-promos",
+          "type": "gallery",
+          "content": {
+            "body": "Image links: monthly specials, eGift cards, careers.",
+            "items": [
+              { "title": "Monthly specials (image)", "link": "/monthly-specials" },
+              {
+                "title": "eGift cards (image)",
+                "link": "https://na2.meevo.com/EgiftApp/home?tenantId=501137&locationId=501471"
+              },
+              { "title": "Careers (image)", "link": "/careers" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-careers",
+          "type": "cta",
+          "content": {
+            "heading": "JOIN OUR TEAM",
+            "ctas": [{ "label": "APPLY TODAY!", "href": "/careers", "kind": "link" }]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-footer",
+          "type": "footer",
+          "content": {
+            "heading": "Bella Lago Salon & MedSpa",
+            "body": "550 Brawley School Road  |  Mooresville, NC 28117 · 704-658-3330 (not a link) · No copyright line.",
+            "items": [
+              { "title": "Policies", "link": "/policies-1" },
+              { "title": "About", "link": "/about" },
+              { "title": "Contact", "link": "/about" }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    },
+    {
+      "path": "/about",
+      "title": "ABout — Bella Lago Salon & Spa",
+      "sections": [
+        {
+          "id": "about-story",
+          "type": "about",
+          "content": {
+            "heading": "THE STORY BEHIND BELLA",
+            "body": "The history of Merissa and Gabe Barnhardts business ventures.  From 1997 where they owned there first Merle Norman Cosmetics"
+          },
+          "confidence": 1
+        },
+        {
+          "id": "about-contact",
+          "type": "contact",
+          "content": {
+            "heading": "HOURS",
+            "body": "MONDAY | 9AM-8PM · TUESDAY | 9AM-8PM · WEDNESDAY | 9AM-5PM · THURSDAY | 9AM-8PM · FRIDAY | 9AM-7PM · SATURDAY | 8AM-4PM · SUNDAY | CLOSED. Google Map embed (Mooresville). No phone link, no email, no form.",
+            "ctas": [
+              {
+                "label": "Open this area in Google Maps",
+                "href": "https://maps.google.com/maps?ll=35.584854,-80.870612&z=12&t=m&hl=en&gl=US&mapclient=apiv3",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    }
+  ]
+}

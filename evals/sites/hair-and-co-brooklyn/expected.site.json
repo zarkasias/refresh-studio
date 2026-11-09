@@ -1,0 +1,340 @@
+{
+  "id": "site_hair-and-co-brooklyn",
+  "projectId": "proj_hair-and-co-brooklyn",
+  "schemaVersion": 1,
+  "sourceUrl": "https://hairandcobklyn.com/",
+  "platform": "wordpress",
+  "platformEvidence": [],
+  "platformConfidence": 0,
+  "business": {
+    "name": "Hair & Co BKLYN",
+    "phone": "347-294-4600",
+    "email": "hello@hairandcobklyn.com",
+    "locations": [
+      {
+        "label": "Prospect Heights",
+        "address": "477 Bergen St., Brooklyn, New York 11217",
+        "phone": "(347) 294-4600"
+      },
+      {
+        "label": "Bay Ridge",
+        "address": "9718 3rd Ave., Brooklyn, New York 11209",
+        "phone": "(718) 748-9880"
+      },
+      {
+        "label": "Clinton Hill (contact page only)",
+        "address": "487 Myrtle Ave. Brooklyn, NY 11205",
+        "phone": "(718) 789-2390"
+      }
+    ],
+    "socialLinks": [
+      { "network": "facebook", "url": "https://www.facebook.com/hairandcobklyn" },
+      { "network": "instagram", "url": "https://instagram.com/hairandcobklyn/" },
+      { "network": "youtube", "url": "https://www.youtube.com/channel/UCZ9AJ2Ul4iHTzrcN7IH6mjg" },
+      {
+        "network": "googleplus",
+        "url": "https://plus.google.com/b/116556049978277718667/116556049978277718667"
+      }
+    ]
+  },
+  "brand": {
+    "extractedColors": [
+      { "hex": "#000000", "role": "primary" },
+      { "hex": "#131312", "role": "surface" },
+      { "hex": "#ffffff", "role": "background" }
+    ],
+    "extractedFonts": ["Raleway", "Open Sans", "Metropolis"]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Hair Salons Brooklyn | Hair & Co BKLYN",
+      "metaDescription": "Your Destination for Great Hair in Brooklyn We believe the woman comes before the hair, so your new style will suit every aspect of what makes you unique. Hair &amp; Co BKLYN is a one-of-a-kind Brooklyn hair salon that celebrates the beauty and diversity of all hair types. We’re a solution-based company where we train our stylists to master the...",
+      "sections": [
+        {
+          "id": "home-nav",
+          "type": "nav",
+          "content": {
+            "items": [
+              { "title": "Home", "link": "https://hairandcobklyn.com/" },
+              { "title": "About", "link": "https://hairandcobklyn.com/about-hairandco/" },
+              { "title": "Locations" },
+              { "title": "Services", "link": "https://hairandcobklyn.com/services/" },
+              { "title": "Blog", "link": "https://hairandcobklyn.com/blog/" },
+              { "title": "SHOP", "link": "https://shop.hairandcobklyn.com/" }
+            ],
+            "ctas": [
+              { "label": "347-294-4600", "href": "tel:347-294-4600", "kind": "call" },
+              {
+                "label": "hello@hairandcobklyn.com",
+                "href": "mailto:hello@hairandcobklyn.com",
+                "kind": "email"
+              },
+              {
+                "label": "Book at Prospect Heights",
+                "href": "https://phorest.com/book/salons/haircobklynprospectheights",
+                "kind": "book",
+                "provider": "phorest"
+              },
+              {
+                "label": "Book at Bay Ridge",
+                "href": "https://phorest.com/book/salons/haircobklynbayridge",
+                "kind": "book",
+                "provider": "phorest"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "content": {
+            "heading": "Hello Brooklyn",
+            "subheading": "We Want to Make You Smile",
+            "body": "Create / Inspire / Community",
+            "items": [
+              { "title": "Who", "body": "Stylists who help clients love their hair again." },
+              {
+                "title": "WHAT",
+                "body": "Color, cuts and designs for all hair types, especially textured hair."
+              },
+              { "title": "WHY", "body": "Individualized service; celebrating the local community." }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-space",
+          "type": "gallery",
+          "content": {
+            "heading": "See Our Brooklyn-Based Space",
+            "body": "Embedded YouTube video. Preceded by quotes from Hubert de Givenchy and Coco Chanel, and 'P.S. I hope you feel beautiful today.'"
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-services",
+          "type": "services",
+          "content": {
+            "subheading": "Services",
+            "heading": "We Pride Ourselves On Quality",
+            "items": [
+              {
+                "title": "Hair Color",
+                "body": "Custom color, bold looks to natural balayage.",
+                "link": "https://hairandcobklyn.com/services"
+              },
+              {
+                "title": "Haircuts & Styling",
+                "body": "Cuts and routines suited to lifestyle and hair health.",
+                "link": "https://hairandcobklyn.com/services"
+              },
+              {
+                "title": "Specialty Services",
+                "body": "Certified smoothing systems and extensions.",
+                "link": "https://hairandcobklyn.com/services"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-team-intro",
+          "type": "cta",
+          "content": {
+            "heading": "Meet Our Team",
+            "body": "Take a quiz to be matched with a stylist.",
+            "ctas": [
+              {
+                "label": "Meet Your Stylist",
+                "href": "http://www.snapsnip.me/#/selectSalon?chainId=60db2643de67d8000400d8e0",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-team-prospect",
+          "type": "team",
+          "content": {
+            "heading": "Prospect Heights Team",
+            "items": [
+              { "title": "Allyson Hurley", "body": "Owner" },
+              { "title": "Stacy Ann", "body": "Lead 3" },
+              { "title": "Hilary", "body": "Lead" },
+              { "title": "Jessica", "body": "Lead" },
+              { "title": "Skye", "body": "Assistant Team Lead - Lead Stylist" },
+              { "title": "Ilicia", "body": "Senior" },
+              { "title": "Ashley", "body": "Senior" },
+              { "title": "Devon", "body": "Senior" },
+              { "title": "Martha", "body": "Senior" },
+              { "title": "Brianna", "body": "Senior" },
+              { "title": "Nivie", "body": "Senior" },
+              { "title": "Tiffani", "body": "Senior" },
+              { "title": "Diana", "body": "Stylist" },
+              { "title": "Nicole", "body": "Stylist" },
+              { "title": "Berenice", "body": "Stylist 2" }
+            ],
+            "ctas": [
+              {
+                "label": "Get Matched",
+                "href": "https://app.joinmya.com/hairandcobklynheights",
+                "kind": "link"
+              },
+              {
+                "label": "allyson@hairandcobklyn.com",
+                "href": "mailto:allyson@hairandcobklyn.com",
+                "kind": "email"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-team-bayridge",
+          "type": "team",
+          "content": {
+            "heading": "Bay Ridge Team",
+            "items": [
+              { "title": "Allyson Hurley", "body": "Owner" },
+              { "title": "Mindy", "body": "Lead" },
+              { "title": "Lisa", "body": "Lead" },
+              { "title": "Cathy", "body": "Lead" },
+              { "title": "Antonello", "body": "Lead" },
+              { "title": "Jess", "body": "Lead" },
+              { "title": "Brianna", "body": "Stylist 2" },
+              { "title": "Danni", "body": "Stylist" },
+              { "title": "Berenice", "body": "Stylist 2" }
+            ],
+            "ctas": [
+              {
+                "label": "Get Matched",
+                "href": "https://app.joinmya.com/hairandcobklynridge",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-portfolio",
+          "type": "gallery",
+          "content": {
+            "heading": "Check Out Our Clients",
+            "items": [
+              {
+                "title": "Angled Bob by Christine",
+                "link": "/portfolio_page/angled-bob-by-christine/"
+              },
+              {
+                "title": "Angled Fade by Shannon",
+                "link": "/portfolio_page/angled-fade-by-shannon/"
+              },
+              {
+                "title": "Balayage & SilkPress by Toniann",
+                "link": "/portfolio_page/balayage-silkpress-by-toniann/"
+              },
+              {
+                "title": "Balayage at it's Finest",
+                "link": "/portfolio_page/balayage-at-its-finest/"
+              },
+              { "title": "Balyage Autumn Tones", "link": "/portfolio_page/balyage-autumn-tones/" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-footer",
+          "type": "footer",
+          "content": {
+            "body": "Hair & Co BKLYN is a one-of-a-kind Brooklyn hair salon that celebrates the beauty and diversity of all hair types. · Prospect Heights: 477 Bergen St., Brooklyn, New York 11217, (347) 294-4600 · Bay Ridge: 9718 3rd Ave., Brooklyn, New York 11209, (718) 748-9880 · Recent blogs dated Jul–Aug 2026 · Copyright 2021 Linkup Marketing | All Rights Reserved",
+            "items": [
+              { "title": "Sitemap", "link": "https://hairandcobklyn.com/sitemap" },
+              {
+                "title": "DISCOVER YOUR PERFECT MATCH",
+                "link": "https://hairandcobklyn.com/meet-your-stylist/"
+              },
+              {
+                "title": "Take The Survey »",
+                "link": "https://hairandcobklyn.com/clinton-hill-team/"
+              }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    },
+    {
+      "path": "/contact/",
+      "title": "Brooklyn Hair Salons | Contact Hair & Co BKLYN",
+      "sections": [
+        {
+          "id": "contact-main",
+          "type": "contact",
+          "content": {
+            "heading": "Contact",
+            "subheading": "GIVE A SHOUT / Your Local Brooklyn Hair Salon",
+            "body": "Diverse Brooklyn salon; call one of our '2 locations' or book online. No contact form. No hours shown for any location.",
+            "ctas": [
+              {
+                "label": "hello@hairandcobklyn.com",
+                "href": "mailto:hello@hairandcobklyn.com",
+                "kind": "email"
+              },
+              {
+                "label": "book an appointment online",
+                "href": "https://hairandcobklyn.mylocalsalon.com/onlinebooking/v7410/Steps/SelectServices.aspx",
+                "kind": "book",
+                "provider": "mylocalsalon"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-clinton-hill",
+          "type": "map",
+          "content": {
+            "heading": "Clinton Hill Location",
+            "body": "487 Myrtle Ave. Brooklyn, NY 11205 · Google Map embed",
+            "ctas": [
+              { "label": "(718) 789-2390", "href": "tel:%28718%29%20789-2390", "kind": "call" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-prospect-heights",
+          "type": "map",
+          "content": {
+            "heading": "Prospect Heights Location",
+            "body": "477 Bergen St. Brooklyn, NY 11217 · Google Map embed",
+            "ctas": [{ "label": "(347) 294-4600", "href": "tel:3472944600", "kind": "call" }]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-bay-ridge",
+          "type": "map",
+          "content": {
+            "heading": "Bay Ridge Location",
+            "body": "9718 3rd Ave. Brooklyn, NY 11209 · Google Map embed",
+            "ctas": [{ "label": "(718) 748-9880", "href": "tel:718-748-9880", "kind": "call" }]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-partners",
+          "type": "gallery",
+          "content": {
+            "heading": "Sustainability is our goal",
+            "body": "Partner logos: KMS, Oribe, Varis, Goldwell, Green Circle."
+          },
+          "confidence": 1
+        }
+      ]
+    }
+  ]
+}

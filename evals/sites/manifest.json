@@ -206,9 +206,10 @@
     },
     {
       "slug": "iphci",
-      "url": "https://iphci.com/",
+      "url": "https://www.iphci.com/",
       "businessType": "Plumbing/HVAC",
       "platform": "wordpress",
+      "pageBuilder": "beaver-builder",
       "platformConfidence": 0.9,
       "evidence": [
         {
@@ -218,11 +219,32 @@
       ],
       "whyUseful": "Two offices, two phones (locations[]), 24/7 CTA, agency-built WP for the child-theme path.",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business.phone",
+          "note": "Two numbers for two towns (Independence, Jesup) but only one address; Jesup may be a second office with no address shown."
+        },
+        {
+          "field": "business.email",
+          "note": "Email is Cloudflare-obfuscated in the HTML ('[email protected]'); capture must run JS or decode it to find info@iphci.com."
+        },
+        {
+          "field": "business",
+          "note": "Service area (10 named towns) has no field. Same gap as chambers-consulting and arc-electric."
+        },
+        {
+          "field": "pages.sections",
+          "note": "Plumbing/Heating/Cooling blocks appear twice in the markup (slider clones). Labeled once; the mapper must de-duplicate."
+        },
+        {
+          "field": "pages.sections.content",
+          "note": "Contact form fields only fit in body text. Same gap as the other sites."
+        }
+      ]
     },
     {
       "slug": "hair-and-co-brooklyn",
-      "url": "http://hairandcobklyn.com/",
+      "url": "https://hairandcobklyn.com/",
       "businessType": "Salon (2 locations)",
       "platform": "wordpress",
       "pageBuilder": "wpbakery",
@@ -239,7 +261,28 @@
       ],
       "whyUseful": "Page-builder WP (style-guide path), Phorest booking, dated parts (© 2021, Google+ icon).",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business.locations",
+          "note": "Location count conflicts: nav/footer show 2 (Prospect Heights, Bay Ridge); contact page lists 3 (adds Clinton Hill) while its text says '2 locations'. No way to mark a location as possibly closed."
+        },
+        {
+          "field": "pages.sections.content.ctas.provider",
+          "note": "Two booking systems: Phorest in the nav, mylocalsalon on the contact page. Likely a retired system still linked."
+        },
+        {
+          "field": "business",
+          "note": "Practitioners (24 stylists, some at both locations) only fit as team section items; no structured staff-per-location field. Same gap as northern-heights-dental."
+        },
+        {
+          "field": "pages.sections",
+          "note": "Bay Ridge team block appears three times and the nav twice in the markup. Labeled once; the mapper must de-duplicate. Same as iphci."
+        },
+        {
+          "field": "pages.sections.content.items",
+          "note": "Nav has dropdowns (About, Locations, Services, SHOP, Book Now) with ~15 child links; items can't nest."
+        }
+      ]
     },
     {
       "slug": "delaware-valley-hardwoods",
@@ -255,7 +298,28 @@
       ],
       "whyUseful": "Custom path, JS-loaded content (render waits).",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business",
+          "note": "Service area given as a radius ('~10 miles from Wilmington') plus a town list; no field for either. Same gap as chambers-consulting, arc-electric, iphci."
+        },
+        {
+          "field": "business",
+          "note": "Certification (Bona Certified Craftsman, with verification link) has no field. Same gap as licences, memberships and awards on other sites."
+        },
+        {
+          "field": "business",
+          "note": "Owners/practitioners (Jim and Andrea Kramer, with roles) have no field. Same as northern-heights-dental and hair-and-co-brooklyn."
+        },
+        {
+          "field": "pages.sections",
+          "note": "Recent Projects is an Instagram feed loaded by JavaScript; without waiting for it, capture sees only 'Loading recent projects...'."
+        },
+        {
+          "field": "pages.sections.content",
+          "note": "Contact form fields, including a required select with options, only fit in body text."
+        }
+      ]
     },
     {
       "slug": "chambers-consulting",

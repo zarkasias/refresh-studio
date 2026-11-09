@@ -1,0 +1,233 @@
+{
+  "id": "site_iphci",
+  "projectId": "proj_iphci",
+  "schemaVersion": 1,
+  "sourceUrl": "https://www.iphci.com/",
+  "platform": "wordpress",
+  "platformEvidence": [],
+  "platformConfidence": 0,
+  "business": {
+    "name": "Independence Plumbing, Heating & Cooling",
+    "phone": "319-334-7008",
+    "email": "info@iphci.com",
+    "address": "509 20th Ave SW, Independence, IA 50644",
+    "hours": [
+      {
+        "label": "Emergency",
+        "text": "Available 24 hours a day, 7 days a week, including holidays"
+      }
+    ],
+    "socialLinks": [
+      {
+        "network": "facebook",
+        "url": "https://www.facebook.com/Independence-Plumbing-Heating-Cooling-Inc-106196728537892"
+      }
+    ]
+  },
+  "brand": {
+    "extractedColors": [
+      { "hex": "#ec1c24", "role": "primary" },
+      { "hex": "#2e3191", "role": "accent" },
+      { "hex": "#ffffff", "role": "background" },
+      { "hex": "#000000", "role": "surface" }
+    ],
+    "extractedFonts": ["Almarai"]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Home - Independence Plumbing, Heating & Cooling",
+      "sections": [
+        {
+          "id": "home-nav",
+          "type": "nav",
+          "content": {
+            "items": [
+              { "title": "Services", "link": "#" },
+              { "title": "Projects", "link": "https://www.iphci.com/projects/" },
+              { "title": "Careers", "link": "https://www.iphci.com/careers/" },
+              { "title": "Contact", "link": "https://www.iphci.com/contact/" }
+            ],
+            "ctas": [
+              { "label": "24/7 Emergency Services", "href": "tel:3193347008", "kind": "call" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "content": {
+            "heading": "Two-Generation, Family-Owned Since 1987!",
+            "body": "Family-owned, serving Buchanan County; licensed, uniformed technicians; new construction, remodels, after-hours emergencies; over 50 years of industry experience.",
+            "ctas": [
+              { "label": "24/7 Emergency Services", "href": "tel:3193347008", "kind": "call" },
+              { "label": "We're Hiring", "href": "https://www.iphci.com/careers/", "kind": "link" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-benefits",
+          "type": "richtext",
+          "content": {
+            "heading": "Independence PHC Benefits",
+            "items": [
+              {
+                "title": "Emergency Plumbing, Heating & Cooling – Available 24 hours a day, 7 days a week, including holidays"
+              },
+              { "title": "100% Customer Satisfaction Guaranteed" },
+              { "title": "Employee background checks" },
+              { "title": "Plumbers and Technicians are licensed and prepared" },
+              { "title": "Proper clean-up" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-plumbing",
+          "type": "services",
+          "content": {
+            "subheading": "Plumbing",
+            "heading": "Full Service Comprehensive Plumbing Services",
+            "items": [
+              { "title": "Preventative Maintenance" },
+              { "title": "Repairs & Installations" },
+              { "title": "Kitchens" },
+              { "title": "Bathrooms" },
+              { "title": "Water Heaters" },
+              { "title": "Sump Pumps" },
+              { "title": "Light Commercial" },
+              { "title": "And more!" }
+            ],
+            "ctas": [
+              { "label": "See More", "href": "https://www.iphci.com/plumbing/", "kind": "link" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-heating",
+          "type": "services",
+          "content": {
+            "subheading": "Heating",
+            "heading": "Full Service Exceptional Heating Services",
+            "items": [
+              { "title": "Preventative Maintenance" },
+              { "title": "Repairs & Installations" },
+              { "title": "Furnaces" },
+              { "title": "Heat Pumps" },
+              { "title": "Mini-Splits" },
+              { "title": "Radiant Floors" },
+              { "title": "Boilers" },
+              { "title": "Geothermal" },
+              { "title": "And more!" }
+            ],
+            "ctas": [
+              { "label": "See More", "href": "https://www.iphci.com/heating/", "kind": "link" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-cooling",
+          "type": "services",
+          "content": {
+            "subheading": "Cooling",
+            "heading": "Full Service Experienced Cooling Services",
+            "items": [
+              { "title": "Preventative Maintenance" },
+              { "title": "Repairs & Installations" },
+              { "title": "Air Conditioners" },
+              { "title": "Heat Pumps" },
+              { "title": "Air Quality" },
+              { "title": "Thermostats" },
+              { "title": "New Construction" },
+              { "title": "Geothermal Heat Pumps" },
+              { "title": "And more!" }
+            ],
+            "ctas": [
+              { "label": "See More", "href": "https://www.iphci.com/cooling/", "kind": "link" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-careers",
+          "type": "cta",
+          "content": {
+            "heading": "Join Our Team",
+            "body": "Grow your skills with the latest tools, technology and equipment.",
+            "ctas": [
+              { "label": "View Benefits", "href": "https://www.iphci.com/careers/", "kind": "link" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-brands",
+          "type": "gallery",
+          "content": {
+            "heading": "Trusted Brands",
+            "items": [
+              { "title": "A. O. Smith", "link": "https://www.aosmith.com/" },
+              { "title": "Weil-McLain", "link": "https://www.weil-mclain.com/" },
+              { "title": "Oasis", "link": "http://oasisbath.com/" },
+              { "title": "Mitsubishi", "link": "https://www.metahvac.com/" },
+              { "title": "Kohler", "link": "https://www.us.kohler.com/us/" },
+              { "title": "Hydron", "link": "https://hydronmodule.com/" },
+              { "title": "Delta", "link": "https://www.deltafaucet.com/" },
+              { "title": "Armstrong", "link": "https://www.armstrongair.com/" },
+              { "title": "Honeywell", "link": "https://www.honeywellhome.com/us/en/" }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-footer",
+          "type": "footer",
+          "content": {
+            "heading": "Get In Touch",
+            "body": "509 20th Ave SW, Independence, IA 50644 · Proudly serving Independence, Otterville, Hazleton, Winthrop, Quasqueton, Rowley, Brandon, Jesup, Littleton, Fairbank and surrounding communities. · Competitive pay, benefits, continuing education. · © 2026 Independence Plumbing, Heating & Cooling. All Rights Reserved. Site by Fusion Forward.",
+            "ctas": [
+              {
+                "label": "509 20th Ave SW, Independence, IA 50644",
+                "href": "https://goo.gl/maps/ov4FbigMYKkW127m9",
+                "kind": "link"
+              },
+              { "label": "319-334-7008 (Independence)", "href": "tel:3193347008", "kind": "call" },
+              { "label": "319-827-6008 (Jesup)", "href": "tel:3198276008", "kind": "call" },
+              { "label": "info@iphci.com", "href": "mailto:info@iphci.com", "kind": "email" },
+              { "label": "We're Hiring!", "href": "https://www.iphci.com/careers/", "kind": "link" }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    },
+    {
+      "path": "/contact/",
+      "title": "Contact - Independence Plumbing, Heating & Cooling",
+      "sections": [
+        {
+          "id": "contact-main",
+          "type": "contact",
+          "content": {
+            "heading": "Contact Us",
+            "body": "Request an estimate or schedule service; after-hours, weekend and emergency needs by phone at 319-334-7008. Address block 'Independence PHC'. Form fields: Name (Required), Phone, Email (Required), Message (Required), Human Verification (math question); hidden honeypot 'Email' field. Button 'Send'. No map embed.",
+            "ctas": [
+              {
+                "label": "509 20th Ave SW, Independence, IA 50644",
+                "href": "https://goo.gl/maps/3muTYwN1jiQCqBAMA",
+                "kind": "link"
+              },
+              { "label": "319-334-7008 (Independence)", "href": "tel:3193347008", "kind": "call" },
+              { "label": "319-827-6008 (Jesup)", "href": "tel:3198276008", "kind": "call" }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    }
+  ]
+}

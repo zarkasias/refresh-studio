@@ -1,0 +1,9 @@
+node_modules
+.next
+pnpm-lock.yaml
+brand
+docs
+.claude
+# Hand-formatted project instructions
+CLAUDE.md
+README-KIT.md

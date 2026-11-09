@@ -114,7 +114,20 @@
       ],
       "whyUseful": "Header/footer hours conflict, menu page, Toast ordering, email domain differs from site domain, missing alt.",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business.hours",
+          "note": "Three conflicting Fri/Sat closing times (4pm homepage, 3pm Find Us, 9pm footer). Hours entries can't say which is current or flag the conflict."
+        },
+        {
+          "field": "pages.sections.type",
+          "note": "No type for an hours block or a 'getting here' directions block; both labeled richtext."
+        },
+        {
+          "field": "pages",
+          "note": "No contact page; 'Find Us' (an SEO-keyword slug) acts as one. The mapper must recognize contact content by what's on the page, not by URL."
+        }
+      ]
     },
     {
       "slug": "northern-heights-dental",
@@ -130,7 +143,32 @@
       ],
       "whyUseful": "Mixed tel: formats, announcement bar, many service pages (25-page cap prioritization).",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "pages.sections.content.items",
+          "note": "Nav has dropdown menus (About, Services, New Patients) with 16 child pages. Items can't nest, so children are left out."
+        },
+        {
+          "field": "business",
+          "note": "Practitioner (Dr. Jacob Williams, DMD) has no field. Key for dental and medical sites."
+        },
+        {
+          "field": "business",
+          "note": "Aggregate rating ('200+ 5-Star Reviews') and status claims ('Accepting New Patients', 'Same-Day Emergency') have no fields. Rating gap recurs from arc-electric."
+        },
+        {
+          "field": "business",
+          "note": "Professional memberships (ADA, AAID, AGD) have no field. Same as BBB/HomeAdvisor badges on jolly-plumbing."
+        },
+        {
+          "field": "pages.sections.content.ctas.kind",
+          "note": "No CTA kind for payments ('Pay Online' via bcpay.online); labeled as link."
+        },
+        {
+          "field": "pages.sections.content",
+          "note": "Contact form fields only fit in body text. Same gap as the other sites."
+        }
+      ]
     },
     {
       "slug": "bella-lago-salon",

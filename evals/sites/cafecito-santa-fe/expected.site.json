@@ -1,0 +1,231 @@
+{
+  "id": "site_cafecito-santa-fe",
+  "projectId": "proj_cafecito-santa-fe",
+  "schemaVersion": 1,
+  "sourceUrl": "https://www.cafecitosantafe.com/",
+  "platform": "squarespace",
+  "platformEvidence": [],
+  "platformConfidence": 0,
+  "business": {
+    "name": "Cafecito Santa Fe",
+    "phone": "(505) 310-0089",
+    "email": "cafe@trailheadsantafe.com",
+    "address": "Trailhead Compound | 922 Shoofly St. Santa Fe, NM 87505",
+    "hours": [
+      {
+        "label": "Homepage",
+        "text": "Monday to THURSDAY 8am - 3pm · Friday & SATURDAY 8am -4pm · Sunday 9am - 3pm · Brunch served on Saturday & Sunday · Kitchen open until 4 pm on FRIDAY & SATURDAY"
+      },
+      { "label": "Find Us page", "text": "Monday–Saturday 8am - 3pm · Sunday 9am - 3pm" },
+      {
+        "label": "Footer",
+        "text": "Monday to Thursday 8am - 3pm | Friday & Saturday 8am - 9pm | Sunday 9am - 3pm"
+      }
+    ],
+    "googleBusinessUrl": "https://g.page/cafecito-santafe?share",
+    "socialLinks": [
+      { "network": "instagram", "url": "https://www.instagram.com/cafecito.santafe/" },
+      { "network": "facebook", "url": "https://www.facebook.com/cafecito.trailhead/" },
+      {
+        "network": "tripadvisor",
+        "url": "https://www.tripadvisor.com/Restaurant_Review-g60958-d19743520-Reviews-Cafecito-Santa_Fe_New_Mexico.html"
+      },
+      { "network": "nextdoor", "url": "https://nextdoor.com/pages/cafecito-santa-fe-nm/" }
+    ]
+  },
+  "brand": {
+    "extractedColors": [
+      { "hex": "#ff0505", "role": "primary" },
+      { "hex": "#000000", "role": "accent" },
+      { "hex": "#f6f4f4", "role": "background" },
+      { "hex": "#ffffff", "role": "surface" }
+    ],
+    "extractedFonts": ["Roboto Slab", "Roboto", "Open Sans"]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Trailhead Compound: Santa Fe's Local Coffee & Restaurant",
+      "metaDescription": "Discover the blend of culture, coffee & cuisine at Cafecito Santa Fe, your local coffee house and restaurant at the Trailhead Compound. Join us today!",
+      "sections": [
+        {
+          "id": "home-nav",
+          "type": "nav",
+          "content": {
+            "items": [
+              { "title": "Home", "link": "https://www.cafecitosantafe.com/" },
+              {
+                "title": "Menus",
+                "link": "https://www.cafecitosantafe.com/breakfast-lunch-brunch-coffee-patio"
+              },
+              {
+                "title": "Find Us",
+                "link": "https://www.cafecitosantafe.com/santafe-railyard-lunch-brunch-coffee-patio"
+              },
+              {
+                "title": "Our Story",
+                "link": "https://www.cafecitosantafe.com/santafe-argentina-armenia-italy-bistro-coffee"
+              },
+              {
+                "title": "Private Events",
+                "link": "https://www.cafecitosantafe.com/private-events"
+              }
+            ],
+            "ctas": [
+              {
+                "label": "CATERING",
+                "href": "https://www.toasttab.com/catering/cafecito/menu/cafecito%20catering%20menu/",
+                "kind": "order",
+                "provider": "toast"
+              },
+              {
+                "label": "ORDER ONLINE",
+                "href": "https://order.toasttab.com/online/cafecito",
+                "kind": "order",
+                "provider": "toast"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "content": {
+            "heading": "Cafecito Santa Fe: Your local Coffee House & Restaurant",
+            "subheading": "Trailhead Compound | 922 Shoofly St. Santa Fe, NM 87505",
+            "ctas": [
+              {
+                "label": "OUR MENU",
+                "href": "https://www.cafecitosantafe.com/breakfast-lunch-brunch-coffee-patio",
+                "kind": "link"
+              },
+              {
+                "label": "ORDER ONLINE",
+                "href": "https://order.toasttab.com/online/cafecito",
+                "kind": "order",
+                "provider": "toast"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hours",
+          "type": "richtext",
+          "content": {
+            "heading": "Monday to THURSDAY 8am - 3pm",
+            "body": "Friday & SATURDAY 8am -4pm · Sunday 9am - 3pm · Brunch served on Saturday & Sunday · Kitchen open until 4 pm on FRIDAY & SATURDAY · closing time is kitchen closing time, you are welcome to stay longer"
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-gallery",
+          "type": "gallery",
+          "content": {
+            "body": "Five food and drink photos, all with empty alt text."
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-reservations",
+          "type": "cta",
+          "content": {
+            "heading": "Large parties please call for reservations and availability"
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-about",
+          "type": "about",
+          "content": {
+            "heading": "Blending Culture, Coffee & Delicious Food",
+            "body": "Family-owned café blending Argentine, Armenian and Italian cultures.",
+            "ctas": [
+              {
+                "label": "Learn more",
+                "href": "https://www.cafecitosantafe.com/santafe-argentina-armenia-italy-bistro-coffee",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-footer",
+          "type": "footer",
+          "content": {
+            "body": "Trailhead Compound | 922 Shoofly St. Santa Fe, NM 87505 · +1 (505) 310-0089 (not a link) · cafe@trailheadsantafe.com (not a link) · Monday to Thursday 8am - 3pm | Friday & Saturday 8am - 9pm | Sunday 9am - 3pm · No copyright line.",
+            "items": [
+              { "title": "Join our team", "link": "https://www.cafecitosantafe.com/join-our-team" },
+              { "title": "Links", "link": "https://www.cafecitosantafe.com/links" },
+              {
+                "title": "Employee Portal",
+                "link": "https://www.cafecitosantafe.com/employee-portal"
+              }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    },
+    {
+      "path": "/santafe-railyard-lunch-brunch-coffee-patio",
+      "title": "Brunch | Breakfast | Lunch | Dinner | Cafecito Santa Fe",
+      "sections": [
+        {
+          "id": "find-gallery",
+          "type": "gallery",
+          "content": {
+            "body": "Six patio and coffee photos, repeated twice."
+          },
+          "confidence": 1
+        },
+        {
+          "id": "find-directions",
+          "type": "richtext",
+          "content": {
+            "heading": "Discover Convenient Ways to Reach Cafecito Santa Fe",
+            "subheading": "Getting to Cafecito Santa Fe",
+            "items": [
+              {
+                "title": "From the Train",
+                "body": "10-minute walk from South Capitol Rail Runner station."
+              },
+              {
+                "title": "From the Acequia Trail",
+                "body": "6-minute bike or 20-minute walk from Railyard Park."
+              },
+              { "title": "From Rideshares", "body": "Uber and Lyft drop off at the door." },
+              { "title": "Convenient Street Parking", "body": "Around the Baca District." },
+              { "title": "On-Site Parking", "body": "Dedicated customer parking." }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "find-contact",
+          "type": "contact",
+          "content": {
+            "heading": "Contact",
+            "body": "Hours: Monday–Saturday 8am - 3pm, Sunday 9am - 3pm. Email cafe@trailheadsantafe.com (not a link). Location: Trailhead Compound, 922 Shoofly St. Santa Fe, NM 87505. Transit map image and Wistia navigation video; no map embed.",
+            "ctas": [
+              { "label": "(505) 310-0089", "href": "tel:+15053100089", "kind": "call" },
+              {
+                "label": "Trailhead Compound, 922 Shoofly St. Santa Fe, NM 87505",
+                "href": "https://g.page/cafecito-santafe?share",
+                "kind": "link"
+              },
+              {
+                "label": "Join our team",
+                "href": "https://www.cafecitosantafe.com/join-our-team",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    }
+  ]
+}

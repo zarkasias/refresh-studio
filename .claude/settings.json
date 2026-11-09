@@ -11,20 +11,23 @@
     ],
     "deny": [
       "Read(./.env)",
-      "Read(./.env.*)"
+      "Read(./.env.*)",
+      "Read(./.env.local)",
+      "Read(./.env.production)",
+      "Read(./.env.development.local)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pnpm -s typecheck >/dev/null 2>&1 || { echo 'Typecheck failed after this edit. Run pnpm typecheck and fix before continuing.' >&2; exit 2; }"
+          }
+        ]
+      }
     ]
   }
-  // "hooks": {
-  //   "PostToolUse": [
-  //     {
-  //       "matcher": "Edit|Write|MultiEdit",
-  //       "hooks": [
-  //         {
-  //           "type": "command",
-  //           "command": "pnpm -s typecheck >/dev/null 2>&1 || { echo 'Typecheck failed after this edit. Run pnpm typecheck and fix before continuing.' >&2; exit 2; }"
-  //         }
-  //       ]
-  //     }
-  //   ]
-  // }
 }

@@ -14,23 +14,54 @@
       ],
       "whyUseful": "Header tel: href doesn't match the displayed number. Tests CTA href vs. display and NAP consistency.",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "pages.sections.content",
+          "note": "Contact form fields (First Name, Last Name, Email, Message) only fit in body text. Same gap as chambers-consulting."
+        }
+      ]
     },
     {
       "slug": "jolly-plumbing",
-      "url": "https://jollyplumbingco.wixsite.com/jollyplumbing",
+      "url": "https://jollyplumbing.net/",
       "businessType": "Plumbing & heating",
-      "platform": "wix",
+      "platform": "wordpress",
+      "pageBuilder": "kadence-blocks",
       "platformConfidence": 0.9,
       "evidence": [
+        { "signal": "meta generator: WordPress", "where": "html" },
+        { "signal": "/wp-content/uploads/ image paths", "where": "asset-url" },
         {
-          "signal": "Proudly created with Wix.com",
-          "where": "footer-text"
-        }
+          "signal": "jQuery Migrate script loaded (JQMIGRATE console message)",
+          "where": "asset-url"
+        },
+        { "signal": "body class wp-theme-kadence; wp-block-kadence-* blocks", "where": "html" }
       ],
-      "whyUseful": "Wix free subdomain: shared host with path-scoped site (pathPrefix), Wix ad banner, leftover Lorem Ipsum, conflicting years-in-business claims.",
+      "whyUseful": "Live WordPress trades site (classic theme). Emergency tel: link contains an encoded zero-width space; same number in three href formats; two phones, two emails, licence numbers; typo in a section heading; yellow-on-white contrast risk. An old Wix copy (jollyplumbingco.wixsite.com/jollyplumbing) is still public.",
       "consent": "none",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business.phone",
+          "note": "Main line plus a separate emergency call-or-text number (719-491-8104). Only one phone field."
+        },
+        {
+          "field": "business.email",
+          "note": "Two emails on the contact page (Steven@, service@). Only one email field."
+        },
+        {
+          "field": "business",
+          "note": "No field for licence numbers (PC.0000533, MP.00188865), a key trust signal for trades."
+        },
+        { "field": "business", "note": "No field for founding year ('since 1955')." },
+        {
+          "field": "pages.sections.type",
+          "note": "No type for a features/benefits list. Labeled richtext; same gap as chambers-consulting."
+        },
+        {
+          "field": "pages.sections.content",
+          "note": "Contact form fields only fit in body text. Same gap as the other sites."
+        }
+      ]
     },
     {
       "slug": "arc-electric",

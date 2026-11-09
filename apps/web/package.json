@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@srs/brand": "workspace:*",
     "@tailwindcss/postcss": "^4.3.5",
     "next": "^16.4.5",
     "react": "^19.3.1",

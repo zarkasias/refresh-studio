@@ -53,6 +53,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@srs/brand':
+        specifier: workspace:*
+        version: link:../../packages/brand
       '@tailwindcss/postcss':
         specifier: ^4.3.5
         version: 4.3.5

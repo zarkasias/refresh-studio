@@ -1,0 +1,21 @@
+/* Studio UI only. Never use in packages/sections, exporters or client previews. */
+@theme {
+  --color-studio-background: #ffffff;
+  --color-studio-foreground: #16324b;
+  --color-studio-primary: #0b6d8e;
+  --color-studio-primary-foreground: #ffffff;
+  --color-studio-surface: #eff8fa;
+  --color-studio-muted-foreground: #475a6b;
+  /* Primary call to action only. */
+  --color-studio-cta: #c5202e;
+  --color-studio-cta-foreground: #ffffff;
+  --color-studio-border: #d2e2e9;
+  --color-studio-input: #7e96a5;
+  --color-studio-ring: #0b6d8e;
+  --color-studio-destructive: #b30015;
+
+  --radius-studio: 0.375rem;
+
+  --font-studio-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-studio-heading: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+}

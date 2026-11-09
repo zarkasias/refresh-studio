@@ -1,1 +1,15 @@
 @import 'tailwindcss';
+@import '@srs/brand/theme.css';
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-studio-heading);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+  }
+}

@@ -1,0 +1,220 @@
+{
+  "sites": [
+    {
+      "slug": "casper-plumbing",
+      "url": "https://www.casperplumbing.com/",
+      "businessType": "Plumber (Casper, WY)",
+      "platform": "wix",
+      "platformConfidence": 0.9,
+      "evidence": [
+        {
+          "signal": "static.wixstatic.com",
+          "where": "asset-url"
+        }
+      ],
+      "whyUseful": "Header tel: href doesn't match the displayed number. Tests CTA href vs. display and NAP consistency.",
+      "consent": "none",
+      "misfits": []
+    },
+    {
+      "slug": "jolly-plumbing",
+      "url": "https://jollyplumbingco.wixsite.com/jollyplumbing",
+      "businessType": "Plumbing & heating",
+      "platform": "wix",
+      "platformConfidence": 0.9,
+      "evidence": [
+        {
+          "signal": "Proudly created with Wix.com",
+          "where": "footer-text"
+        }
+      ],
+      "whyUseful": "Wix free subdomain: shared host with path-scoped site (pathPrefix), Wix ad banner, leftover Lorem Ipsum, conflicting years-in-business claims.",
+      "consent": "none",
+      "misfits": []
+    },
+    {
+      "slug": "arc-electric",
+      "url": "https://www.arcelectric.co",
+      "businessType": "Electrician (Grimes, IA)",
+      "platform": "wix",
+      "platformConfidence": 0.9,
+      "evidence": [
+        {
+          "signal": "wixstatic",
+          "where": "asset-url"
+        }
+      ],
+      "whyUseful": "Control case: well built. Proves we don't invent problems.",
+      "consent": "none",
+      "misfits": []
+    },
+    {
+      "slug": "cafecito-santa-fe",
+      "url": "https://www.cafecitosantafe.com/",
+      "businessType": "Café",
+      "platform": "squarespace",
+      "platformConfidence": 0.9,
+      "evidence": [
+        {
+          "signal": "squarespace-cdn",
+          "where": "asset-url"
+        }
+      ],
+      "whyUseful": "Header/footer hours conflict, menu page, Toast ordering, email domain differs from site domain, missing alt.",
+      "consent": "none",
+      "misfits": []
+    },
+    {
+      "slug": "northern-heights-dental",
+      "url": "https://www.northernheightsdental.com/",
+      "businessType": "Dental",
+      "platform": "squarespace",
+      "platformConfidence": 0.9,
+      "evidence": [
+        {
+          "signal": "squarespace-cdn",
+          "where": "asset-url"
+        }
+      ],
+      "whyUseful": "Mixed tel: formats, announcement bar, many service pages (25-page cap prioritization).",
+      "consent": "none",
+      "misfits": []
+    },
+    {
+      "slug": "bella-lago-salon",
+      "url": "http://www.bellalagosalon.com/",
+      "businessType": "Salon & spa",
+      "platform": "squarespace",
+      "platformConfidence": 0.9,
+      "evidence": [
+        {
+          "signal": "squarespace-cdn",
+          "where": "asset-url"
+        }
+      ],
+      "whyUseful": "Meevo booking, sister site on another domain (must not be crawled), script display font.",
+      "consent": "none",
+      "misfits": []
+    },
+    {
+      "slug": "iphci",
+      "url": "https://iphci.com/",
+      "businessType": "Plumbing/HVAC",
+      "platform": "wordpress",
+      "platformConfidence": 0.9,
+      "evidence": [
+        {
+          "signal": "wp-content/uploads",
+          "where": "asset-url"
+        }
+      ],
+      "whyUseful": "Two offices, two phones (locations[]), 24/7 CTA, agency-built WP for the child-theme path.",
+      "consent": "none",
+      "misfits": []
+    },
+    {
+      "slug": "hair-and-co-brooklyn",
+      "url": "http://hairandcobklyn.com/",
+      "businessType": "Salon (2 locations)",
+      "platform": "wordpress",
+      "pageBuilder": "wpbakery",
+      "platformConfidence": 0.9,
+      "evidence": [
+        {
+          "signal": "js_composer",
+          "where": "asset-url"
+        },
+        {
+          "signal": "theme class",
+          "where": "html"
+        }
+      ],
+      "whyUseful": "Page-builder WP (style-guide path), Phorest booking, dated parts (© 2021, Google+ icon).",
+      "consent": "none",
+      "misfits": []
+    },
+    {
+      "slug": "delaware-valley-hardwoods",
+      "url": "https://delawarevalleyhardwoods.com",
+      "businessType": "Flooring",
+      "platform": "custom",
+      "platformConfidence": 0.9,
+      "evidence": [
+        {
+          "signal": "No CMS signals, hand-coded static on Cloudflare Pages (builder's case study, off-site, also confirms)",
+          "where": "html"
+        }
+      ],
+      "whyUseful": "Custom path, JS-loaded content (render waits).",
+      "consent": "none",
+      "misfits": []
+    },
+    {
+      "slug": "chambers-consulting",
+      "url": "https://www.chambers-consulting.dev",
+      "businessType": "Web consultancy (own)",
+      "platform": "custom",
+      "platformConfidence": 0.9,
+      "evidence": [
+        {
+          "signal": "/_next/image (Next.js)",
+          "where": "asset-url"
+        }
+      ],
+      "whyUseful": "The only site with guaranteed consent. First real crawl in M1.",
+      "consent": "own-site",
+      "consentRecordedAt": "2026-11-09T00:00:00Z",
+      "misfits": []
+    },
+    {
+      "slug": "williamsburg-chiro-ny",
+      "url": "https://www.williamsburgchirony.com/",
+      "businessType": "Chiropractor",
+      "platform": "webflow",
+      "platformConfidence": 0.75,
+      "evidence": [
+        {
+          "signal": "website-files.com",
+          "where": "asset-url"
+        }
+      ],
+      "whyUseful": "Migrated platform (drift). Webflow has no PRD handoff path (gap, D12).",
+      "consent": "none",
+      "misfits": []
+    },
+    {
+      "slug": "mckinley-chiro",
+      "url": "http://www.mckinleychiro.com/",
+      "businessType": "Chiropractor",
+      "platform": "other-hosted",
+      "builder": "chiroplanet",
+      "platformConfidence": 0.75,
+      "evidence": [
+        {
+          "signal": "Powered by ChiroPlanet.com",
+          "where": "footer-text"
+        }
+      ],
+      "whyUseful": "Tests other-hosted. Footer shows \"Copyright 2028\".",
+      "consent": "none",
+      "misfits": []
+    },
+    {
+      "slug": "ramseys-diners",
+      "url": "https://www.ramseysdiners.com",
+      "businessType": "Diner (multi-location)",
+      "platform": "other-hosted",
+      "builder": "bentobox",
+      "platformConfidence": 0.9,
+      "evidence": [
+        {
+          "signal": "powered by BentoBox",
+          "where": "footer-text"
+        }
+      ],
+      "whyUseful": "Restaurant vertical builder, no phone in homepage text (verify), menus.",
+      "consent": "none",
+      "misfits": []
+    }
+  ]
+}

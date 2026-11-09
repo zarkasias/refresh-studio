@@ -164,7 +164,20 @@
       "whyUseful": "The only site with guaranteed consent. First real crawl in M1.",
       "consent": "own-site",
       "consentRecordedAt": "2026-11-09T00:00:00.000Z",
-      "misfits": []
+      "misfits": [
+        {
+          "field": "business.address",
+          "note": "Site gives a service area ('Based in Northern Virginia, working with businesses anywhere'), not an address. No field for service area."
+        },
+        {
+          "field": "pages.sections.type",
+          "note": "Numbered 'How it works' steps have no section type; labeled as richtext."
+        },
+        {
+          "field": "pages.sections.content",
+          "note": "Contact form fields only fit in body text. The audit's form-works check will need them structured."
+        }
+      ]
     },
     {
       "slug": "williamsburg-chiro-ny",

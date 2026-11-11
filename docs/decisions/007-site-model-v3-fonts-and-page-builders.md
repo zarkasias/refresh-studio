@@ -1,7 +1,7 @@
 # 007 — Site model v3: fonts and page builders
 
 - **Date:** 2026-11-09
-- **Status:** accepted (M1 plan, `docs/plans/M1.md` section 2a; the consultant approved D1 and D6)
+- **Status:** accepted (M1 plan, `docs/plans/M1/site-model-changes.md` section 2a; the consultant approved D1 and D6)
 
 ## Context
 

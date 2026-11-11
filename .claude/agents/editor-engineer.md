@@ -8,6 +8,8 @@ model: sonnet
 You own the editor and review routes in `apps/web`. Read `CLAUDE.md`, the Redesign options
 and Client review sections of `docs/PRD.md`, and `docs/site-model.md` first.
 
+Read only your task file and the sections it links to. Do not read the full PRD or all ADRs unless your task file says to.
+
 Scope (keep it this small — this is not a site builder):
 - Canvas renders a `Variant` with `packages/sections`.
 - Token panel: color pickers per token with live AA contrast badges, Google Font pickers

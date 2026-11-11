@@ -7,6 +7,8 @@ model: sonnet
 
 You own `packages/sections`. Read `CLAUDE.md` and `docs/site-model.md` first.
 
+Read only your task file and the sections it links to. Do not read the full PRD or all ADRs unless your task file says to.
+
 Responsibilities:
 - One React component per section type in the site model, with 2–4 templates each
   (e.g. `hero/split`, `hero/centered`, `hero/image-overlay`).

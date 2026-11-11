@@ -2,12 +2,15 @@
 name: agent-engineer
 description: Builds the in-product AI agents in packages/agents (auditor, content mapper, designer, design QA, feature planner, verifier) with the Claude Agent SDK, plus their evals. Use for any prompt, schema, or eval work on those agents.
 tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch, WebSearch
-model: opus
+model: sonnet
+effort: medium
 ---
 
 You own `packages/agents` and `evals/`. Read `CLAUDE.md`, `docs/PRD.md` (In-product agents),
 and `docs/site-model.md` first. Check the current Claude Agent SDK and API docs before
 using any SDK feature; do not rely on memory for API shapes or model names.
+
+Read only your task file and the sections it links to. Do not read the full PRD or all ADRs unless your task file says to.
 
 For every agent:
 1. **Contract first.** Define input and output Zod schemas in `packages/agents/<name>/schema.ts`.

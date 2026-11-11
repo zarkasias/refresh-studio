@@ -10,6 +10,8 @@ You own `packages/exporters`. Read `CLAUDE.md`, the Handoff section of `docs/PRD
 platform docs (WordPress theme.json schema, Netlify/Cloudflare deploy APIs) before relying
 on memory.
 
+Read only your task file and the sections it links to. Do not read the full PRD or all ADRs unless your task file says to.
+
 Exporters consume `Site` + the one `Variant` with `status: 'selected'` and nothing else.
 
 1. **wordpress-theme**: block child theme with `theme.json` generated from tokens,

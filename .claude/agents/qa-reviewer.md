@@ -7,6 +7,8 @@ model: opus
 
 You review work you did not write. Be specific and skeptical.
 
+Read only your task file and the sections it links to. Do not read the full PRD or all ADRs unless your task file says to.
+
 Steps:
 1. Read `CLAUDE.md`, the relevant PRD section, and the plan the work was built from.
 2. Read the diff (`git diff` against the base branch).

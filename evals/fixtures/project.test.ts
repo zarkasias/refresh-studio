@@ -1,4 +1,5 @@
 import { GuardError, ProjectSchema, assertCrawlAllowed } from '@srs/site-model';
+import { FixtureProjectSchema } from '@srs/site-model/fixture-urls';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { fixtureProject } from './project';
 import { type FixtureServer, startFixtureServer } from './server';
@@ -27,11 +28,9 @@ describe('fixtureProject', () => {
 
   it('is a valid own-site Project scoped to the loopback origin', () => {
     const project = fixtureProject(server.port);
-    // Everything but the loopback URLs must satisfy the site-model schema. (Site-model
-    // UrlSchema rejects 127.0.0.1 hosts today; see LOOPBACK_URL_PATHS in project.ts.)
-    const result = ProjectSchema.safeParse(project);
-    const paths = result.success ? [] : result.error.issues.map((i) => i.path.join('.'));
-    expect(paths.filter((p) => p !== 'siteUrl' && p !== 'consent.scope.origin')).toEqual([]);
+    // Validates fully with the fixture schema; the strict production schema still refuses it.
+    expect(FixtureProjectSchema.safeParse(project).success).toBe(true);
+    expect(ProjectSchema.safeParse(project).success).toBe(false);
     expect(project.consent?.method).toBe('own-site');
     expect(project.consent?.scope).toEqual({ origin: server.origin, maxPages: 25 });
     expect(project.siteUrl).toBe(`${server.origin}/`);
@@ -88,13 +87,13 @@ describe('fixtureProject', () => {
   it('still throws on any other schema problem', () => {
     expect(() => fixtureProject(server.port, { maxPages: 26 })).toThrow(/maxPages/);
     expect(() => fixtureProject(server.port, { pathPrefix: 'about' })).toThrow(/pathPrefix/);
-    // A prefix that would turn siteUrl into another host is not hidden by the URL tolerance.
-    expect(() => fixtureProject(server.port, { pathPrefix: '//evil.example' })).toThrow(
-      /not a plain loopback address/,
-    );
-    expect(() => fixtureProject(server.port, { pathPrefix: '/a?x=1' })).toThrow(
-      /not a plain loopback address/,
-    );
+    // A prefix that would turn siteUrl into another host, or carry a query or hash, or not be
+    // the plain path it says, is refused.
+    for (const pathPrefix of ['//evil.example', '/a?x=1', '/a#x', '/a/../b', '/%2e%2e/evil']) {
+      expect(() => fixtureProject(server.port, { pathPrefix }), pathPrefix).toThrow(
+        /not a plain path on http:\/\/127\.0\.0\.1/,
+      );
+    }
   });
 
   it('rejects an invalid port', () => {

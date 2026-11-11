@@ -1,7 +1,7 @@
 # 004 — Test-site set and consent policy
 
 - **Date:** 2026-11-09
-- **Status:** accepted
+- **Status:** accepted (fixture policy amended by ADR-010)
 
 ## Context
 
@@ -50,3 +50,6 @@ Decision D9 is recorded here.
 - The set leans polished and light on WordPress page builders, dated sites and GoDaddy. The open
   slots and outreach to prospects should fix this.
 - The repo must stay private, because the manifest names real businesses.
+
+Amended by ADR-010: label-derived synthetic sites are allowed after anonymization, and fixtures
+use fixture-only loopback URL schemas. The consent rules above are unchanged.

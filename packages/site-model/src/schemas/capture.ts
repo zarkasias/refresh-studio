@@ -8,9 +8,11 @@ import {
   HexColorSchema,
   IdSchema,
   IsoDateTimeSchema,
-  OriginSchema,
+  STRICT_URLS,
+  memoOnUrls,
   SlugSchema,
-  UrlSchema,
+  type UrlLike,
+  type UrlSchemas,
 } from './primitives';
 import { MAX_CRAWL_PAGES } from './project';
 
@@ -89,60 +91,73 @@ export const SkippedUrlSchema = z.strictObject({
 });
 export type SkippedUrl = z.infer<typeof SkippedUrlSchema>;
 
-/**
- * The CaptureRun object without its cross-field refinements (Zod 4 refined schemas cannot be
- * `.pick`ed, `.omit`ted or `.extend`ed). Validate with `CaptureRunSchema`.
- */
-export const CaptureRunObjectSchema = z.strictObject({
-  id: IdSchema,
-  projectId: IdSchema,
-  siteId: IdSchema.optional(),
-  startUrl: UrlSchema,
-  status: CaptureStatusSchema,
-  blockedReason: BlockedReasonSchema.optional(),
-  userAgent: z.string().min(1),
-  robots: RobotsInfoSchema,
-  /** At most MAX_CRAWL_PAGES; the consent's own `maxPages` is enforced by the crawl guard. */
-  planned: z.array(UrlSchema).max(MAX_CRAWL_PAGES),
-  skipped: z.array(SkippedUrlSchema),
-  startedAt: IsoDateTimeSchema,
-  finishedAt: IsoDateTimeSchema.optional(),
-});
+export function makeCaptureRunSchemas<U extends UrlLike, O extends UrlLike>(
+  urls: UrlSchemas<U, O>,
+) {
+  return memoOnUrls(urls, 'makeCaptureRunSchemas', () => {
+    // Same names as the strict exports, so the bodies below are shared unchanged.
+    const UrlSchema = urls.url;
+    /**
+     * The CaptureRun object without its cross-field refinements (Zod 4 refined schemas cannot be
+     * `.pick`ed, `.omit`ted or `.extend`ed). Validate with `CaptureRunSchema`.
+     */
+    const CaptureRunObjectSchema = z.strictObject({
+      id: IdSchema,
+      projectId: IdSchema,
+      siteId: IdSchema.optional(),
+      startUrl: UrlSchema,
+      status: CaptureStatusSchema,
+      blockedReason: BlockedReasonSchema.optional(),
+      userAgent: z.string().min(1),
+      robots: RobotsInfoSchema,
+      /** At most MAX_CRAWL_PAGES; the consent's own `maxPages` is enforced by the crawl guard. */
+      planned: z.array(UrlSchema).max(MAX_CRAWL_PAGES),
+      skipped: z.array(SkippedUrlSchema),
+      startedAt: IsoDateTimeSchema,
+      finishedAt: IsoDateTimeSchema.optional(),
+    });
 
-/**
- * CaptureRun with its invariants: `finishedAt >= startedAt` (also a DB CHECK), `blocked` runs
- * have a `blockedReason` and no other run has one, and `done`/`failed` runs have a `finishedAt`.
- */
-export const CaptureRunSchema = CaptureRunObjectSchema.superRefine((run, ctx) => {
-  if (run.finishedAt !== undefined && run.finishedAt < run.startedAt) {
-    ctx.addIssue({
-      code: 'custom',
-      message: 'finishedAt cannot be earlier than startedAt',
-      path: ['finishedAt'],
+    /**
+     * CaptureRun with its invariants: `finishedAt >= startedAt` (also a DB CHECK), `blocked` runs
+     * have a `blockedReason` and no other run has one, and `done`/`failed` runs have a `finishedAt`.
+     */
+    const CaptureRunSchema = CaptureRunObjectSchema.superRefine((run, ctx) => {
+      if (run.finishedAt !== undefined && run.finishedAt < run.startedAt) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'finishedAt cannot be earlier than startedAt',
+          path: ['finishedAt'],
+        });
+      }
+      if (run.status === 'blocked' && run.blockedReason === undefined) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'A blocked run needs a blockedReason',
+          path: ['blockedReason'],
+        });
+      }
+      if (run.status !== 'blocked' && run.blockedReason !== undefined) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'blockedReason is only allowed when status is blocked',
+          path: ['blockedReason'],
+        });
+      }
+      if ((run.status === 'done' || run.status === 'failed') && run.finishedAt === undefined) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'A done or failed run needs a finishedAt',
+          path: ['finishedAt'],
+        });
+      }
     });
-  }
-  if (run.status === 'blocked' && run.blockedReason === undefined) {
-    ctx.addIssue({
-      code: 'custom',
-      message: 'A blocked run needs a blockedReason',
-      path: ['blockedReason'],
-    });
-  }
-  if (run.status !== 'blocked' && run.blockedReason !== undefined) {
-    ctx.addIssue({
-      code: 'custom',
-      message: 'blockedReason is only allowed when status is blocked',
-      path: ['blockedReason'],
-    });
-  }
-  if ((run.status === 'done' || run.status === 'failed') && run.finishedAt === undefined) {
-    ctx.addIssue({
-      code: 'custom',
-      message: 'A done or failed run needs a finishedAt',
-      path: ['finishedAt'],
-    });
-  }
-});
+    return { CaptureRunObjectSchema, CaptureRunSchema };
+  });
+}
+
+const strictCaptureRunSchemas = makeCaptureRunSchemas(STRICT_URLS);
+export const CaptureRunObjectSchema = strictCaptureRunSchemas.CaptureRunObjectSchema;
+export const CaptureRunSchema = strictCaptureRunSchemas.CaptureRunSchema;
 export type CaptureRun = z.infer<typeof CaptureRunSchema>;
 
 /** CSS px in that viewport's full-page screenshot. */
@@ -164,124 +179,139 @@ const SizeSchema = z.strictObject({ w: z.number().nonnegative(), h: z.number().n
 /** Cloudflare's placeholder for an obfuscated address; it must be decoded, never stored. */
 const OBFUSCATED_EMAIL = /\[email[\s\u00a0]*protected\]/i;
 
-export const PageFactsSchema = z.strictObject({
-  viewport: z.strictObject({ width: z.int().positive(), height: z.int().positive() }),
-  documentWidth: z.number().nonnegative(),
-  hasViewportMeta: z.boolean(),
-  protocol: z.enum(['http', 'https']),
-  title: z.string(),
-  metaDescription: z.string().optional(),
-  headings: z.array(
-    z.strictObject({ level: z.int().min(1).max(6), text: z.string(), selector: SelectorSchema }),
-  ),
-  links: z.array(
-    z.strictObject({
-      /** As found in the markup. */
-      href: z.string(),
-      resolved: UrlSchema.optional(),
-      text: z.string(),
-      selector: SelectorSchema,
-      region: RegionSchema,
-      box: BoxSchema,
-      /** aria-expanded, aria-haspopup, or controls a submenu. */
-      isToggle: z.boolean(),
-      /** For same-page `#id` links. */
-      targetExists: z.boolean().optional(),
-    }),
-  ),
-  phoneTexts: z.array(
-    z.strictObject({
-      text: z.string(),
-      digits: z.string().min(1),
-      selector: SelectorSchema,
-      region: RegionSchema,
-      insideTelLink: z.boolean(),
-    }),
-  ),
-  emails: z.array(
-    z.strictObject({
-      value: z
-        .string()
-        .min(1)
-        .refine((v) => !OBFUSCATED_EMAIL.test(v), {
-          message: 'Obfuscated placeholder "[email protected]" is not an email address',
-        }),
-      source: z.enum(['mailto', 'text', 'cfemail']),
-      selector: SelectorSchema,
-    }),
-  ),
-  hoursBlocks: z.array(
-    z.strictObject({
-      text: z.string(),
-      selector: SelectorSchema,
-      region: RegionSchema,
-      heading: z.string().optional(),
-    }),
-  ),
-  /** Parsed, not trusted; the checks validate it. */
-  jsonLd: z.array(z.record(z.string(), z.unknown())),
-  iframes: z.array(
-    z.strictObject({
-      src: UrlSchema,
-      srcOrigin: OriginSchema,
-      title: z.string().optional(),
-      box: BoxSchema,
-      provider: SlugSchema.optional(),
-    }),
-  ),
-  forms: z.array(
-    z.strictObject({
-      selector: SelectorSchema,
-      fields: z.array(
+export function makePageFactsSchemas<U extends UrlLike, O extends UrlLike>(urls: UrlSchemas<U, O>) {
+  return memoOnUrls(urls, 'makePageFactsSchemas', () => {
+    // Same names as the strict exports, so the bodies below are shared unchanged.
+    const UrlSchema = urls.url;
+    const OriginSchema = urls.origin;
+    const PageFactsSchema = z.strictObject({
+      viewport: z.strictObject({ width: z.int().positive(), height: z.int().positive() }),
+      documentWidth: z.number().nonnegative(),
+      hasViewportMeta: z.boolean(),
+      protocol: z.enum(['http', 'https']),
+      title: z.string(),
+      metaDescription: z.string().optional(),
+      headings: z.array(
         z.strictObject({
-          label: z.string().optional(),
-          type: z.string().min(1),
-          required: z.boolean(),
-          hasLabel: z.boolean(),
+          level: z.int().min(1).max(6),
+          text: z.string(),
+          selector: SelectorSchema,
         }),
       ),
-      submitLabel: z.string().optional(),
-    }),
-  ),
-  images: z.array(
-    z.strictObject({
-      src: UrlSchema,
-      bytes: z.int().nonnegative().optional(),
-      natural: SizeSchema,
-      rendered: SizeSchema,
-      /** null = no alt attribute; empty string = decorative. */
-      alt: z.string().nullable(),
-      selector: SelectorSchema,
-    }),
-  ),
-  fonts: z.array(
-    z.strictObject({ raw: z.string().min(1), family: z.string().min(1), share: ShareSchema }),
-  ),
-  colors: z.array(
-    z.strictObject({
-      hex: HexColorSchema,
-      kind: z.enum(['text', 'background']),
-      share: ShareSchema,
-    }),
-  ),
-  /** Mobile only. */
-  interactive: z.array(
-    z.strictObject({
-      selector: SelectorSchema,
-      box: BoxSchema,
-      kind: z.enum(['link', 'button', 'input']),
-    }),
-  ),
-  footerText: z.string(),
-  copyrightYears: z.array(z.int()),
-  platformSignals: z.strictObject({
-    generator: z.string().min(1).optional(),
-    bodyClasses: z.array(z.string()),
-    assetUrls: z.array(z.string()),
-    headers: z.record(z.string(), z.string()),
-    footerText: z.string(),
-  }),
-});
+      links: z.array(
+        z.strictObject({
+          /** As found in the markup. */
+          href: z.string(),
+          resolved: UrlSchema.optional(),
+          text: z.string(),
+          selector: SelectorSchema,
+          region: RegionSchema,
+          box: BoxSchema,
+          /** aria-expanded, aria-haspopup, or controls a submenu. */
+          isToggle: z.boolean(),
+          /** For same-page `#id` links. */
+          targetExists: z.boolean().optional(),
+        }),
+      ),
+      phoneTexts: z.array(
+        z.strictObject({
+          text: z.string(),
+          digits: z.string().min(1),
+          selector: SelectorSchema,
+          region: RegionSchema,
+          insideTelLink: z.boolean(),
+        }),
+      ),
+      emails: z.array(
+        z.strictObject({
+          value: z
+            .string()
+            .min(1)
+            .refine((v) => !OBFUSCATED_EMAIL.test(v), {
+              message: 'Obfuscated placeholder "[email protected]" is not an email address',
+            }),
+          source: z.enum(['mailto', 'text', 'cfemail']),
+          selector: SelectorSchema,
+        }),
+      ),
+      hoursBlocks: z.array(
+        z.strictObject({
+          text: z.string(),
+          selector: SelectorSchema,
+          region: RegionSchema,
+          heading: z.string().optional(),
+        }),
+      ),
+      /** Parsed, not trusted; the checks validate it. */
+      jsonLd: z.array(z.record(z.string(), z.unknown())),
+      iframes: z.array(
+        z.strictObject({
+          src: UrlSchema,
+          srcOrigin: OriginSchema,
+          title: z.string().optional(),
+          box: BoxSchema,
+          provider: SlugSchema.optional(),
+        }),
+      ),
+      forms: z.array(
+        z.strictObject({
+          selector: SelectorSchema,
+          fields: z.array(
+            z.strictObject({
+              label: z.string().optional(),
+              type: z.string().min(1),
+              required: z.boolean(),
+              hasLabel: z.boolean(),
+            }),
+          ),
+          submitLabel: z.string().optional(),
+        }),
+      ),
+      images: z.array(
+        z.strictObject({
+          src: UrlSchema,
+          bytes: z.int().nonnegative().optional(),
+          natural: SizeSchema,
+          rendered: SizeSchema,
+          /** null = no alt attribute; empty string = decorative. */
+          alt: z.string().nullable(),
+          selector: SelectorSchema,
+        }),
+      ),
+      fonts: z.array(
+        z.strictObject({ raw: z.string().min(1), family: z.string().min(1), share: ShareSchema }),
+      ),
+      colors: z.array(
+        z.strictObject({
+          hex: HexColorSchema,
+          kind: z.enum(['text', 'background']),
+          share: ShareSchema,
+        }),
+      ),
+      /** Mobile only. */
+      interactive: z.array(
+        z.strictObject({
+          selector: SelectorSchema,
+          box: BoxSchema,
+          kind: z.enum(['link', 'button', 'input']),
+        }),
+      ),
+      footerText: z.string(),
+      copyrightYears: z.array(z.int()),
+      platformSignals: z.strictObject({
+        generator: z.string().min(1).optional(),
+        bodyClasses: z.array(z.string()),
+        assetUrls: z.array(z.string()),
+        headers: z.record(z.string(), z.string()),
+        footerText: z.string(),
+      }),
+    });
+    return { PageFactsSchema };
+  });
+}
+
+const strictPageFactsSchemas = makePageFactsSchemas(STRICT_URLS);
+export const PageFactsSchema = strictPageFactsSchemas.PageFactsSchema;
 export type PageFacts = z.infer<typeof PageFactsSchema>;
 
 export const AxeImpactSchema = z.enum(['minor', 'moderate', 'serious', 'critical']);
@@ -304,23 +334,36 @@ export const AxeSummarySchema = z.strictObject({
 });
 export type AxeSummary = z.infer<typeof AxeSummarySchema>;
 
-export const CapturedPageSchema = z.strictObject({
-  id: IdSchema,
-  captureRunId: IdSchema,
-  url: UrlSchema,
-  finalUrl: UrlSchema,
-  redirectChain: z.array(UrlSchema),
-  httpStatus: z.int().min(100).max(599),
-  fetchedAt: IsoDateTimeSchema,
-  /** Asset of kind 'document'. */
-  htmlAssetId: IdSchema,
-  /** Assets of kind 'screenshot', full page. */
-  screenshots: z.strictObject({ mobile: IdSchema, desktop: IdSchema }),
-  facts: z.strictObject({ mobile: PageFactsSchema, desktop: PageFactsSchema }),
-  axe: z.strictObject({ mobile: AxeSummarySchema, desktop: AxeSummarySchema }).optional(),
-  /** Content still showing a placeholder ("Loading...") when the wait cap hit. */
-  pendingContent: z.array(
-    z.strictObject({ selector: SelectorSchema, placeholderText: z.string() }),
-  ),
-});
+export function makeCapturedPageSchemas<U extends UrlLike, O extends UrlLike>(
+  urls: UrlSchemas<U, O>,
+) {
+  return memoOnUrls(urls, 'makeCapturedPageSchemas', () => {
+    // Same names as the strict exports, so the bodies below are shared unchanged.
+    const UrlSchema = urls.url;
+    const { PageFactsSchema } = makePageFactsSchemas(urls);
+    const CapturedPageSchema = z.strictObject({
+      id: IdSchema,
+      captureRunId: IdSchema,
+      url: UrlSchema,
+      finalUrl: UrlSchema,
+      redirectChain: z.array(UrlSchema),
+      httpStatus: z.int().min(100).max(599),
+      fetchedAt: IsoDateTimeSchema,
+      /** Asset of kind 'document'. */
+      htmlAssetId: IdSchema,
+      /** Assets of kind 'screenshot', full page. */
+      screenshots: z.strictObject({ mobile: IdSchema, desktop: IdSchema }),
+      facts: z.strictObject({ mobile: PageFactsSchema, desktop: PageFactsSchema }),
+      axe: z.strictObject({ mobile: AxeSummarySchema, desktop: AxeSummarySchema }).optional(),
+      /** Content still showing a placeholder ("Loading...") when the wait cap hit. */
+      pendingContent: z.array(
+        z.strictObject({ selector: SelectorSchema, placeholderText: z.string() }),
+      ),
+    });
+    return { CapturedPageSchema };
+  });
+}
+
+const strictCapturedPageSchemas = makeCapturedPageSchemas(STRICT_URLS);
+export const CapturedPageSchema = strictCapturedPageSchemas.CapturedPageSchema;
 export type CapturedPage = z.infer<typeof CapturedPageSchema>;

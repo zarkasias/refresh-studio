@@ -6,7 +6,14 @@
  */
 import { z } from 'zod';
 import { ScoresSchema } from './audit';
-import { IdSchema, IsoDateTimeSchema, UrlSchema } from './primitives';
+import {
+  IdSchema,
+  IsoDateTimeSchema,
+  STRICT_URLS,
+  memoOnUrls,
+  type UrlLike,
+  type UrlSchemas,
+} from './primitives';
 
 export const MAX_FIX_NOW = 5;
 
@@ -15,20 +22,31 @@ export const Sha256HexSchema = z
   .string()
   .regex(/^[0-9a-f]{64}$/, 'Expected a lowercase SHA-256 hex digest');
 
-/**
- * `sentence` and `whyItMatters` are editable report copy, so a draft may hold an empty string.
- * Approval rejects blank wording with `empty-copy` (see ADR-008).
- */
-export const ReportFindingSchema = z.strictObject({
-  findingId: IdSchema,
-  sentence: z.string(),
-  whyItMatters: z.string(),
-  pageUrl: UrlSchema,
-  /** Assets of kind 'screenshot' (cropped, outlined). Empty when crops are toggled off. */
-  annotationAssetIds: z.array(IdSchema),
-});
-export type ReportFinding = z.infer<typeof ReportFindingSchema>;
+export function makeReportFindingSchemas<U extends UrlLike, O extends UrlLike>(
+  urls: UrlSchemas<U, O>,
+) {
+  return memoOnUrls(urls, 'makeReportFindingSchemas', () => {
+    // Same names as the strict exports, so the bodies below are shared unchanged.
+    const UrlSchema = urls.url;
+    /**
+     * `sentence` and `whyItMatters` are editable report copy, so a draft may hold an empty string.
+     * Approval rejects blank wording with `empty-copy` (see ADR-008).
+     */
+    const ReportFindingSchema = z.strictObject({
+      findingId: IdSchema,
+      sentence: z.string(),
+      whyItMatters: z.string(),
+      pageUrl: UrlSchema,
+      /** Assets of kind 'screenshot' (cropped, outlined). Empty when crops are toggled off. */
+      annotationAssetIds: z.array(IdSchema),
+    });
+    return { ReportFindingSchema };
+  });
+}
 
+const strictReportFindingSchemas = makeReportFindingSchemas(STRICT_URLS);
+export const ReportFindingSchema = strictReportFindingSchemas.ReportFindingSchema;
+export type ReportFinding = z.infer<typeof ReportFindingSchema>;
 /** A finding the consultant judged a false positive. Recorded on the version (D5). */
 export const DismissedFindingSchema = z.strictObject({
   findingId: IdSchema,
@@ -40,23 +58,33 @@ export type DismissedFinding = z.infer<typeof DismissedFindingSchema>;
 export const DraftSourceSchema = z.enum(['auditor-agent', 'template']);
 export type DraftSource = z.infer<typeof DraftSourceSchema>;
 
-export const ReportDocSchema = z.strictObject({
-  businessName: z.string().min(1),
-  siteUrl: UrlSchema,
-  auditedAt: IsoDateTimeSchema,
-  /** Must equal `recomputeScores(auditRun, dismissed ids)`; checked by `assertReportApprovable`. */
-  scores: ScoresSchema,
-  /** Editable report copy; may be empty in a draft. */
-  summary: z.string(),
-  /** One or two lines of editable copy. */
-  whatsWorking: z.array(z.string()).min(1).max(2),
-  fixNow: z.array(ReportFindingSchema).max(MAX_FIX_NOW),
-  canWait: z.array(ReportFindingSchema),
-  dismissed: z.array(DismissedFindingSchema),
-  draftSource: DraftSourceSchema,
-});
-export type ReportDoc = z.infer<typeof ReportDocSchema>;
+export function makeReportDocSchemas<U extends UrlLike, O extends UrlLike>(urls: UrlSchemas<U, O>) {
+  return memoOnUrls(urls, 'makeReportDocSchemas', () => {
+    // Same names as the strict exports, so the bodies below are shared unchanged.
+    const UrlSchema = urls.url;
+    const { ReportFindingSchema } = makeReportFindingSchemas(urls);
+    const ReportDocSchema = z.strictObject({
+      businessName: z.string().min(1),
+      siteUrl: UrlSchema,
+      auditedAt: IsoDateTimeSchema,
+      /** Must equal `recomputeScores(auditRun, dismissed ids)`; checked by `assertReportApprovable`. */
+      scores: ScoresSchema,
+      /** Editable report copy; may be empty in a draft. */
+      summary: z.string(),
+      /** One or two lines of editable copy. */
+      whatsWorking: z.array(z.string()).min(1).max(2),
+      fixNow: z.array(ReportFindingSchema).max(MAX_FIX_NOW),
+      canWait: z.array(ReportFindingSchema),
+      dismissed: z.array(DismissedFindingSchema),
+      draftSource: DraftSourceSchema,
+    });
+    return { ReportDocSchema };
+  });
+}
 
+const strictReportDocSchemas = makeReportDocSchemas(STRICT_URLS);
+export const ReportDocSchema = strictReportDocSchemas.ReportDocSchema;
+export type ReportDoc = z.infer<typeof ReportDocSchema>;
 /** The report's relational row: which AuditRun it explains. Its content lives in versions. */
 export const AuditReportSchema = z.strictObject({
   id: IdSchema,
@@ -66,42 +94,54 @@ export const AuditReportSchema = z.strictObject({
 });
 export type AuditReport = z.infer<typeof AuditReportSchema>;
 
-export const ReportVersionObjectSchema = z.strictObject({
-  id: IdSchema,
-  reportId: IdSchema,
-  /** 1, 2, 3, ... per report, in creation order; unique within the report (ADR-005). */
-  number: z.int().min(1),
-  doc: ReportDocSchema,
-  createdBy: z.string().min(1),
-  createdAt: IsoDateTimeSchema,
-  /** Free text; may be empty. */
-  note: z.string(),
-  /** Set once by the consultant approval step (CLAUDE.md rule 4). Never cleared. */
-  approvedAt: IsoDateTimeSchema.optional(),
-  approvedBy: z.string().min(1).optional(),
-});
+export function makeReportVersionSchemas<U extends UrlLike, O extends UrlLike>(
+  urls: UrlSchemas<U, O>,
+) {
+  return memoOnUrls(urls, 'makeReportVersionSchemas', () => {
+    // Same names as the strict exports, so the bodies below are shared unchanged.
+    const { ReportDocSchema } = makeReportDocSchemas(urls);
+    const ReportVersionObjectSchema = z.strictObject({
+      id: IdSchema,
+      reportId: IdSchema,
+      /** 1, 2, 3, ... per report, in creation order; unique within the report (ADR-005). */
+      number: z.int().min(1),
+      doc: ReportDocSchema,
+      createdBy: z.string().min(1),
+      createdAt: IsoDateTimeSchema,
+      /** Free text; may be empty. */
+      note: z.string(),
+      /** Set once by the consultant approval step (CLAUDE.md rule 4). Never cleared. */
+      approvedAt: IsoDateTimeSchema.optional(),
+      approvedBy: z.string().min(1).optional(),
+    });
 
-/** ReportVersion with its invariants: the approval pair, and `approvedAt >= createdAt`. */
-export const ReportVersionSchema = ReportVersionObjectSchema.superRefine((version, ctx) => {
-  const hasAt = version.approvedAt !== undefined;
-  const hasBy = version.approvedBy !== undefined;
-  if (hasAt !== hasBy) {
-    ctx.addIssue({
-      code: 'custom',
-      message: 'approvedAt and approvedBy must be set together',
-      path: [hasAt ? 'approvedBy' : 'approvedAt'],
+    /** ReportVersion with its invariants: the approval pair, and `approvedAt >= createdAt`. */
+    const ReportVersionSchema = ReportVersionObjectSchema.superRefine((version, ctx) => {
+      const hasAt = version.approvedAt !== undefined;
+      const hasBy = version.approvedBy !== undefined;
+      if (hasAt !== hasBy) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'approvedAt and approvedBy must be set together',
+          path: [hasAt ? 'approvedBy' : 'approvedAt'],
+        });
+      }
+      if (version.approvedAt !== undefined && version.approvedAt < version.createdAt) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'approvedAt cannot be earlier than createdAt',
+          path: ['approvedAt'],
+        });
+      }
     });
-  }
-  if (version.approvedAt !== undefined && version.approvedAt < version.createdAt) {
-    ctx.addIssue({
-      code: 'custom',
-      message: 'approvedAt cannot be earlier than createdAt',
-      path: ['approvedAt'],
-    });
-  }
-});
+    return { ReportVersionObjectSchema, ReportVersionSchema };
+  });
+}
+
+const strictReportVersionSchemas = makeReportVersionSchemas(STRICT_URLS);
+export const ReportVersionObjectSchema = strictReportVersionSchemas.ReportVersionObjectSchema;
+export const ReportVersionSchema = strictReportVersionSchemas.ReportVersionSchema;
 export type ReportVersion = z.infer<typeof ReportVersionSchema>;
-
 /** True when the consultant approved this version (both approval fields present). */
 export function isApprovedReportVersion(
   version: Pick<ReportVersion, 'approvedAt' | 'approvedBy'>,

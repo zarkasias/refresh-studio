@@ -409,6 +409,34 @@ not allow `.pick`/`.omit`/`.extend` on refined objects. Derive from `SiteObjectS
 `SectionObjectSchema` / `VersionObjectSchema` (same fields, no refinement), but always validate
 with the refined schema.
 
+## Fixture URL schemas (ADR-010)
+
+`UrlSchema` and `OriginSchema` are strict: loopback hosts (`http://127.0.0.1:3000`, `localhost`,
+`[::1]`) are rejected, so a real project can never point the worker at localhost. Tests and
+fixture runs need loopback, so each URL-bearing schema is built by a factory in its module,
+`makeXSchemas(urls)` (`makeProjectSchemas`, `makeSiteSchemas`, `makeVersionSchemas`,
+`makeCapturedPageSchemas`, `makeAuditRunSchemas`, `makeReportVersionSchemas`, and so on).
+Factories are memoized per `urls` object. The strict exports (`ProjectSchema`, `SiteSchema`, ...)
+call the factory with `STRICT_URLS`. The `Fixture*` variants (`FixtureProjectSchema`, ...) call it
+with a URL schema that also accepts plain `http:` on a canonically spelled loopback host, with an
+optional port and no credentials. Nothing else is loosened, and `superRefine` rules are shared,
+not copied. Inferred input and output types are identical.
+
+The variants live in `@srs/site-model/fixture-urls`. Import them only from `evals/` and `*.test.ts`
+files; ESLint and a repo-scan test enforce it. The factories themselves are internal and
+lint-guarded. The `rowTo*` mappers, jobs and the app use the strict schemas.
+(`@srs/site-model/fixtures` is different: valid example records.)
+
+Adding a URL-bearing schema:
+
+1. Put the URL fields inside a factory, using the local `UrlSchema` / `OriginSchema` alias.
+2. A schema that embeds a URL-bearing schema is URL-bearing: call the child's factory with the same
+   `urls`.
+3. Add a `Fixture*` export in `fixture-urls/index.ts`, a row in the `cases` table in
+   `fixture-urls.test.ts`, and the type-equality lines.
+4. `fixture-urls/coverage.test.ts` enforces it: it fails for any exported schema that contains the
+   strict URL schema but has no `Fixture*` twin.
+
 ## Helpers
 
 - `needsReview(section)`: true unless `section.confidence >= REVIEW_CONFIDENCE_THRESHOLD` (0.7),

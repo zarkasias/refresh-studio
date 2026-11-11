@@ -336,6 +336,8 @@ function buildContext(
   }
 
   const places: string[][] = [];
+  /** Places matched only as whole words (single words taken from location labels). */
+  const wholeWordPlaces = new Set<string>();
   const addPlace = (text: string, evenIfState = false): void => {
     const words = text.trim().split(/\s+/u).filter(Boolean);
     if (words.length === 0) return;
@@ -377,6 +379,7 @@ function buildContext(
             !GEO_NOUNS.has(lower)
           ) {
             addPlace(w);
+            wholeWordPlaces.add(lower);
           }
         }
       }
@@ -499,7 +502,12 @@ function buildContext(
       fake = pickFake(list, key, seed, 'place', usedPlaces, forbidden);
       placeFakes.set(key, fake);
     }
-    entries.push({ words, replacement: fake, kind: 'place' });
+    entries.push({
+      words,
+      replacement: fake,
+      kind: 'place',
+      ...(wholeWordPlaces.has(key) ? { wordBoundary: true } : {}),
+    });
   }
   // "Heights"/"Ridge" from a location label, glued to the business name in a slug
   // ("…bklynheights"): replaced together with the name.

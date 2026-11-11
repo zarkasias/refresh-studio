@@ -96,4 +96,18 @@ footer richtext menu features process`. Use `features` for a features/benefits l
    Errors name the exact field, e.g. `brand.extractedColors.0.hex: Expected a lowercase hex
 color like #1a2b3c`.
 
+5. **Keep the anonymizer's identity list current** (M1 T5, ADR-004). Synthetic fixtures are built
+   from an anonymized copy of your label. The anonymizer replaces everything recorded in
+   `business` (name, phones, emails, addresses, people, service-area places, locations), but it
+   can't recognize a place or a local business that is only named elsewhere: a lake, district or
+   trail in a heading, a neighbourhood in a page title, a local partner badge, the agency in the
+   footer credit. Add every such name to that site's entry in
+   `evals/fixtures/anonymize/extra-identity.ts`, then run the leak test:
+
+   ```sh
+   pnpm vitest run --project evals anonymize   # must pass with no leaks for every label
+   ```
+
+   National brands and organisations (BBB, Invisalign, Generac) don't need an entry.
+
 See `docs/site-model.md` for every field and its rules.

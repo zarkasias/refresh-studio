@@ -112,6 +112,18 @@ export class PhoneMapper {
     }
   }
 
+  /**
+   * The fake local part (7 digits) of an already mapped full number whose last 7 digits are `d`,
+   * or undefined. Used for 7-digit numbers in display text, which are only treated as phones when
+   * they match a number the label shows in full.
+   */
+  knownLocal(d: string): string | undefined {
+    for (const [full, fake10] of this.cache) {
+      if (full.length === 10 && full.slice(3) === d) return fake10.slice(3);
+    }
+    return undefined;
+  }
+
   private map7(d: string): string {
     const key = `7:${d}`;
     const hit = this.cache.get(key);
@@ -333,6 +345,26 @@ const PHONE_IN_TEXT_RE = new RegExp(
   'gu',
 );
 const ENTITY_RE = /&(?:[a-zA-Z]+|#\d+|#x[0-9a-fA-F]+);/g;
+/**
+ * A 7-digit local number in text (`473-8545`): three digits, a separator, four digits, not part of
+ * a longer number, a licence (`PC.0000533`) or a word. Only mapped when it matches a full number
+ * from the label (see `PhoneMapper.knownLocal`), so ZIPs, years and counts are never touched.
+ */
+const LOCAL_PHONE_IN_TEXT_RE = new RegExp(
+  String.raw`(?<![\p{L}\p{N}.\-)])\d{3}${PHONE_SEP}+\d{4}(?![\p{L}\p{N}]|${PHONE_SEP}\d)`,
+  'gu',
+);
+
+function* localPhoneSpans(text: string, ctx: RewriteContext): Generator<Span> {
+  for (const m of text.matchAll(LOCAL_PHONE_IN_TEXT_RE)) {
+    const digits = m[0].replace(/\D/g, '');
+    const fake = ctx.phones.knownLocal(digits);
+    if (!fake) continue;
+    let k = 0;
+    const rewritten = m[0].replace(/\d/g, () => fake[k++] ?? '0');
+    yield { start: m.index, end: m.index + m[0].length, text: rewritten };
+  }
+}
 
 function assemble(text: string, spans: Span[], gap: (s: string) => string): string {
   spans.sort((a, b) => a.start - b.start);
@@ -375,6 +407,7 @@ export function rewriteText(text: string, ctx: RewriteContext, long: boolean): s
     spans,
     matches(text, PHONE_IN_TEXT_RE, (m) => ctx.phones.rewriteDigits(m)),
   );
+  addSpans(spans, localPhoneSpans(text, ctx));
   addSpans(
     spans,
     ctx.matcher.find(text).map((m) => ({ start: m.start, end: m.end, text: m.replacement })),

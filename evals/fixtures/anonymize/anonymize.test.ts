@@ -14,7 +14,7 @@ import { fakeLicense } from './anonymize';
 import { formatLike } from './dictionary';
 import { anonymize, extraIdentityFor, findLabelLeaks } from './index';
 import { PhoneMapper } from './rewrite';
-import { TOLL_FREE_AREA_CODES } from './vocab';
+import { GEO_NOUNS, TOLL_FREE_AREA_CODES } from './vocab';
 
 const SEED = 'm1-t5';
 
@@ -354,6 +354,56 @@ describe('anonymize: acceptance snapshots', () => {
 });
 
 describe('anonymize: details', () => {
+  it('matches single words from location labels as whole words only', () => {
+    const slug = 'hair-and-co-brooklyn';
+    const label = load(slug);
+    // First words of multi-word location labels, minus geographic nouns ("Bay").
+    const words = (label.business.locations ?? [])
+      .map((l) => l.label.replace(/\s*\([^)]*\)/g, '').split(' '))
+      .filter((w) => w.length > 1)
+      .map((w) => w[0] ?? '')
+      .filter((w) => !GEO_NOUNS.has(w.toLowerCase()));
+    expect(words.length).toBeGreaterThanOrEqual(2);
+    const [a = '', b = ''] = words;
+    const hero = label.pages[0]?.sections.find((x) => x.type === 'hero');
+    const team = label.pages[0]?.sections.find((x) => x.type === 'team');
+    if (!hero || !team) throw new Error('unexpected label shape');
+    // e.g. "Prospective clients · Prospects · Clintonville"
+    const planted = `${a}ive clients · ${a}s · ${b}ville`;
+    hero.content.subheading = planted;
+    team.id = `home-team-${a.toLowerCase()}`;
+    const out = anonymize(label, SEED, opts(slug));
+    const outHero = out.pages[0]?.sections.find((x) => x.type === 'hero');
+    const outTeam = out.pages[0]?.sections.find((x) => x.type === 'team');
+    expect(outHero?.content.subheading).toBe(planted);
+    expect(outTeam?.id).toMatch(/^home-team-/);
+    expect(outTeam?.id).not.toBe(team.id);
+    expect(outTeam?.id.toLowerCase()).not.toContain(a.toLowerCase());
+  });
+
+  it('maps a 7-digit number in text when it matches a full number from the label', () => {
+    const slug = 'jolly-plumbing';
+    const label = load(slug);
+    const display = label.business.phones?.[0]?.value ?? '';
+    const digits = display.replace(/\D/g, '').slice(-10);
+    const local = `${digits.slice(3, 6)}-${digits.slice(6)}`;
+    const year = label.business.trust?.foundedYear ?? 1999;
+    const licence = label.business.trust?.licenses[0]?.number ?? '';
+    const hero = label.pages[0]?.sections.find((x) => x.type === 'hero');
+    if (!hero || !licence) throw new Error('unexpected label shape');
+    // A 7-digit number that is not in the label, a year, a review count and a licence must not
+    // be treated as phones.
+    hero.content.heading = `Call ${display} or ${local}. Since ${year}; 514 reviews; 555-0000; ${licence}`;
+    const out = anonymize(label, SEED, opts(slug));
+    const heading = out.pages[0]?.sections.find((x) => x.type === 'hero')?.content.heading ?? '';
+    const fake = (out.business.phones?.[0]?.value ?? '').replace(/\D/g, '');
+    const fakeLocal = `${fake.slice(3, 6)}-${fake.slice(6)}`;
+    expect(heading).toBe(
+      `Call ${out.business.phones?.[0]?.value} or ${fakeLocal}. Since ${year}; 514 reviews; 555-0000; ${out.business.trust?.licenses[0]?.number}`,
+    );
+    expect(heading).not.toContain(local);
+  });
+
   it('never gives a local number a toll-free area code, and keeps toll-free numbers toll-free', () => {
     for (let area = 200; area <= 999; area++) {
       const code = String(area);

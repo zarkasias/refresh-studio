@@ -22,6 +22,11 @@ export interface DictEntry {
    * core of a name), so `hair-and-co` and `hairandco/` match but "Hair Color" does not.
    */
   endGuard?: boolean;
+  /**
+   * Must sit on word boundaries whatever its length. For single words from location labels
+   * ("Prospect"): `home-team-prospect` matches, "Prospective" and "Prospects" do not.
+   */
+  wordBoundary?: boolean;
 }
 
 export interface DictMatch {
@@ -55,7 +60,7 @@ function wordPattern(word: string): string {
 /** Short tokens and anything with digits must sit on word boundaries; longer ones may sit inside a handle. */
 function needsBoundary(entry: DictEntry): boolean {
   const compact = compactOf(entry.words);
-  return compact.length < 5 || /\d/.test(compact);
+  return entry.wordBoundary === true || compact.length < 5 || /\d/.test(compact);
 }
 
 function entrySource(entry: DictEntry): string {

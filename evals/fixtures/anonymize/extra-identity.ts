@@ -9,11 +9,15 @@
  */
 export const EXTRA_IDENTITY: Readonly<Record<string, readonly string[]>> = {
   // "Nevada" is a town in the Iowa service area; extra identity overrides the keep-states rule.
-  'arc-electric': ['Nevada'],
+  // "Dynasty Homes" is a local builder shown as a partner badge.
+  'arc-electric': ['Nevada', 'Dynasty Homes'],
   'bella-lago-salon': ['Lake Norman', 'Birkdale'],
   'cafecito-santa-fe': ['Acequia Trail', 'Baca District', 'Railyard', 'South Capitol'],
   'chambers-consulting': ['Northern Virginia'],
   'delaware-valley-hardwoods': ['Northern Delaware'],
+  // Local web agencies credited in the footer.
+  'hair-and-co-brooklyn': ['Linkup Marketing'],
+  iphci: ['Fusion Forward'],
 };
 
 /** The extra identity strings for a slug (empty when there are none). */

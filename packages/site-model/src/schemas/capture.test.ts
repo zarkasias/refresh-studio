@@ -72,6 +72,24 @@ describe('CaptureRunSchema', () => {
       CaptureRunSchema.safeParse({ ...blocked, blockedReason: 'robots-disallowed' }).success,
     ).toBe(true);
   });
+  it('only allows crawl-relevant blocked reasons', () => {
+    const blocked = { ...minimalCaptureRun(), status: 'blocked' };
+    for (const ok of [
+      'no-consent',
+      'bad-consent',
+      'bad-url',
+      'cross-origin',
+      'outside-path',
+      'page-limit',
+      'robots-disallowed',
+      'bot-challenge',
+    ]) {
+      expect(CaptureRunSchema.safeParse({ ...blocked, blockedReason: ok }).success).toBe(true);
+    }
+    for (const bad of ['scores-mismatch', 'not-approved', 'listed-twice']) {
+      expect(CaptureRunSchema.safeParse({ ...blocked, blockedReason: bad }).success).toBe(false);
+    }
+  });
   it('rejects an unknown blockedReason, status or skip reason', () => {
     const run = minimalCaptureRun();
     const blockedRun = { ...run, status: 'blocked', blockedReason: 'robots-disallowed' };

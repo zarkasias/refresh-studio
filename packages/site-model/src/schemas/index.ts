@@ -9,3 +9,5 @@ export * from './variant';
 export * from './version';
 export * from './comment';
 export * from './capture';
+export * from './audit';
+export * from './report';

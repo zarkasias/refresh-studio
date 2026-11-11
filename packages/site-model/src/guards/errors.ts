@@ -9,7 +9,20 @@ export type GuardErrorCode =
   | 'not-selected'
   | 'already-approved'
   | 'not-latest'
-  | 'version-locked';
+  | 'version-locked'
+  | 'fix-now-limit'
+  | 'unknown-finding'
+  | 'dismissed-and-listed'
+  | 'scores-mismatch'
+  | 'delivery-mismatch'
+  | 'sent-before-approval'
+  | 'listed-twice'
+  | 'unlisted-finding'
+  | 'empty-copy'
+  | 'report-mismatch'
+  | 'link-mismatch'
+  | 'link-expired'
+  | 'link-revoked';
 
 /** Thrown by the guards. Callers branch on `code`; `message` is plain English for the consultant. */
 export class GuardError extends Error {

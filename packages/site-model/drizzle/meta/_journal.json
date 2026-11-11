@@ -29,6 +29,20 @@
       "when": 1794261359398,
       "tag": "0003_flawless_adam_warlock",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794262408170,
+      "tag": "0004_overconfident_jamie_braddock",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794262408864,
+      "tag": "0005_freeze_approved_report_versions",
+      "breakpoints": true
     }
   ]
 }

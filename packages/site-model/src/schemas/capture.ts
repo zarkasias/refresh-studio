@@ -27,6 +27,19 @@ export const GuardErrorCodeSchema = z.enum([
   'already-approved',
   'not-latest',
   'version-locked',
+  'fix-now-limit',
+  'unknown-finding',
+  'dismissed-and-listed',
+  'scores-mismatch',
+  'delivery-mismatch',
+  'sent-before-approval',
+  'listed-twice',
+  'unlisted-finding',
+  'empty-copy',
+  'report-mismatch',
+  'link-mismatch',
+  'link-expired',
+  'link-revoked',
 ]);
 type AssertSame<A, B> = [A] extends [B] ? ([B] extends [A] ? true : never) : never;
 const guardCodesMatch: AssertSame<z.infer<typeof GuardErrorCodeSchema>, GuardErrorCode> = true;
@@ -35,9 +48,19 @@ void guardCodesMatch;
 export const CaptureStatusSchema = z.enum(['queued', 'running', 'done', 'failed', 'blocked']);
 export type CaptureStatus = z.infer<typeof CaptureStatusSchema>;
 
-export const BlockedReasonSchema = z.union([
-  GuardErrorCodeSchema,
-  z.enum(['robots-disallowed', 'bot-challenge']),
+/**
+ * Why a crawl was blocked: the codes `assertCrawlAllowed` can throw (consent and crawl scope),
+ * plus the two the capture layer finds itself. Report guard codes are not valid here.
+ */
+export const BlockedReasonSchema = z.enum([
+  'no-consent',
+  'bad-consent',
+  'bad-url',
+  'cross-origin',
+  'outside-path',
+  'page-limit',
+  'robots-disallowed',
+  'bot-challenge',
 ]);
 export type BlockedReason = z.infer<typeof BlockedReasonSchema>;
 

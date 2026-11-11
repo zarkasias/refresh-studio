@@ -4,6 +4,8 @@
  */
 import type {
   Asset,
+  AuditReport,
+  AuditRun,
   CaptureRun,
   CapturedPage,
   Comment,
@@ -11,7 +13,12 @@ import type {
   DesignTokens,
   PageFacts,
   Project,
+  ReportDelivery,
+  ReportDoc,
+  ReportExport,
+  ReportVersion,
   Section,
+  ShareLink,
   Site,
   Variant,
   Version,
@@ -188,5 +195,152 @@ export function minimalCapturedPage(): CapturedPage {
       },
     },
     pendingContent: [],
+  };
+}
+
+/** Fingerprint of the failed `tap-to-call` finding in `minimalAuditRun`. */
+export const MINIMAL_FINDING_ID = 'tap-to-call:3f9a1c2e';
+
+/**
+ * A run with one failed check (the phone number isn't tappable) and one passed check. Its scores
+ * follow `recomputeScores`: `minimalAuditRun().scores` equals `recomputeScores(run, [])`.
+ */
+export function minimalAuditRun(): AuditRun {
+  return {
+    id: 'audit_1',
+    projectId: 'proj_1',
+    siteId: 'site_1',
+    captureRunId: 'crawl_1',
+    createdAt: '2026-11-09T13:00:00.000Z',
+    toolVersions: { lighthouse: '12.8.2', axe: '4.10.2', audit: '0.0.0' },
+    lighthouse: [
+      {
+        pageUrl: 'https://example-plumbing.com/',
+        preset: 'mobile',
+        performance: 0.93,
+        accessibility: 0.98,
+        bestPractices: 1,
+        seo: 0.9,
+        lcpMs: 2100,
+        tbtMs: 120,
+        cls: 0.02,
+        lhrAssetId: 'asset_lhr_1',
+      },
+    ],
+    checks: [
+      {
+        id: 'tap-to-call',
+        findingId: MINIMAL_FINDING_ID,
+        passed: false,
+        severity: 'high',
+        pageUrl: 'https://example-plumbing.com/',
+        evidence: [
+          {
+            kind: 'element',
+            pageUrl: 'https://example-plumbing.com/',
+            selector: 'header .phone',
+            box: { x: 20, y: 12, w: 160, h: 24 },
+            viewport: 'mobile',
+            value: '(555) 010-0199',
+          },
+        ],
+        plainEnglish: "Your phone number isn't tappable on phones.",
+      },
+      {
+        id: 'https',
+        findingId: 'https:7d41b0aa',
+        passed: true,
+        severity: 'high',
+        evidence: [{ kind: 'page', pageUrl: 'https://example-plumbing.com/', value: 'https' }],
+        plainEnglish: 'Your site loads securely.',
+      },
+    ],
+    scores: {
+      looksCurrent: { value: 100, contributions: [] },
+      worksOnPhones: { value: 100, contributions: [] },
+      easyToContact: { value: 75, contributions: [{ source: 'tap-to-call', delta: -25 }] },
+      speed: { value: 93, contributions: [{ source: 'lighthouse:performance', delta: -7 }] },
+      accessibility: { value: 100, contributions: [] },
+    },
+    weightsVersion: '2026-11-09',
+  };
+}
+
+/** A draft report for `minimalAuditRun` with the one failure listed under "fix now". */
+export function minimalReportDoc(): ReportDoc {
+  return {
+    businessName: 'Example Plumbing',
+    siteUrl: 'https://example-plumbing.com/',
+    auditedAt: '2026-11-09T13:00:00.000Z',
+    scores: minimalAuditRun().scores,
+    summary: 'Your site looks fine, but customers on phones cannot tap to call you.',
+    whatsWorking: ['Your site loads securely.'],
+    fixNow: [
+      {
+        findingId: MINIMAL_FINDING_ID,
+        sentence: "Your phone number isn't tappable on phones.",
+        whyItMatters: 'Most people look you up on their phone and expect to call with one tap.',
+        pageUrl: 'https://example-plumbing.com/',
+        annotationAssetIds: ['asset_crop_1'],
+      },
+    ],
+    canWait: [],
+    dismissed: [],
+    draftSource: 'template',
+  };
+}
+
+export function minimalAuditReport(): AuditReport {
+  return {
+    id: 'report_1',
+    projectId: 'proj_1',
+    auditRunId: 'audit_1',
+    createdAt: '2026-11-09T13:05:00.000Z',
+  };
+}
+
+export function minimalReportVersion(): ReportVersion {
+  return {
+    id: 'rver_1',
+    reportId: 'report_1',
+    number: 1,
+    doc: minimalReportDoc(),
+    createdBy: 'consultant',
+    createdAt: '2026-11-09T13:05:00.000Z',
+    note: '',
+  };
+}
+
+/** A hash standing in for sha256(token); the fixture never holds a raw token. */
+const FIXTURE_SHA256 = 'a'.repeat(64);
+
+export function minimalShareLink(): ShareLink {
+  return {
+    id: 'share_1',
+    reportId: 'report_1',
+    tokenHash: FIXTURE_SHA256,
+    createdAt: '2026-11-09T14:00:00.000Z',
+    expiresAt: '2026-12-09T14:00:00.000Z',
+  };
+}
+
+export function minimalReportExport(): ReportExport {
+  return {
+    id: 'export_1',
+    reportVersionId: 'rver_1',
+    kind: 'pdf',
+    storagePath: 'reports/proj_1/report_1-v1.pdf',
+    sha256: 'b'.repeat(64),
+    createdAt: '2026-11-09T14:10:00.000Z',
+  };
+}
+
+export function minimalReportDelivery(): ReportDelivery {
+  return {
+    id: 'delivery_1',
+    reportVersionId: 'rver_1',
+    channel: 'email-pdf',
+    recipientName: 'Example Recipient',
+    sentAt: '2026-11-09T15:00:00.000Z',
   };
 }

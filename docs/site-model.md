@@ -254,6 +254,118 @@ Constraints and policies:
   `captured_pages` are not foreign keys.
 - **Mappers:** `crawlToRow` / `rowToCrawl` and `capturedPageToRow` / `rowToCapturedPage`.
 
+## Audit and report records
+
+Stored next to the Site, like capture records (tables `audit_runs`, `audit_reports`,
+`report_versions`, `share_links`, `report_exports`, `report_deliveries`; no Site `schemaVersion`
+change; ADR-008). An AuditRun is what the tools measured; a report is the consultant-approved
+wording of one AuditRun. Schemas: `packages/site-model/src/schemas/{audit,report}.ts`.
+
+```
+CheckId = 'tel-matches-display' | 'tel-hidden-characters' | 'tap-to-call' | 'contact-above-fold-mobile'
+        | 'form-works' | 'google-business-link' | 'hours-visible' | 'hours-consistent' | 'nap-consistent'
+        | 'local-business-schema' | 'https' | 'h1-present' | 'dead-links' | 'text-contrast'
+        | 'tap-targets' | 'no-horizontal-scroll' | 'nav-mobile' | 'image-weight' | 'title-meta'
+        | 'dated-copyright' | 'placeholder-text' | 'font-count'
+Severity = 'high' | 'medium' | 'low'
+Evidence { kind: 'element' | 'metric' | 'text' | 'page'; pageUrl: Url; selector?: non-empty
+           box?: Box; viewport?: 'mobile' | 'desktop'; value?: string | number; note?: non-empty }
+CheckResult { id: CheckId; findingId: `${id}:<hash>`; passed; severity; pageUrl?: Url
+              evidence: Evidence[]; plainEnglish: non-empty }
+ScoreKey = 'looksCurrent' | 'worksOnPhones' | 'easyToContact' | 'speed' | 'accessibility'
+Score { value: integer 0-100; contributions: { source: CheckId | `lighthouse:<x>` | `axe:<x>`;
+                                               delta: finite number }[] }
+AuditRun {                                                      // table audit_runs
+  id, projectId, siteId, captureRunId, createdAt
+  toolVersions: { lighthouse, axe, audit }                      // non-empty strings
+  lighthouse: { pageUrl: Url; preset: 'mobile' | 'desktop'
+                performance, accessibility, bestPractices, seo: number 0-1
+                lcpMs, tbtMs, cls: number >= 0; lhrAssetId }[]
+  checks: CheckResult[]; scores: Record<ScoreKey, Score>; weightsVersion: non-empty
+}
+ReportFinding { findingId; sentence: string; whyItMatters: string; pageUrl: Url; annotationAssetIds: Id[] }
+ReportDoc {
+  businessName; siteUrl: Url; auditedAt
+  scores: Record<ScoreKey, Score>            // must equal recomputeScores(auditRun, dismissed ids)
+  summary: string; whatsWorking: string[] (1-2)
+  fixNow: ReportFinding[] (0-5); canWait: ReportFinding[]
+  dismissed: { findingId; reason: non-empty; dismissedAt }[]
+  draftSource: 'auditor-agent' | 'template'
+}
+AuditReport   { id, projectId, auditRunId, createdAt }          // table audit_reports
+ReportVersion { id, reportId, number >= 1, doc: ReportDoc, createdBy, createdAt, note,
+                approvedAt?, approvedBy? }                      // table report_versions
+ShareLink     { id, reportId, tokenHash, createdAt, expiresAt, revokedAt? }
+ReportExport  { id, reportVersionId, kind: 'pdf', storagePath, sha256, createdAt }
+ReportDelivery{ id, reportVersionId, channel: 'email-pdf' | 'share-link', recipientName, sentAt }
+```
+
+Constraints and policies:
+
+- **Findings.** `findingId` starts with the check's `id` and a colon and has something after it
+  (`tap-to-call:3f9a1c2e`); it is unique within an AuditRun. A failed check has at least one
+  `Evidence`. These are Zod refinements (`CheckResultSchema`, `AuditRunSchema`; the
+  `*ObjectSchema` versions are the same fields without them). Nothing in an AuditRun comes from an
+  LLM (rule 2).
+- **Scores are copied, never typed.** `ReportDoc.scores` must equal
+  `recomputeScores(auditRun, dismissed finding ids)`. `recomputeScores` starts each score at 100,
+  adds the deltas of its `contributions`, rounds, and clamps to 0-100. A contribution whose
+  `source` is a check id is dropped once every failed finding of that check is dismissed;
+  `lighthouse:*` and `axe:*` contributions are never dropped. `packages/audit` must write
+  `contributions` so that `recomputeScores(run, [])` reproduces `run.scores` exactly (see the
+  comment in `scoring/recompute.ts`).
+- **ReportDoc limits (Zod):** `fixNow` has at most 5 entries; `whatsWorking` has 1 or 2.
+- **ReportVersion follows ADR-005:** `approvedAt` and `approvedBy` are both present or both absent,
+  `approvedAt >= createdAt` (Zod and CHECKs `report_versions_approval_pair`,
+  `_approved_by_nonempty`, `_approved_after_created`); `(report_id, number)` is unique
+  (`report_versions_report_number_unique`) and `number >= 1`. An approved row is frozen by the
+  trigger `report_versions_freeze_approved` (migration 0005): any UPDATE or DELETE of a row with
+  `approved_at` set fails. Any edit after approval is a new, unapproved version; the share link
+  shows the newest approved one. Only the newest version can be approved, once.
+- **Approval guards** (`guards/report.ts`, pure). `assertReportApprovable(version, auditRun)`
+  throws a `GuardError` for: more than 5 fix-now items (`fix-now-limit`); a `findingId` that is not
+  a failed check in the AuditRun (`unknown-finding`, so a passed check cannot be listed); a finding
+  listed twice (`listed-twice`); a finding both dismissed and listed (`dismissed-and-listed`); a
+  failed finding in none of fix now, can wait or dismissed (`unlisted-finding`); scores that differ
+  from the recomputation (`scores-mismatch`); a blank summary, "what's working" line or finding
+  wording (`empty-copy`; `note` is exempt). `approveReport(history, versionId, approval, report,
+  auditRun)` checks the report matches (`report-mismatch`), approves through
+  `approveReportVersion` (newest only, once) and then runs `assertReportApprovable`; the editor
+  approves through it. `assertReportShareable(version)` needs `approvedAt` and `approvedBy`
+  (`not-approved`). `resolveSharedReportVersion(link, history, now)` returns the newest approved
+  version of the link's report, or throws `link-mismatch`, `link-revoked`, `link-expired` or
+  `not-approved`. `assertDeliverable(delivery, version)` needs the same version id
+  (`delivery-mismatch`), an approved version (`not-approved`) and `sentAt >= approvedAt`
+  (`sent-before-approval`). The DB does not check these cross-record rules.
+  Known M1 limit: a score changes only when all of a check's failed findings are dismissed.
+  The D18 90-day purge keeps the crawl row and crop assets a report version refers to.
+- **Share link expiry:** `expiresAt` must be later than `createdAt` (Zod refinement, CHECK `share_links_expires_after_created`).
+- **Share tokens** are stored only as `tokenHash`: a lowercase SHA-256 hex digest (Zod regex,
+  CHECK `share_links_token_hash_sha256`, unique). The raw token is never stored; the code that
+  creates and checks links hashes at the edge with `node:crypto`. `ReportExport.sha256` has the
+  same format.
+- **Foreign keys:** `audit_runs`, `audit_reports` cascade from `projects`; `audit_runs` also cascade
+  from `sites` and `crawls` (they are derived data), and `audit_reports` from `audit_runs`.
+  `share_links` cascade from `audit_reports`. `report_versions.report_id`,
+  `report_exports.report_version_id` and `report_deliveries.report_version_id` are
+  `ON DELETE RESTRICT`: they are the record of what the client saw. So, like variants with
+  versions, a project whose reports have versions cannot be deleted.
+- **Mappers:** `auditRunToRow` / `rowToAuditRun`, `auditReportToRow` / `rowToAuditReport`,
+  `reportVersionToRow` / `rowToReportVersion`, `shareLinkToRow` / `rowToShareLink`,
+  `reportExportToRow` / `rowToReportExport`, `reportDeliveryToRow` / `rowToReportDelivery`.
+  Rows and models are validated with Zod both ways.
+- **Version history:** `reportHistory` (`saveReportEdit`, `approveReportVersion`,
+  `createReportVersion`, `latestReportVersion`, `latestApprovedReportVersion`) has the same
+  semantics as the variant functions; both are built on one generic core
+  (`versioning/core.ts`) parameterized by owner key.
+- **Strings.** Non-empty unless listed. Editable report copy may be empty in a draft:
+  `ReportFinding.sentence`, `ReportFinding.whyItMatters`, `ReportDoc.summary`, each
+  `whatsWorking` line and `ReportVersion.note`; approval rejects blank wording
+  (`empty-copy`), except `note`. `Evidence.value`
+  may be an empty string (text found on the client's site). `DismissedFinding.reason`,
+  `businessName`, `recipientName`, `storagePath`, `plainEnglish` and tool version strings are
+  non-empty.
+
 ## Constraints
 
 - **Strings are non-empty** unless noted. Exceptions (text copied from the client site, which

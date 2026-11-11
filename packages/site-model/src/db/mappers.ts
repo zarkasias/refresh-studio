@@ -13,22 +13,47 @@ import {
   type CaptureRun,
   type CapturedPage,
 } from '../schemas/capture';
+import { AuditRunSchema, type AuditRun } from '../schemas/audit';
 import { CommentSchema, type Comment } from '../schemas/comment';
+import {
+  AuditReportSchema,
+  ReportDeliverySchema,
+  ReportExportSchema,
+  ReportVersionSchema,
+  ShareLinkSchema,
+  type AuditReport,
+  type ReportDelivery,
+  type ReportExport,
+  type ReportVersion,
+  type ShareLink,
+} from '../schemas/report';
 import { VersionSchema, type Version } from '../schemas/version';
 import type {
   AssetRow,
+  AuditReportRow,
+  AuditRunRow,
   CapturedPageRow,
   CommentRow,
   CrawlRow,
   ProjectRow,
+  ReportDeliveryRow,
+  ReportExportRow,
+  ReportVersionRow,
+  ShareLinkRow,
   SiteRow,
   VariantRow,
   VersionRow,
   assets,
+  auditReports,
+  auditRuns,
   capturedPages,
   comments,
   crawls,
   projects,
+  reportDeliveries,
+  reportExports,
+  reportVersions,
+  shareLinks,
   sites,
   variants,
   versions,
@@ -320,5 +345,163 @@ export function rowToCapturedPage(row: CapturedPageRow): CapturedPage {
     facts: row.facts,
     axe: orUndef(row.axe),
     pendingContent: row.pendingContent,
+  });
+}
+
+// Audit run
+
+export function auditRunToRow(run: AuditRun): Insert<typeof auditRuns> {
+  const r = AuditRunSchema.parse(run);
+  return {
+    id: r.id,
+    projectId: r.projectId,
+    siteId: r.siteId,
+    captureRunId: r.captureRunId,
+    createdAt: new Date(r.createdAt),
+    toolVersions: r.toolVersions,
+    lighthouse: r.lighthouse,
+    checks: r.checks,
+    scores: r.scores,
+    weightsVersion: r.weightsVersion,
+  };
+}
+
+export function rowToAuditRun(row: AuditRunRow): AuditRun {
+  return AuditRunSchema.parse({
+    id: row.id,
+    projectId: row.projectId,
+    siteId: row.siteId,
+    captureRunId: row.captureRunId,
+    createdAt: iso(row.createdAt),
+    toolVersions: row.toolVersions,
+    lighthouse: row.lighthouse,
+    checks: row.checks,
+    scores: row.scores,
+    weightsVersion: row.weightsVersion,
+  });
+}
+
+// Audit report (table `audit_reports`)
+
+export function auditReportToRow(report: AuditReport): Insert<typeof auditReports> {
+  const r = AuditReportSchema.parse(report);
+  return {
+    id: r.id,
+    projectId: r.projectId,
+    auditRunId: r.auditRunId,
+    createdAt: new Date(r.createdAt),
+  };
+}
+
+export function rowToAuditReport(row: AuditReportRow): AuditReport {
+  return AuditReportSchema.parse({
+    id: row.id,
+    projectId: row.projectId,
+    auditRunId: row.auditRunId,
+    createdAt: iso(row.createdAt),
+  });
+}
+
+// Report version
+
+export function reportVersionToRow(version: ReportVersion): Insert<typeof reportVersions> {
+  const v = ReportVersionSchema.parse(version);
+  return {
+    id: v.id,
+    reportId: v.reportId,
+    number: v.number,
+    doc: v.doc,
+    createdBy: v.createdBy,
+    note: v.note,
+    createdAt: new Date(v.createdAt),
+    approvedAt: v.approvedAt ? new Date(v.approvedAt) : null,
+    approvedBy: orNull(v.approvedBy),
+  };
+}
+
+export function rowToReportVersion(row: ReportVersionRow): ReportVersion {
+  return ReportVersionSchema.parse({
+    id: row.id,
+    reportId: row.reportId,
+    number: row.number,
+    doc: row.doc,
+    createdBy: row.createdBy,
+    createdAt: iso(row.createdAt),
+    note: row.note,
+    approvedAt: isoOrUndef(row.approvedAt),
+    approvedBy: orUndef(row.approvedBy),
+  });
+}
+
+// Share link
+
+export function shareLinkToRow(link: ShareLink): Insert<typeof shareLinks> {
+  const l = ShareLinkSchema.parse(link);
+  return {
+    id: l.id,
+    reportId: l.reportId,
+    tokenHash: l.tokenHash,
+    createdAt: new Date(l.createdAt),
+    expiresAt: new Date(l.expiresAt),
+    revokedAt: l.revokedAt ? new Date(l.revokedAt) : null,
+  };
+}
+
+export function rowToShareLink(row: ShareLinkRow): ShareLink {
+  return ShareLinkSchema.parse({
+    id: row.id,
+    reportId: row.reportId,
+    tokenHash: row.tokenHash,
+    createdAt: iso(row.createdAt),
+    expiresAt: iso(row.expiresAt),
+    revokedAt: isoOrUndef(row.revokedAt),
+  });
+}
+
+// Report export
+
+export function reportExportToRow(exp: ReportExport): Insert<typeof reportExports> {
+  const e = ReportExportSchema.parse(exp);
+  return {
+    id: e.id,
+    reportVersionId: e.reportVersionId,
+    kind: e.kind,
+    storagePath: e.storagePath,
+    sha256: e.sha256,
+    createdAt: new Date(e.createdAt),
+  };
+}
+
+export function rowToReportExport(row: ReportExportRow): ReportExport {
+  return ReportExportSchema.parse({
+    id: row.id,
+    reportVersionId: row.reportVersionId,
+    kind: row.kind,
+    storagePath: row.storagePath,
+    sha256: row.sha256,
+    createdAt: iso(row.createdAt),
+  });
+}
+
+// Report delivery
+
+export function reportDeliveryToRow(delivery: ReportDelivery): Insert<typeof reportDeliveries> {
+  const d = ReportDeliverySchema.parse(delivery);
+  return {
+    id: d.id,
+    reportVersionId: d.reportVersionId,
+    channel: d.channel,
+    recipientName: d.recipientName,
+    sentAt: new Date(d.sentAt),
+  };
+}
+
+export function rowToReportDelivery(row: ReportDeliveryRow): ReportDelivery {
+  return ReportDeliverySchema.parse({
+    id: row.id,
+    reportVersionId: row.reportVersionId,
+    channel: row.channel,
+    recipientName: row.recipientName,
+    sentAt: iso(row.sentAt),
   });
 }

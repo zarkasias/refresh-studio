@@ -23,6 +23,7 @@ import {
   unique,
 } from 'drizzle-orm/pg-core';
 import { AssetKindSchema } from '../schemas/asset';
+import type { CheckResult, LighthouseSummary, Scores } from '../schemas/audit';
 import {
   CaptureStatusSchema,
   type AxeSummary,
@@ -32,6 +33,7 @@ import {
 } from '../schemas/capture';
 import { CommentAuthorSchema } from '../schemas/comment';
 import { ConsentMethodSchema, MAX_CRAWL_PAGES } from '../schemas/project';
+import { DeliveryChannelSchema, type ReportDoc } from '../schemas/report';
 import { VariantStatusSchema, VariantStyleSchema } from '../schemas/variant';
 import type { DesignTokens } from '../schemas/tokens';
 import type { Site } from '../schemas/site';
@@ -258,6 +260,147 @@ export const capturedPages = pgTable(
   ],
 );
 
+// Audit and report records (ADR-008)
+
+export const auditRuns = pgTable(
+  'audit_runs',
+  {
+    id: text('id').primaryKey(),
+    projectId: text('project_id')
+      .notNull()
+      .references(() => projects.id, { onDelete: 'cascade' }),
+    siteId: text('site_id')
+      .notNull()
+      .references(() => sites.id, { onDelete: 'cascade' }),
+    captureRunId: text('capture_run_id')
+      .notNull()
+      .references(() => crawls.id, { onDelete: 'cascade' }),
+    createdAt: tstz('created_at').notNull(),
+    toolVersions: jsonb('tool_versions')
+      .$type<{ lighthouse: string; axe: string; audit: string }>()
+      .notNull(),
+    lighthouse: jsonb('lighthouse').$type<LighthouseSummary[]>().notNull(),
+    checks: jsonb('checks').$type<CheckResult[]>().notNull(),
+    scores: jsonb('scores').$type<Scores>().notNull(),
+    weightsVersion: text('weights_version').notNull(),
+  },
+  (t) => [
+    index('audit_runs_project_id_idx').on(t.projectId),
+    index('audit_runs_capture_run_id_idx').on(t.captureRunId),
+  ],
+);
+
+export const auditReports = pgTable(
+  'audit_reports',
+  {
+    id: text('id').primaryKey(),
+    projectId: text('project_id')
+      .notNull()
+      .references(() => projects.id, { onDelete: 'cascade' }),
+    auditRunId: text('audit_run_id')
+      .notNull()
+      .references(() => auditRuns.id, { onDelete: 'cascade' }),
+    createdAt: tstz('created_at').notNull(),
+  },
+  (t) => [
+    index('audit_reports_project_id_idx').on(t.projectId),
+    index('audit_reports_audit_run_id_idx').on(t.auditRunId),
+  ],
+);
+
+export const reportVersions = pgTable(
+  'report_versions',
+  {
+    id: text('id').primaryKey(),
+    reportId: text('report_id')
+      .notNull()
+      .references(() => auditReports.id, { onDelete: 'restrict' }),
+    /** 1, 2, 3, ... per report (ADR-005, ADR-008). */
+    number: integer('number').notNull(),
+    doc: jsonb('doc').$type<ReportDoc>().notNull(),
+    createdBy: text('created_by').notNull(),
+    note: text('note').notNull(),
+    createdAt: tstz('created_at').notNull(),
+    /** Consultant approval (rule 4). Set once; the trigger in migration 0005 freezes the row. */
+    approvedAt: tstz('approved_at'),
+    approvedBy: text('approved_by'),
+  },
+  (t) => [
+    index('report_versions_report_id_idx').on(t.reportId),
+    unique('report_versions_report_number_unique').on(t.reportId, t.number),
+    check('report_versions_number_positive', sql`${t.number} >= 1`),
+    check(
+      'report_versions_approved_by_nonempty',
+      sql`${t.approvedBy} IS NULL OR ${t.approvedBy} <> ''`,
+    ),
+    check(
+      'report_versions_approval_pair',
+      sql`(${t.approvedAt} IS NULL) = (${t.approvedBy} IS NULL)`,
+    ),
+    check(
+      'report_versions_approved_after_created',
+      sql`${t.approvedAt} IS NULL OR ${t.approvedAt} >= ${t.createdAt}`,
+    ),
+  ],
+);
+
+export const shareLinks = pgTable(
+  'share_links',
+  {
+    id: text('id').primaryKey(),
+    reportId: text('report_id')
+      .notNull()
+      .references(() => auditReports.id, { onDelete: 'cascade' }),
+    /** SHA-256 hex of the token. The token itself is never stored. */
+    tokenHash: text('token_hash').notNull(),
+    createdAt: tstz('created_at').notNull(),
+    expiresAt: tstz('expires_at').notNull(),
+    revokedAt: tstz('revoked_at'),
+  },
+  (t) => [
+    index('share_links_report_id_idx').on(t.reportId),
+    unique('share_links_token_hash_unique').on(t.tokenHash),
+    check('share_links_token_hash_sha256', sql`${t.tokenHash} ~ '^[0-9a-f]{64}$'`),
+    check('share_links_expires_after_created', sql`${t.expiresAt} > ${t.createdAt}`),
+  ],
+);
+
+export const reportExports = pgTable(
+  'report_exports',
+  {
+    id: text('id').primaryKey(),
+    reportVersionId: text('report_version_id')
+      .notNull()
+      .references(() => reportVersions.id, { onDelete: 'restrict' }),
+    kind: text('kind').notNull(),
+    storagePath: text('storage_path').notNull(),
+    sha256: text('sha256').notNull(),
+    createdAt: tstz('created_at').notNull(),
+  },
+  (t) => [
+    index('report_exports_report_version_id_idx').on(t.reportVersionId),
+    check('report_exports_kind_values', inList('kind', ['pdf'])),
+    check('report_exports_sha256_hex', sql`${t.sha256} ~ '^[0-9a-f]{64}$'`),
+  ],
+);
+
+export const reportDeliveries = pgTable(
+  'report_deliveries',
+  {
+    id: text('id').primaryKey(),
+    reportVersionId: text('report_version_id')
+      .notNull()
+      .references(() => reportVersions.id, { onDelete: 'restrict' }),
+    channel: text('channel').notNull(),
+    recipientName: text('recipient_name').notNull(),
+    sentAt: tstz('sent_at').notNull(),
+  },
+  (t) => [
+    index('report_deliveries_report_version_id_idx').on(t.reportVersionId),
+    check('report_deliveries_channel_values', inList('channel', DeliveryChannelSchema.options)),
+  ],
+);
+
 export type ProjectRow = typeof projects.$inferSelect;
 export type SiteRow = typeof sites.$inferSelect;
 export type AssetRow = typeof assets.$inferSelect;
@@ -266,3 +409,9 @@ export type VersionRow = typeof versions.$inferSelect;
 export type CommentRow = typeof comments.$inferSelect;
 export type CrawlRow = typeof crawls.$inferSelect;
 export type CapturedPageRow = typeof capturedPages.$inferSelect;
+export type AuditRunRow = typeof auditRuns.$inferSelect;
+export type AuditReportRow = typeof auditReports.$inferSelect;
+export type ReportVersionRow = typeof reportVersions.$inferSelect;
+export type ShareLinkRow = typeof shareLinks.$inferSelect;
+export type ReportExportRow = typeof reportExports.$inferSelect;
+export type ReportDeliveryRow = typeof reportDeliveries.$inferSelect;

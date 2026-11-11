@@ -10,10 +10,16 @@ import { migrate } from 'drizzle-orm/pglite/migrator';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import {
   minimalAsset,
+  minimalAuditReport,
+  minimalAuditRun,
   minimalCaptureRun,
   minimalCapturedPage,
   minimalComment,
   minimalProject,
+  minimalReportDelivery,
+  minimalReportExport,
+  minimalReportVersion,
+  minimalShareLink,
   minimalSite,
   minimalVariant,
   minimalVersion,
@@ -23,6 +29,10 @@ import { ProjectSchema, SiteSchema, VariantSchema } from '../schemas';
 import {
   assetToRow,
   assets,
+  auditReports,
+  auditReportToRow,
+  auditRuns,
+  auditRunToRow,
   capturedPageToRow,
   capturedPages,
   commentToRow,
@@ -31,7 +41,19 @@ import {
   crawls,
   projects,
   projectToRow,
+  reportDeliveries,
+  reportDeliveryToRow,
+  reportExports,
+  reportExportToRow,
+  reportVersions,
+  reportVersionToRow,
   rowToAsset,
+  rowToAuditReport,
+  rowToAuditRun,
+  rowToReportDelivery,
+  rowToReportExport,
+  rowToReportVersion,
+  rowToShareLink,
   rowToCapturedPage,
   rowToCrawl,
   rowToComment,
@@ -39,6 +61,8 @@ import {
   rowToSite,
   rowToVariant,
   rowToVersion,
+  shareLinks,
+  shareLinkToRow,
   siteToRow,
   sites,
   variants,
@@ -62,7 +86,7 @@ beforeAll(async () => {
 });
 beforeEach(async () => {
   await db.execute(
-    sql`TRUNCATE projects, sites, assets, variants, versions, comments, crawls, captured_pages CASCADE`,
+    sql`TRUNCATE projects, sites, assets, variants, versions, comments, crawls, captured_pages, audit_runs, audit_reports, report_versions, share_links, report_exports, report_deliveries CASCADE`,
   );
 });
 afterAll(async () => {
@@ -460,6 +484,292 @@ describe('delete policy', () => {
     expect(await db.select().from(sites)).toHaveLength(0);
     expect(await db.select().from(assets)).toHaveLength(0);
     expect(await db.select().from(variants)).toHaveLength(0);
+  });
+});
+
+describe('audit and report records (ADR-008)', () => {
+  const approvedAt = new Date('2026-11-09T14:00:00.000Z');
+
+  async function seedReport() {
+    await seedSite();
+    await db.insert(crawls).values(crawlToRow(minimalCaptureRun()));
+    await db.insert(auditRuns).values(auditRunToRow(minimalAuditRun()));
+    await db.insert(auditReports).values(auditReportToRow(minimalAuditReport()));
+  }
+  const approvedRow = () => ({
+    ...reportVersionToRow(minimalReportVersion()),
+    approvedAt,
+    approvedBy: 'consultant',
+  });
+
+  it('round-trips a run, report, version, share link, export and delivery', async () => {
+    await seedReport();
+    await db.insert(reportVersions).values(reportVersionToRow(minimalReportVersion()));
+    await db.insert(shareLinks).values(shareLinkToRow(minimalShareLink()));
+    await db.insert(reportExports).values(reportExportToRow(minimalReportExport()));
+    await db.insert(reportDeliveries).values(reportDeliveryToRow(minimalReportDelivery()));
+    const [run] = await db.select().from(auditRuns);
+    const [report] = await db.select().from(auditReports);
+    const [version] = await db.select().from(reportVersions);
+    const [link] = await db.select().from(shareLinks);
+    const [exp] = await db.select().from(reportExports);
+    const [delivery] = await db.select().from(reportDeliveries);
+    expect(rowToAuditRun(run!)).toEqual(minimalAuditRun());
+    expect(rowToAuditReport(report!)).toEqual(minimalAuditReport());
+    expect(rowToReportVersion(version!)).toEqual(minimalReportVersion());
+    expect(rowToShareLink(link!)).toEqual(minimalShareLink());
+    expect(rowToReportExport(exp!)).toEqual(minimalReportExport());
+    expect(rowToReportDelivery(delivery!)).toEqual(minimalReportDelivery());
+  });
+
+  it('round-trips a revoked share link and an approved version in UTC', async () => {
+    await seedReport();
+    const approved = {
+      ...minimalReportVersion(),
+      approvedAt: approvedAt.toISOString(),
+      approvedBy: 'c',
+    };
+    const link = { ...minimalShareLink(), revokedAt: '2026-11-10T09:00:00.000Z' };
+    await db.insert(reportVersions).values(reportVersionToRow(approved));
+    await db.insert(shareLinks).values(shareLinkToRow(link));
+    const [v] = await db.select().from(reportVersions);
+    const [l] = await db.select().from(shareLinks);
+    expect(rowToReportVersion(v!)).toEqual(approved);
+    expect(rowToShareLink(l!)).toEqual(link);
+  });
+
+  it('applies migrations 0004 and 0005: tables, CHECKs and the freeze trigger exist', async () => {
+    const tables = await db.execute(
+      sql`SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'`,
+    );
+    const tableNames = (tables.rows as { table_name: string }[]).map((r) => r.table_name);
+    for (const t of [
+      'audit_runs',
+      'audit_reports',
+      'report_versions',
+      'share_links',
+      'report_exports',
+      'report_deliveries',
+    ]) {
+      expect(tableNames).toContain(t);
+    }
+    const checks = await db.execute(sql`SELECT conname FROM pg_constraint WHERE contype = 'c'`);
+    const checkNames = (checks.rows as { conname: string }[]).map((r) => r.conname);
+    for (const c of [
+      'share_links_expires_after_created',
+      'share_links_token_hash_sha256',
+      'report_versions_approval_pair',
+      'report_versions_approved_by_nonempty',
+    ]) {
+      expect(checkNames).toContain(c);
+    }
+    const triggers = await db.execute(sql`SELECT tgname FROM pg_trigger WHERE NOT tgisinternal`);
+    expect((triggers.rows as { tgname: string }[]).map((r) => r.tgname)).toContain(
+      'report_versions_freeze_approved',
+    );
+  });
+
+  it('never stores a raw share token: share_links has a hash column and no token column', async () => {
+    const res = await db.execute(
+      sql`SELECT column_name FROM information_schema.columns WHERE table_name = 'share_links'`,
+    );
+    const names = (res.rows as { column_name: string }[]).map((r) => r.column_name);
+    expect(names).toContain('token_hash');
+    expect(names).not.toContain('token');
+  });
+
+  describe('report_versions constraints', () => {
+    it('rejects approved_at without approved_by, an empty approved_by and approval before creation', async () => {
+      await seedReport();
+      const base = reportVersionToRow(minimalReportVersion());
+      await rejectsOn(
+        db.insert(reportVersions).values({ ...base, approvedAt }),
+        'report_versions_approval_pair',
+      );
+      await rejectsOn(
+        db.insert(reportVersions).values({ ...base, approvedAt, approvedBy: '' }),
+        'report_versions_approved_by_nonempty',
+      );
+      await rejectsOn(
+        db.insert(reportVersions).values({
+          ...base,
+          approvedAt: new Date('2026-11-09T11:00:00.000Z'),
+          approvedBy: 'c',
+        }),
+        'report_versions_approved_after_created',
+      );
+    });
+
+    it('rejects a duplicate number for the same report and number 0', async () => {
+      await seedReport();
+      await db.insert(reportVersions).values(reportVersionToRow(minimalReportVersion()));
+      const dup = { ...reportVersionToRow(minimalReportVersion()), id: 'rver_2' };
+      await rejectsOn(
+        db.insert(reportVersions).values(dup),
+        'report_versions_report_number_unique',
+      );
+      await rejectsOn(
+        db.insert(reportVersions).values({ ...dup, number: 0 }),
+        'report_versions_number_positive',
+      );
+    });
+
+    it('allows editing and then approving an unapproved version', async () => {
+      await seedReport();
+      await db.insert(reportVersions).values(reportVersionToRow(minimalReportVersion()));
+      await db
+        .update(reportVersions)
+        .set({ note: 'edited' })
+        .where(eq(reportVersions.id, 'rver_1'));
+      await db
+        .update(reportVersions)
+        .set({ approvedAt, approvedBy: 'consultant' })
+        .where(eq(reportVersions.id, 'rver_1'));
+      const [row] = await db.select().from(reportVersions);
+      expect(rowToReportVersion(row!)).toMatchObject({ note: 'edited', approvedBy: 'consultant' });
+    });
+
+    it('freezes an approved version: UPDATE is refused', async () => {
+      await seedReport();
+      await db.insert(reportVersions).values(approvedRow());
+      await rejectsOn(
+        db
+          .update(reportVersions)
+          .set({ note: 'sneaky edit' })
+          .where(eq(reportVersions.id, 'rver_1')),
+        'report_versions_freeze_approved',
+      );
+      await rejectsOn(
+        db
+          .update(reportVersions)
+          .set({ approvedAt: null, approvedBy: null })
+          .where(eq(reportVersions.id, 'rver_1')),
+        'report_versions_freeze_approved',
+      );
+      const [row] = await db.select().from(reportVersions);
+      expect(rowToReportVersion(row!).note).toBe('');
+    });
+
+    it('freezes an approved version: DELETE is refused', async () => {
+      await seedReport();
+      await db.insert(reportVersions).values(approvedRow());
+      await rejectsOn(
+        db.delete(reportVersions).where(eq(reportVersions.id, 'rver_1')),
+        'report_versions_freeze_approved',
+      );
+      expect(await db.select().from(reportVersions)).toHaveLength(1);
+    });
+
+    it('does not freeze a different report version row', async () => {
+      await seedReport();
+      await db.insert(reportVersions).values(approvedRow());
+      const draft = { ...reportVersionToRow(minimalReportVersion()), id: 'rver_2', number: 2 };
+      await db.insert(reportVersions).values(draft);
+      await db.update(reportVersions).set({ note: 'ok' }).where(eq(reportVersions.id, 'rver_2'));
+      const [edited] = await db
+        .select()
+        .from(reportVersions)
+        .where(eq(reportVersions.id, 'rver_2'));
+      expect(edited?.note).toBe('ok');
+      await db.delete(reportVersions).where(eq(reportVersions.id, 'rver_2'));
+      const left = await db.select().from(reportVersions);
+      expect(left.map((r) => r.id)).toEqual(['rver_1']);
+    });
+  });
+
+  describe('other constraints', () => {
+    it('rejects a token hash that is not sha256 hex, and a duplicate hash', async () => {
+      await seedReport();
+      await rejectsOn(
+        db
+          .insert(shareLinks)
+          .values({ ...shareLinkToRow(minimalShareLink()), tokenHash: 'raw-token' }),
+        'share_links_token_hash_sha256',
+      );
+      await db.insert(shareLinks).values(shareLinkToRow(minimalShareLink()));
+      await rejectsOn(
+        db.insert(shareLinks).values({ ...shareLinkToRow(minimalShareLink()), id: 'share_2' }),
+        'share_links_token_hash_unique',
+      );
+    });
+
+    it('rejects a share link that expires before it was created', async () => {
+      await seedReport();
+      const link = {
+        ...shareLinkToRow(minimalShareLink()),
+        expiresAt: new Date('2026-11-09T13:00:00.000Z'),
+      };
+      await rejectsOn(db.insert(shareLinks).values(link), 'share_links_expires_after_created');
+    });
+
+    it('rejects a bad export kind or hash, and an unknown delivery channel', async () => {
+      await seedReport();
+      await db.insert(reportVersions).values(reportVersionToRow(minimalReportVersion()));
+      const exp = reportExportToRow(minimalReportExport());
+      await rejectsOn(
+        db.insert(reportExports).values({ ...exp, kind: 'docx' }),
+        'report_exports_kind_values',
+      );
+      await rejectsOn(
+        db.insert(reportExports).values({ ...exp, sha256: 'abc' }),
+        'report_exports_sha256_hex',
+      );
+      await rejectsOn(
+        db
+          .insert(reportDeliveries)
+          .values({ ...reportDeliveryToRow(minimalReportDelivery()), channel: 'sms' }),
+        'report_deliveries_channel_values',
+      );
+    });
+  });
+
+  describe('delete policy', () => {
+    async function seedHistory() {
+      await seedReport();
+      await db.insert(reportVersions).values(reportVersionToRow(minimalReportVersion()));
+      await db.insert(reportExports).values(reportExportToRow(minimalReportExport()));
+      await db.insert(reportDeliveries).values(reportDeliveryToRow(minimalReportDelivery()));
+    }
+
+    it('refuses to delete a report that has versions', async () => {
+      await seedHistory();
+      await rejectsOn(
+        db.delete(auditReports).where(eq(auditReports.id, 'report_1')),
+        'report_versions_report_id_audit_reports_id_fk',
+      );
+    });
+
+    it('refuses to delete a version that has deliveries, or exports', async () => {
+      await seedHistory();
+      await db.delete(reportExports);
+      await rejectsOn(
+        db.delete(reportVersions).where(eq(reportVersions.id, 'rver_1')),
+        'report_deliveries_report_version_id_report_versions_id_fk',
+      );
+      await db.delete(reportDeliveries);
+      await db.insert(reportExports).values(reportExportToRow(minimalReportExport()));
+      await rejectsOn(
+        db.delete(reportVersions).where(eq(reportVersions.id, 'rver_1')),
+        'report_exports_report_version_id_report_versions_id_fk',
+      );
+    });
+
+    it('refuses to delete a project whose reports have versions', async () => {
+      await seedHistory();
+      await rejectsOn(
+        db.delete(projects).where(eq(projects.id, minimalProject().id)),
+        'report_versions_report_id_audit_reports_id_fk',
+      );
+    });
+
+    it('cascades project -> audit run, report and share links when there are no versions', async () => {
+      await seedReport();
+      await db.insert(shareLinks).values(shareLinkToRow(minimalShareLink()));
+      await db.delete(projects).where(eq(projects.id, minimalProject().id));
+      expect(await db.select().from(auditRuns)).toHaveLength(0);
+      expect(await db.select().from(auditReports)).toHaveLength(0);
+      expect(await db.select().from(shareLinks)).toHaveLength(0);
+    });
   });
 });
 

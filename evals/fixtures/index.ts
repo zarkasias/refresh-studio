@@ -1,4 +1,7 @@
-/** Offline fixture tooling (M1 T4): loopback server, network lockdown, fixture project. */
+/**
+ * Offline fixture tooling: loopback server, network lockdown, fixture project (M1 T4) and the
+ * label anonymizer (M1 T5).
+ */
 export * from './network-policy';
 export * from './server';
 export * from './sinkhole';
@@ -15,3 +18,4 @@ export {
   newLockedDownContext,
 } from './lockdown';
 export * from './project';
+export * from './anonymize';

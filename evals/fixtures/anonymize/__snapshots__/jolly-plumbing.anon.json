@@ -1,0 +1,441 @@
+{
+  "id": "site_acme-plumbing",
+  "projectId": "proj_acme-plumbing",
+  "schemaVersion": 3,
+  "sourceUrl": "https://acmeplumbingco.example/",
+  "platform": "wordpress",
+  "platformEvidence": [],
+  "platformConfidence": 0,
+  "business": {
+    "name": "Acme Plumbing Co",
+    "phones": [
+      {
+        "value": "742-555-0187",
+        "label": "Schedule an Appointment"
+      },
+      {
+        "value": "742-555-0106",
+        "label": "Emergency Services"
+      }
+    ],
+    "emails": [
+      {
+        "value": "Harper@example.com"
+      },
+      {
+        "value": "service@example.com"
+      }
+    ],
+    "address": "515 Linden St, Oakby Crossing, CO 85279",
+    "hours": [
+      {
+        "label": "Header",
+        "text": "Monday – Friday 7:30a – 4:00p"
+      },
+      {
+        "label": "Office Hours",
+        "text": "Mon-Fri 07:30 AM – 04:00 PM"
+      },
+      {
+        "label": "Emergency Services",
+        "text": "24/7"
+      }
+    ],
+    "socialLinks": [
+      {
+        "network": "instagram",
+        "url": "https://www.instagram.com/oakbycrossingplumber/?hl=en"
+      },
+      {
+        "network": "linkedin",
+        "url": "https://www.linkedin.com/company/acme-plumbing-co-"
+      },
+      {
+        "network": "yelp",
+        "url": "https://www.yelp.com/biz/acme-plumbing-co-oakby-crossing-2"
+      }
+    ],
+    "trust": {
+      "foundedYear": 1955,
+      "licenses": [
+        {
+          "number": "PC.0000609"
+        },
+        {
+          "number": "MP.00838526"
+        }
+      ],
+      "ratings": [],
+      "credentials": [
+        {
+          "kind": "badge",
+          "name": "BBB"
+        },
+        {
+          "kind": "badge",
+          "name": "HomeAdvisor"
+        }
+      ]
+    }
+  },
+  "brand": {
+    "extractedColors": [
+      {
+        "hex": "#ffd000",
+        "role": "primary"
+      },
+      {
+        "hex": "#444342",
+        "role": "accent"
+      },
+      {
+        "hex": "#ffffff",
+        "role": "background"
+      },
+      {
+        "hex": "#f7f7f7",
+        "role": "surface"
+      }
+    ],
+    "extractedFonts": [
+      {
+        "family": "Oswald"
+      },
+      {
+        "family": "Open Sans"
+      }
+    ]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Acme Plumbing Oakby Crossing Best Plumber | Call for Quote",
+      "metaDescription": "Blossom cut Oakby Crossing' deck plumber? Acme Plumbing chestnut seashell plumbing cabinet, mustardwoolag, and gingerbread foam mustard cider service.",
+      "sections": [
+        {
+          "id": "home-nav",
+          "type": "nav",
+          "content": {
+            "body": "PC License #: PC.0000609 · MP License #: MP.00838526 · Tapestry an Appointment 742-555-0187 (not linked) · Monday – Friday 7:30a – 4:00p · 515 Linden St, Oakby Crossing, CO 85279",
+            "items": [
+              {
+                "title": "Plumbing Services",
+                "link": "https://acmeplumbingco.example/plumbing-services/"
+              },
+              {
+                "title": "Water Heater Services",
+                "link": "https://acmeplumbingco.example/water-heater-services/"
+              },
+              {
+                "title": "Heating Services",
+                "link": "https://acmeplumbingco.example/heating-services/"
+              },
+              {
+                "title": "About Us",
+                "link": "https://acmeplumbingco.example/about/"
+              },
+              {
+                "title": "Featured Blogs",
+                "link": "https://acmeplumbingco.example/featured-blogs/"
+              },
+              {
+                "title": "Contact Us",
+                "link": "https://acmeplumbingco.example/contact/"
+              }
+            ],
+            "ctas": [
+              {
+                "label": "Have a Plumbing emergency? Call or Text 742-555-0106",
+                "href": "tel:742-555-0106",
+                "kind": "call"
+              },
+              {
+                "label": "Request A Quote",
+                "href": "https://acmeplumbingco.example/contact/",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "content": {
+            "heading": "Oakby Crossing Best Plumber",
+            "subheading": "Locally Owned & Operated Since 1955",
+            "body": "Peppermint the Acme cornflower foam pot harp of joy-blackberries, licensed plumbers pancake on cup orchard boat plumbing tapestry."
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-pricing",
+          "type": "cta",
+          "content": {
+            "heading": "Offering No-Hassle, Straightforward, Pricing.",
+            "ctas": [
+              {
+                "label": "Request A Quote",
+                "href": "https://acmeplumbingco.example/contact/",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-about",
+          "type": "about",
+          "content": {
+            "heading": "Acme Plumbing Co.",
+            "body": "Family-coral Oakby Crossing plumber honey 1955; winter, wildflower plum."
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-features",
+          "type": "features",
+          "content": {
+            "items": [
+              {
+                "title": "Licensed Plumbers",
+                "body": "Licensed and insured."
+              },
+              {
+                "title": "One Year Warranty",
+                "body": "On all services."
+              },
+              {
+                "title": "Emergency Services",
+                "body": "Available 24/7."
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-team",
+          "type": "cta",
+          "content": {
+            "heading": "OUR EMERGENCY OAKBY CROSSING PLUMBING TEAM",
+            "body": "Candlelight harbor chestnut and berry snowfall.",
+            "ctas": [
+              {
+                "label": "Request A Quote!",
+                "href": "https://acmeplumbingco.example/contact/",
+                "kind": "link"
+              },
+              {
+                "label": "Call To Schedule",
+                "href": "tel:742-555-0187",
+                "kind": "call"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-services",
+          "type": "services",
+          "content": {
+            "heading": "Our Services",
+            "items": [
+              {
+                "title": "Plumbing",
+                "body": "Vase service cobalt the Oakby Crossing gift."
+              },
+              {
+                "title": "Water Heaters",
+                "body": "Repair and replacement."
+              },
+              {
+                "title": "Heating",
+                "body": "Repair and installation."
+              },
+              {
+                "title": "Emergency Services",
+                "body": "24/7: otter acorn, lettuce fabric, maple mitten cinnamon."
+              },
+              {
+                "title": "Remodleing",
+                "body": "Kitchen, bathroom and system upgrades."
+              }
+            ],
+            "ctas": [
+              {
+                "label": "View Plumbing Services",
+                "href": "https://acmeplumbingco.example/plumbing-services/",
+                "kind": "link"
+              },
+              {
+                "label": "View Water Heater Services",
+                "href": "https://acmeplumbingco.example/water-heater-services/",
+                "kind": "link"
+              },
+              {
+                "label": "View Heating Services",
+                "href": "https://acmeplumbingco.example/heating-services/",
+                "kind": "link"
+              },
+              {
+                "label": "Contact Emergency Services",
+                "href": "tel:+1%E2%80%8B742-555-0106",
+                "kind": "call"
+              },
+              {
+                "label": "View Remodeling Services",
+                "href": "https://acmeplumbingco.example/bathroom-remodeling/",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-testimonials",
+          "type": "testimonials",
+          "content": {
+            "heading": "Why People are Choosing us.",
+            "items": [
+              {
+                "title": "Wynn Iverson",
+                "body": "Notebook cushion; blackberries, cider wool acorn."
+              },
+              {
+                "title": "Frankie Oldham",
+                "body": "Fair pricing, one-day turnaround."
+              },
+              {
+                "title": "Noel Selwyn",
+                "body": "Pear-mud maple mitten blanket; hollow seashell."
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-partners",
+          "type": "gallery",
+          "content": {
+            "heading": "Our Trusted Partners"
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-contact",
+          "type": "contact",
+          "content": {
+            "body": "Hedgehog 515 Linden St, Oakby Crossing, CO 85279 · Ribbon Hours Mon-Fri 07:30 AM – 04:00 PM · BAG and GingErbread hollow",
+            "ctas": [
+              {
+                "label": "Call Us Now: 742-555-0187",
+                "href": "tel:742-555-0187",
+                "kind": "call"
+              },
+              {
+                "label": "Email Us At: Harper@example.com",
+                "href": "mailto:Harper@example.com",
+                "kind": "email"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-footer",
+          "type": "footer",
+          "content": {
+            "heading": "Quick Links",
+            "body": "No copyright line.",
+            "items": [
+              {
+                "title": "Plumbing Services",
+                "link": "https://acmeplumbingco.example/plumbing-services/"
+              },
+              {
+                "title": "Water Heater Services",
+                "link": "https://acmeplumbingco.example/water-heater-services/"
+              },
+              {
+                "title": "Heating Services",
+                "link": "https://acmeplumbingco.example/heating-services/"
+              },
+              {
+                "title": "About Us",
+                "link": "https://acmeplumbingco.example/about/"
+              },
+              {
+                "title": "Featured Blogs",
+                "link": "https://acmeplumbingco.example/featured-blogs/"
+              },
+              {
+                "title": "Contact Us",
+                "link": "https://acmeplumbingco.example/contact/"
+              }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    },
+    {
+      "path": "/contact/",
+      "title": "Contact | acmeplumbingco.example",
+      "sections": [
+        {
+          "id": "contact-intro",
+          "type": "about",
+          "content": {
+            "heading": "Contact Us",
+            "subheading": "about our company",
+            "body": "Family-pen El Bell Tunnel notebook honey 1955. Open Monday – Friday from 7: 30 am to 4: 00 pm. Tapestry a Appointment 742-555-0187.",
+            "ctas": [
+              {
+                "label": "More about us",
+                "href": "https://acmeplumbingco.example/about/",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-main",
+          "type": "contact",
+          "content": {
+            "heading": "Contact us",
+            "body": "Email Us: Harper@example.com, service@example.com. Blossom: 515 Linden St, Oakby Crossing, CO 85279. Fern us: Tapestry an Appointment 742-555-0187; Emergency Services 742-555-0106. The form cinnamon JavaScript. No map.",
+            "ctas": [
+              {
+                "label": "Call Us Now: 742-555-0187",
+                "href": "tel:742-555-0187",
+                "kind": "call"
+              },
+              {
+                "label": "Email Us At: Harper@example.com",
+                "href": "mailto:Harper@example.com",
+                "kind": "email"
+              }
+            ],
+            "form": {
+              "fields": [
+                {
+                  "label": "Message",
+                  "type": "textarea",
+                  "required": false
+                },
+                {
+                  "label": "Email",
+                  "type": "email",
+                  "required": false
+                }
+              ],
+              "submitLabel": "Send A Message"
+            }
+          },
+          "confidence": 1
+        }
+      ]
+    }
+  ]
+}

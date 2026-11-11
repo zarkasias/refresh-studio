@@ -1,0 +1,219 @@
+{
+  "id": "site_acme-plumbing-co",
+  "projectId": "proj_acme-plumbing-co",
+  "schemaVersion": 3,
+  "sourceUrl": "https://www.acmeplumbingco.example/",
+  "platform": "wix",
+  "platformEvidence": [],
+  "platformConfidence": 0,
+  "business": {
+    "name": "Acme Plumbing Co",
+    "phones": [
+      {
+        "value": "998-555-0179"
+      }
+    ],
+    "emails": [
+      {
+        "value": "infoacmeplumbingco@example.com"
+      }
+    ],
+    "address": "9950 E Juniper Hwy, Silverby, WY 85559",
+    "hours": [
+      {
+        "label": "Opening Hours",
+        "text": "Monday, Friday, Tuesday, Thursday, Wednesday, Saturday, Sunday: 7:00 am – 7:00 pm"
+      }
+    ],
+    "socialLinks": []
+  },
+  "brand": {
+    "extractedColors": [
+      {
+        "hex": "#2da0bd",
+        "role": "primary"
+      },
+      {
+        "hex": "#ff6161",
+        "role": "accent"
+      },
+      {
+        "hex": "#ffffff",
+        "role": "background"
+      },
+      {
+        "hex": "#000000",
+        "role": "surface"
+      }
+    ],
+    "extractedFonts": [
+      {
+        "family": "Futura"
+      },
+      {
+        "family": "Cormorant Garamond"
+      },
+      {
+        "family": "Bitter"
+      },
+      {
+        "family": "Georgia"
+      }
+    ]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Home | Acme Plumbing Co",
+      "sections": [
+        {
+          "id": "home-nav",
+          "type": "nav",
+          "content": {
+            "items": [
+              {
+                "title": "Home",
+                "link": "https://www.acmeplumbingco.example"
+              },
+              {
+                "title": "Services",
+                "link": "https://www.acmeplumbingco.example/services-4"
+              },
+              {
+                "title": "Contact",
+                "link": "https://www.acmeplumbingco.example/contact-5"
+              }
+            ],
+            "ctas": [
+              {
+                "label": "998-555-0179",
+                "href": "tel:9985550123",
+                "kind": "call"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "content": {
+            "heading": "YOUR PLUMBING EXPERTS",
+            "subheading": "Professional Plumbing Services in Silverby, Wyoming",
+            "body": "20+ hazel rainbow Silverby; candlelight and peppermint plumbing, cabinet, tulip raincoat, maple marmalade."
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-about",
+          "type": "about",
+          "content": {
+            "heading": "ABOUT"
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-cta",
+          "type": "cta",
+          "content": {
+            "heading": "Call Us Today - 998-555-0179"
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-testimonials",
+          "type": "testimonials",
+          "content": {
+            "heading": "What our Customers say:",
+            "items": [
+              {
+                "title": "Bellamy H.",
+                "body": "Crisp watercolor, macaroon, cabinslatecor service."
+              },
+              {
+                "title": "Peyton C.",
+                "body": "Vase notebook; watercolor pottery in 30 cushion."
+              },
+              {
+                "title": "Lane M.",
+                "body": "Jacket, blackberries fit and harvest beacon blanket."
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-footer",
+          "type": "footer",
+          "content": {
+            "body": "9950 E Juniper Hwy, Silverby, WY 85559 · www.acmeplumbingco.example · 998-555-0179 (not linked)",
+            "ctas": [
+              {
+                "label": "www.acmeplumbingco.example",
+                "href": "http://www.acmeplumbingco.example",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    },
+    {
+      "path": "/contact-5",
+      "title": "Contact | Acme Plumbing Co",
+      "sections": [
+        {
+          "id": "contact-call",
+          "type": "cta",
+          "content": {
+            "heading": "Call Us Today - 998-555-0179"
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-main",
+          "type": "contact",
+          "content": {
+            "heading": "Contact",
+            "body": "Blossom 9950 E Juniper Hwy, Silverby, WY 85559. Phone 998-555-0179 (not linked). Saffron Hours thread oak mud, all 7:00 am – 7:00 pm.",
+            "ctas": [
+              {
+                "label": "infoacmeplumbingco@example.com",
+                "href": "mailto:infoacmeplumbingco@example.com",
+                "kind": "email"
+              }
+            ],
+            "form": {
+              "fields": [
+                {
+                  "label": "First Name",
+                  "type": "text",
+                  "required": false
+                },
+                {
+                  "label": "Last Name",
+                  "type": "text",
+                  "required": false
+                },
+                {
+                  "label": "Email",
+                  "type": "email",
+                  "required": false
+                },
+                {
+                  "label": "Message",
+                  "type": "textarea",
+                  "required": false
+                }
+              ],
+              "submitLabel": "Send",
+              "confirmation": "Thanks for submitting!"
+            }
+          },
+          "confidence": 1
+        }
+      ]
+    }
+  ]
+}

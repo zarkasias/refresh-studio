@@ -1,0 +1,658 @@
+{
+  "id": "site_acme-salon-co-glenby",
+  "projectId": "proj_acme-salon-co-glenby",
+  "schemaVersion": 3,
+  "sourceUrl": "https://acmesalonco.example/",
+  "platform": "wordpress",
+  "platformEvidence": [],
+  "platformConfidence": 0,
+  "business": {
+    "name": "Acme Salon Co",
+    "phones": [
+      {
+        "value": "686-555-0187"
+      }
+    ],
+    "emails": [
+      {
+        "value": "hello@example.com"
+      },
+      {
+        "value": "perry@example.com"
+      }
+    ],
+    "socialLinks": [
+      {
+        "network": "facebook",
+        "url": "https://www.facebook.com/acmesalonco"
+      },
+      {
+        "network": "instagram",
+        "url": "https://instagram.com/acmesalonco/"
+      },
+      {
+        "network": "youtube",
+        "url": "https://www.youtube.com/channel/NQS0TZ2Gv3bWBocrU6OD0enu"
+      },
+      {
+        "network": "googleplus",
+        "url": "https://plus.google.com/b/173883183205294433804/173883183205294433804"
+      }
+    ],
+    "locations": [
+      {
+        "label": "Willowham Fields",
+        "address": "851 Mulberry St., Glenby, New York 18292",
+        "phone": "(686) 555-0187"
+      },
+      {
+        "label": "Wrenby Vale",
+        "address": "9613 62nd Ave., Glenby, New York 16032",
+        "phone": "(894) 555-0178"
+      },
+      {
+        "label": "Stonewick Vale (contact page only)",
+        "address": "687 Magnolia Ave. Glenby, NY 13361",
+        "phone": "(894) 555-0148"
+      }
+    ],
+    "people": [
+      {
+        "name": "Perry Keating",
+        "role": "Owner",
+        "locations": [
+          "Willowham Fields",
+          "Wrenby Vale"
+        ]
+      },
+      {
+        "name": "Ainsley Rook",
+        "role": "Lead 3",
+        "locations": [
+          "Willowham Fields"
+        ]
+      },
+      {
+        "name": "Esme",
+        "role": "Lead",
+        "locations": [
+          "Willowham Fields"
+        ]
+      },
+      {
+        "name": "Maren",
+        "role": "Lead",
+        "locations": [
+          "Willowham Fields"
+        ]
+      },
+      {
+        "name": "Keegan",
+        "role": "Assistant Team Lead - Lead Stylist",
+        "locations": [
+          "Willowham Fields"
+        ]
+      },
+      {
+        "name": "Flynn",
+        "role": "Senior",
+        "locations": [
+          "Willowham Fields"
+        ]
+      },
+      {
+        "name": "Shay",
+        "role": "Senior",
+        "locations": [
+          "Willowham Fields"
+        ]
+      },
+      {
+        "name": "Dorian",
+        "role": "Senior",
+        "locations": [
+          "Willowham Fields"
+        ]
+      },
+      {
+        "name": "Wren",
+        "role": "Senior",
+        "locations": [
+          "Willowham Fields"
+        ]
+      },
+      {
+        "name": "Odette",
+        "role": "Senior",
+        "locations": [
+          "Willowham Fields"
+        ]
+      },
+      {
+        "name": "Elliot",
+        "role": "Senior",
+        "locations": [
+          "Willowham Fields"
+        ]
+      },
+      {
+        "name": "Corin",
+        "role": "Senior",
+        "locations": [
+          "Willowham Fields"
+        ]
+      },
+      {
+        "name": "Lennon",
+        "role": "Stylist",
+        "locations": [
+          "Willowham Fields"
+        ]
+      },
+      {
+        "name": "Indigo",
+        "role": "Stylist",
+        "locations": [
+          "Willowham Fields"
+        ]
+      },
+      {
+        "name": "Callan",
+        "role": "Stylist 2",
+        "locations": [
+          "Willowham Fields",
+          "Wrenby Vale"
+        ]
+      },
+      {
+        "name": "Merritt",
+        "role": "Lead",
+        "locations": [
+          "Wrenby Vale"
+        ]
+      },
+      {
+        "name": "Fallon",
+        "role": "Lead",
+        "locations": [
+          "Wrenby Vale"
+        ]
+      },
+      {
+        "name": "Frankie",
+        "role": "Lead",
+        "locations": [
+          "Wrenby Vale"
+        ]
+      },
+      {
+        "name": "Kendall",
+        "role": "Lead",
+        "locations": [
+          "Wrenby Vale"
+        ]
+      },
+      {
+        "name": "Gale",
+        "role": "Lead",
+        "locations": [
+          "Wrenby Vale"
+        ]
+      },
+      {
+        "name": "Odette",
+        "role": "Stylist 2",
+        "locations": [
+          "Wrenby Vale"
+        ]
+      },
+      {
+        "name": "Arden",
+        "role": "Stylist",
+        "locations": [
+          "Wrenby Vale"
+        ]
+      }
+    ]
+  },
+  "brand": {
+    "extractedColors": [
+      {
+        "hex": "#000000",
+        "role": "primary"
+      },
+      {
+        "hex": "#131312",
+        "role": "surface"
+      },
+      {
+        "hex": "#ffffff",
+        "role": "background"
+      }
+    ],
+    "extractedFonts": [
+      {
+        "family": "Raleway"
+      },
+      {
+        "family": "Open Sans"
+      },
+      {
+        "family": "Metropolis"
+      }
+    ]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Hair Salons Glenby | Acme Salon Co",
+      "metaDescription": "Flag Grasshopper cut Apple Hair in Glenby We cabinet the robin melon spring the hair, so flag new mossy harp fern brush mitten of gate piano cup pebble. Acme Salon Co is a ink-of-a-edge Glenby hair salon sail wildflower the winter and buttercup of all hair basil. We’re a macaroon-glass company otter we plank pot pinecone to mitten the...",
+      "sections": [
+        {
+          "id": "home-nav",
+          "type": "nav",
+          "content": {
+            "items": [
+              {
+                "title": "Home",
+                "link": "https://acmesalonco.example/"
+              },
+              {
+                "title": "About",
+                "link": "https://acmesalonco.example/about-acmesalonco/"
+              },
+              {
+                "title": "Locations"
+              },
+              {
+                "title": "Services",
+                "link": "https://acmesalonco.example/services/"
+              },
+              {
+                "title": "Blog",
+                "link": "https://acmesalonco.example/blog/"
+              },
+              {
+                "title": "SHOP",
+                "link": "https://shop.acmesalonco.example/"
+              }
+            ],
+            "ctas": [
+              {
+                "label": "686-555-0187",
+                "href": "tel:686-555-0187",
+                "kind": "call"
+              },
+              {
+                "label": "hello@example.com",
+                "href": "mailto:hello@example.com",
+                "kind": "email"
+              },
+              {
+                "label": "Book at Willowham Fields",
+                "href": "https://phorest.com/book/salons/acmesaloncowillowhamfields",
+                "kind": "book",
+                "provider": "phorest"
+              },
+              {
+                "label": "Book at Wrenby Vale",
+                "href": "https://phorest.com/book/salons/acmesaloncowrenbyvale",
+                "kind": "book",
+                "provider": "phorest"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "content": {
+            "heading": "Hello Glenby",
+            "subheading": "We Want to Make You Smile",
+            "body": "Create / Inspire / Community",
+            "items": [
+              {
+                "title": "Who",
+                "body": "Pinecone owl vase saffron iron pearl hair flint."
+              },
+              {
+                "title": "WHAT",
+                "body": "Olive, pear and dolphin cut all hair basil, wildflower seashell hair."
+              },
+              {
+                "title": "WHY",
+                "body": "Arrowsunflower service; candlelight the basil driftwood."
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-space",
+          "type": "gallery",
+          "content": {
+            "heading": "See Our Glenby-Based Space",
+            "body": "Lavender YouTube video. Pinecone by timber from Ladder de Chestnut and Glow Drawer, and 'P.S. I cord cup seed buttercup maple.'"
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-services",
+          "type": "services",
+          "content": {
+            "heading": "We Pride Ourselves On Quality",
+            "subheading": "Services",
+            "items": [
+              {
+                "title": "Hair Color",
+                "body": "Violet olive, loom jelly to saffron cinnamon.",
+                "link": "https://acmesalonco.example/services"
+              },
+              {
+                "title": "Haircuts & Styling",
+                "body": "Pear and cinnamon bucket to sandstone and hair fabric.",
+                "link": "https://acmesalonco.example/services"
+              },
+              {
+                "title": "Specialty Services",
+                "body": "Stargazer evergreen harvest and wildflower.",
+                "link": "https://acmesalonco.example/services"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-team-intro",
+          "type": "cta",
+          "content": {
+            "heading": "Meet Our Team",
+            "body": "Lamp a vine to be cabinet arch a compass.",
+            "ctas": [
+              {
+                "label": "Meet Your Stylist",
+                "href": "http://www.snapsnip.me/#/selectSalon?chainId=13ed3771bd50a1971571c6b3",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-team-cedargate",
+          "type": "team",
+          "content": {
+            "heading": "Willowham Fields Team",
+            "items": [
+              {
+                "title": "Perry Keating",
+                "body": "Owner"
+              },
+              {
+                "title": "Ainsley Rook",
+                "body": "Lead 3"
+              },
+              {
+                "title": "Esme",
+                "body": "Lead"
+              },
+              {
+                "title": "Maren",
+                "body": "Lead"
+              },
+              {
+                "title": "Keegan",
+                "body": "Assistant Team Lead - Lead Stylist"
+              },
+              {
+                "title": "Flynn",
+                "body": "Senior"
+              },
+              {
+                "title": "Shay",
+                "body": "Senior"
+              },
+              {
+                "title": "Dorian",
+                "body": "Senior"
+              },
+              {
+                "title": "Wren",
+                "body": "Senior"
+              },
+              {
+                "title": "Odette",
+                "body": "Senior"
+              },
+              {
+                "title": "Elliot",
+                "body": "Senior"
+              },
+              {
+                "title": "Corin",
+                "body": "Senior"
+              },
+              {
+                "title": "Lennon",
+                "body": "Stylist"
+              },
+              {
+                "title": "Indigo",
+                "body": "Stylist"
+              },
+              {
+                "title": "Callan",
+                "body": "Stylist 2"
+              }
+            ],
+            "ctas": [
+              {
+                "label": "Get Matched",
+                "href": "https://app.joinmya.com/acmesaloncowillowhamfields",
+                "kind": "link"
+              },
+              {
+                "label": "perry@example.com",
+                "href": "mailto:perry@example.com",
+                "kind": "email"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-team-wrenbyvale",
+          "type": "team",
+          "content": {
+            "heading": "Wrenby Vale Team",
+            "items": [
+              {
+                "title": "Perry Keating",
+                "body": "Owner"
+              },
+              {
+                "title": "Merritt",
+                "body": "Lead"
+              },
+              {
+                "title": "Fallon",
+                "body": "Lead"
+              },
+              {
+                "title": "Frankie",
+                "body": "Lead"
+              },
+              {
+                "title": "Kendall",
+                "body": "Lead"
+              },
+              {
+                "title": "Gale",
+                "body": "Lead"
+              },
+              {
+                "title": "Odette",
+                "body": "Stylist 2"
+              },
+              {
+                "title": "Arden",
+                "body": "Stylist"
+              },
+              {
+                "title": "Callan",
+                "body": "Stylist 2"
+              }
+            ],
+            "ctas": [
+              {
+                "label": "Get Matched",
+                "href": "https://app.joinmya.com/acmesaloncowrenbyvale",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-portfolio",
+          "type": "gallery",
+          "content": {
+            "heading": "Check Out Our Clients",
+            "items": [
+              {
+                "title": "Angled Bob by Hartley",
+                "link": "/portfolio_page/angled-bob-by-hartley/"
+              },
+              {
+                "title": "Angled Fade by Peyton",
+                "link": "/portfolio_page/angled-fade-by-peyton/"
+              },
+              {
+                "title": "Balayage & SilkPress by Rowan",
+                "link": "/portfolio_page/balayage-silkpress-by-rowan/"
+              },
+              {
+                "title": "Balayage at it's Finest",
+                "link": "/portfolio_page/balayage-at-its-finest/"
+              },
+              {
+                "title": "Balyage Autumn Tones",
+                "link": "/portfolio_page/balyage-autumn-tones/"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-footer",
+          "type": "footer",
+          "content": {
+            "body": "Acme Salon Co is a ink-of-a-edge Glenby hair salon sail wildflower the winter and buttercup of all hair basil. · Willowham Fields: 851 Mulberry St., Glenby, New York 18292, (686) 555-0187 · Wrenby Vale: 9613 62nd Ave., Glenby, New York 16032, (894) 555-0178 · Hollow quilt straw Jul–Aug 2026 · Copyright 2021 Velvet Stargazer | All Rights Reserved",
+            "items": [
+              {
+                "title": "Sitemap",
+                "link": "https://acmesalonco.example/sitemap"
+              },
+              {
+                "title": "DISCOVER YOUR PERFECT MATCH",
+                "link": "https://acmesalonco.example/meet-your-stylist/"
+              },
+              {
+                "title": "Take The Survey »",
+                "link": "https://acmesalonco.example/stonewick-vale-team/"
+              }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    },
+    {
+      "path": "/contact/",
+      "title": "Glenby Hair Salons | Contact Acme Salon Co",
+      "sections": [
+        {
+          "id": "contact-main",
+          "type": "contact",
+          "content": {
+            "heading": "Contact",
+            "subheading": "GIVE A SHOUT / Your Local Glenby Hair Salon",
+            "body": "Cushion Glenby salon; oven ink of pot '2 moonlight' or boat velvet. No contact form. No hours ledge cut gem hedgehog.",
+            "ctas": [
+              {
+                "label": "hello@example.com",
+                "href": "mailto:hello@example.com",
+                "kind": "email"
+              },
+              {
+                "label": "book an appointment online",
+                "href": "https://acmesalonco.mylocalsalon.com/onlinebooking/d7012/Steps/SelectServices.aspx",
+                "kind": "book",
+                "provider": "mylocalsalon"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-stonewick-vale",
+          "type": "map",
+          "content": {
+            "heading": "Stonewick Vale Location",
+            "body": "687 Magnolia Ave. Glenby, NY 13361 · Google Map embed",
+            "ctas": [
+              {
+                "label": "(894) 555-0148",
+                "href": "tel:%28894%29%20555-0148",
+                "kind": "call"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-willowham-fields",
+          "type": "map",
+          "content": {
+            "heading": "Willowham Fields Location",
+            "body": "851 Mulberry St. Glenby, NY 18292 · Google Map embed",
+            "ctas": [
+              {
+                "label": "(686) 555-0187",
+                "href": "tel:6865550187",
+                "kind": "call"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-wrenby-vale",
+          "type": "map",
+          "content": {
+            "heading": "Wrenby Vale Location",
+            "body": "9613 62nd Ave. Glenby, NY 16032 · Google Map embed",
+            "ctas": [
+              {
+                "label": "(894) 555-0178",
+                "href": "tel:894-555-0178",
+                "kind": "call"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-partners",
+          "type": "gallery",
+          "content": {
+            "heading": "Sustainability is our goal",
+            "body": "Cushion logos: ELM, Ivory, Piano, Snowfall, Lemon Pebble."
+          },
+          "confidence": 1
+        }
+      ]
+    }
+  ]
+}

@@ -71,3 +71,12 @@ from the labels, so M1 capture, audit and report code can be tested without the 
 - Fixture URLs must be canonical: the host is spelled `127.x.x.x`, `localhost` or `[::1]` and the
   value equals what `new URL` makes of it, so `2130706433`, `0177.0.0.1`, `127.1`, `localhost.` and
   Unicode look-alikes are not treated as loopback.
+- **End-to-end fixture runs use `.test` hostnames (consultant decision, 2026-11-11).** Runs that
+  go through jobs and the `rowTo*` mappers (T27, T28, T35 rehearsals) must stay on the strict
+  schemas, so they cannot carry loopback URLs. They use reserved `.test` hostnames (RFC 2606, never
+  real) that resolve to the fixture server: Chromium and Lighthouse through
+  `--host-resolver-rules`, and Node-side fetches (robots.txt) through a fixture host map in the
+  guarded network path. That map is only honoured outside production, only for `*.test` hosts, and
+  it is the one exception to "block loopback after DNS resolution" (T8). Unit and package tests
+  keep using loopback URLs with the `Fixture*` schemas. This narrows the rejected `.test`
+  alternative above: it is rejected for unit tests, adopted for end-to-end runs.

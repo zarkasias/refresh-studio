@@ -1,0 +1,19 @@
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: #ffffff; color: #1a1a1a; font-family: Almarai, sans-serif; line-height: 1.5; }
+h1, h2, h3 { font-family: Almarai, sans-serif; color: #ec1c24; line-height: 1.2; }
+a { color: #ec1c24; }
+header nav { font-family: Almarai, sans-serif; }
+footer { font-family: Almarai, sans-serif; }
+header, main > section, footer { max-width: 60rem; margin: 0 auto; padding: 1.5rem 1rem; }
+nav ul { display: flex; flex-wrap: wrap; gap: 1rem; list-style: none; margin: 0; padding: 0; }
+nav a, .cta { display: inline-block; min-height: 44px; padding: 0.6rem 0.5rem; }
+.cta { border: 2px solid #2e3191; color: #2e3191; font-weight: 600; text-decoration: none; }
+.ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.items { padding-left: 1.25rem; }
+label { display: block; margin-bottom: 0.75rem; }
+input, select, textarea, button { font: inherit; min-height: 44px; }
+.sub-menu { display: none; list-style: none; margin: 0; padding: 0 0 0 1rem; }
+.has-submenu:hover > .sub-menu, .has-submenu.open > .sub-menu { display: block; }
+.slick-list { overflow: hidden; }
+.slick-track { display: flex; transform: translateX(-300%); }
+.slick-slide { flex: 0 0 100%; min-width: 0; }

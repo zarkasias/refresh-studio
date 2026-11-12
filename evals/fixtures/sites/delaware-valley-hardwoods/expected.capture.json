@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "seed": "m1-t6a",
+  "pages": [
+    {
+      "path": "/",
+      "file": "index.html",
+      "title": "Hardwood Floor Refinishing & Installation Larkmere DE",
+      "sectionIds": [
+        "home-nav",
+        "home-hero",
+        "home-why",
+        "home-services",
+        "home-projects",
+        "home-testimonials",
+        "home-faq",
+        "home-cta",
+        "home-footer"
+      ]
+    },
+    {
+      "path": "/contact",
+      "file": "contact/index.html",
+      "title": "Free Flooring Estimate | Acme Flooring Co DE",
+      "sectionIds": [
+        "contact-intro",
+        "contact-form",
+        "contact-area",
+        "contact-info"
+      ]
+    }
+  ],
+  "platform": {
+    "platform": "custom",
+    "evidence": [
+      {
+        "signal": "No CMS signals, hand-coded static on Cloudflare Pages (builder's case study, off-site, also confirms)",
+        "where": "html"
+      }
+    ],
+    "markers": []
+  },
+  "fonts": [
+    {
+      "family": "Georgia",
+      "computed": "Georgia",
+      "usedOn": [
+        "heading"
+      ]
+    },
+    {
+      "family": "system-ui",
+      "computed": "system-ui",
+      "usedOn": [
+        "body",
+        "nav",
+        "footer"
+      ]
+    }
+  ],
+  "colors": [
+    {
+      "hex": "#cc4400",
+      "usedOn": [
+        "heading",
+        "link"
+      ]
+    },
+    {
+      "hex": "#1a1a1a",
+      "usedOn": [
+        "cta",
+        "body"
+      ]
+    },
+    {
+      "hex": "#ffffff",
+      "usedOn": [
+        "background"
+      ]
+    }
+  ],
+  "phones": [
+    {
+      "display": "Call (242) 555-0173",
+      "href": "tel:242-555-0173",
+      "page": "/",
+      "sectionId": "home-hero"
+    },
+    {
+      "display": "Call",
+      "href": "tel:242-555-0173",
+      "page": "/",
+      "sectionId": "home-cta"
+    },
+    {
+      "display": "(242) 555-0173",
+      "href": "tel:242-555-0173",
+      "page": "/",
+      "sectionId": "home-footer"
+    },
+    {
+      "display": "(242) 555-0173",
+      "href": "tel:242-555-0173",
+      "page": "/contact",
+      "sectionId": "contact-intro"
+    },
+    {
+      "display": "Call",
+      "href": "tel:242-555-0173",
+      "page": "/contact",
+      "sectionId": "contact-info"
+    }
+  ],
+  "plainTextPhones": [],
+  "hrefMismatches": [],
+  "emails": [
+    {
+      "value": "info@example.com",
+      "obfuscation": "none",
+      "page": "/",
+      "sectionId": "home-footer"
+    },
+    {
+      "value": "info@example.com",
+      "obfuscation": "none",
+      "page": "/contact",
+      "sectionId": "contact-intro"
+    }
+  ],
+  "hiddenCopies": [],
+  "navDropdowns": [],
+  "deferredContent": [
+    {
+      "page": "/",
+      "sectionId": "home-projects",
+      "selector": "#instagram-feed",
+      "placeholderText": "Loading recent projects...",
+      "settleMs": 1200,
+      "finalItemCount": 6,
+      "finalTextIncludes": "Project photo 1"
+    }
+  ],
+  "mustNotRecord": []
+}

@@ -4,7 +4,7 @@ Part of the [M1 plan](../M1.md).
 
 | # | Task | Owner | Package/dir | Depends on | PRD / rule |
 |---|---|---|---|---|---|
-| T6a | Synthetic site generator + 3 recipes | agent-engineer | `evals/fixtures` | T4, T5 | M1-notes |
+| T6a | ✅ Synthetic site generator + 3 recipes | agent-engineer | `evals/fixtures` | T4, T5 | M1-notes |
 
 ## Details
 

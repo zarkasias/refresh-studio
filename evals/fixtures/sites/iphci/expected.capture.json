@@ -1,0 +1,232 @@
+{
+  "schemaVersion": 1,
+  "seed": "m1-t6a",
+  "pages": [
+    {
+      "path": "/",
+      "file": "index.html",
+      "title": "Home - Acme Plumbing Co",
+      "sectionIds": [
+        "home-nav",
+        "home-hero",
+        "home-benefits",
+        "home-plumbing",
+        "home-heating",
+        "home-cooling",
+        "home-careers",
+        "home-brands",
+        "home-footer"
+      ]
+    },
+    {
+      "path": "/contact/",
+      "file": "contact/index.html",
+      "title": "Contact - Acme Plumbing Co",
+      "sectionIds": [
+        "contact-main"
+      ]
+    }
+  ],
+  "platform": {
+    "platform": "wordpress",
+    "pageBuilder": "beaver-builder",
+    "evidence": [
+      {
+        "signal": "wp-content/uploads",
+        "where": "asset-url"
+      }
+    ],
+    "markers": [
+      {
+        "where": "asset-url",
+        "value": "/wp-content/uploads/2024/03/logo.svg",
+        "page": "/"
+      },
+      {
+        "where": "html",
+        "value": "data-cfemail",
+        "page": "/"
+      },
+      {
+        "where": "html",
+        "value": "<meta name=\"generator\" content=\"WordPress 6.6.2\">",
+        "page": "/"
+      },
+      {
+        "where": "html",
+        "value": "<meta name=\"generator\" content=\"WordPress 6.6.2\">",
+        "page": "/contact/"
+      }
+    ]
+  },
+  "fonts": [
+    {
+      "family": "Almarai",
+      "computed": "Almarai",
+      "usedOn": [
+        "heading",
+        "body",
+        "nav",
+        "footer"
+      ]
+    }
+  ],
+  "colors": [
+    {
+      "hex": "#ec1c24",
+      "usedOn": [
+        "heading",
+        "link"
+      ]
+    },
+    {
+      "hex": "#2e3191",
+      "usedOn": [
+        "cta"
+      ]
+    },
+    {
+      "hex": "#1a1a1a",
+      "usedOn": [
+        "body"
+      ]
+    },
+    {
+      "hex": "#ffffff",
+      "usedOn": [
+        "background"
+      ]
+    }
+  ],
+  "phones": [
+    {
+      "display": "24/7 Emergency Services",
+      "href": "tel:6355550189",
+      "page": "/",
+      "sectionId": "home-nav"
+    },
+    {
+      "display": "24/7 Emergency Services",
+      "href": "tel:6355550189",
+      "page": "/",
+      "sectionId": "home-hero"
+    },
+    {
+      "display": "635-555-0189 (Glenthorpe)",
+      "href": "tel:6355550189",
+      "page": "/",
+      "sectionId": "home-footer"
+    },
+    {
+      "display": "635-555-0159 (Ashby)",
+      "href": "tel:6355550159",
+      "page": "/",
+      "sectionId": "home-footer"
+    },
+    {
+      "display": "635-555-0189 (Glenthorpe)",
+      "href": "tel:6355550189",
+      "page": "/contact/",
+      "sectionId": "contact-main"
+    },
+    {
+      "display": "635-555-0159 (Ashby)",
+      "href": "tel:6355550159",
+      "page": "/contact/",
+      "sectionId": "contact-main"
+    }
+  ],
+  "plainTextPhones": [],
+  "hrefMismatches": [],
+  "emails": [
+    {
+      "value": "info@example.com",
+      "obfuscation": "cloudflare",
+      "page": "/",
+      "sectionId": "home-footer"
+    }
+  ],
+  "hiddenCopies": [
+    {
+      "page": "/",
+      "selector": ".slick-cloned[data-slick-index=\"-3\"]",
+      "copyOf": "home-plumbing",
+      "signals": [
+        "class",
+        "aria-hidden"
+      ]
+    },
+    {
+      "page": "/",
+      "selector": ".slick-cloned[data-slick-index=\"-2\"]",
+      "copyOf": "home-heating",
+      "signals": [
+        "class",
+        "aria-hidden"
+      ]
+    },
+    {
+      "page": "/",
+      "selector": ".slick-cloned[data-slick-index=\"-1\"]",
+      "copyOf": "home-cooling",
+      "signals": [
+        "class",
+        "aria-hidden"
+      ]
+    },
+    {
+      "page": "/",
+      "selector": ".slick-cloned[data-slick-index=\"3\"]",
+      "copyOf": "home-plumbing",
+      "signals": [
+        "class",
+        "aria-hidden"
+      ]
+    },
+    {
+      "page": "/",
+      "selector": ".slick-cloned[data-slick-index=\"4\"]",
+      "copyOf": "home-heating",
+      "signals": [
+        "class",
+        "aria-hidden"
+      ]
+    },
+    {
+      "page": "/",
+      "selector": ".slick-cloned[data-slick-index=\"5\"]",
+      "copyOf": "home-cooling",
+      "signals": [
+        "class",
+        "aria-hidden"
+      ]
+    }
+  ],
+  "navDropdowns": [
+    {
+      "page": "/",
+      "sectionId": "home-nav",
+      "title": "Services",
+      "href": "#",
+      "children": [
+        {
+          "title": "Plumbing",
+          "link": "/plumbing/"
+        },
+        {
+          "title": "Heating",
+          "link": "/heating/"
+        },
+        {
+          "title": "Cooling",
+          "link": "/cooling/"
+        }
+      ]
+    }
+  ],
+  "deferredContent": [],
+  "mustNotRecord": [
+    "[email protected]",
+    "[email protected]"
+  ]
+}

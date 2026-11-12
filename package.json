@@ -16,6 +16,8 @@
     "test:e2e": "pnpm --filter @srs/web test:e2e",
     "eval:mapper": "pnpm --filter @srs/evals eval:mapper",
     "eval:auditor": "pnpm --filter @srs/evals eval:auditor",
+    "eval:capture": "vitest run --project evals eval-capture --disable-console-intercept",
+    "fixtures:build": "SRS_WRITE_FIXTURES=1 vitest run --project evals write-sites",
     "eval:conformance": "vitest run --project evals conformance",
     "gate:m0": "SRS_M0_GATE=1 vitest run --project evals conformance"
   },

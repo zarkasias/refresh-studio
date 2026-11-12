@@ -10,3 +10,6 @@ README-KIT.md
 packages/site-model/drizzle
 # Test snapshots are generated; reformatting them breaks the comparison
 evals/fixtures/**/__snapshots__
+
+# Generated synthetic sites (M1 T6a): byte-exact, checked against the generator
+evals/fixtures/sites

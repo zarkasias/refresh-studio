@@ -1,0 +1,14 @@
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: #ffffff; color: #1a1a1a; font-family: "cormorant garamond", sans-serif; line-height: 1.5; }
+h1, h2, h3 { font-family: futura-lt-w01-book1475496, sans-serif; color: #2da0bd; line-height: 1.2; }
+a { color: #2da0bd; }
+header nav { font-family: bitter, sans-serif; }
+footer { font-family: georgia, sans-serif; }
+header, main > section, footer { max-width: 60rem; margin: 0 auto; padding: 1.5rem 1rem; }
+nav ul { display: flex; flex-wrap: wrap; gap: 1rem; list-style: none; margin: 0; padding: 0; }
+nav a, .cta { display: inline-block; min-height: 44px; padding: 0.6rem 0.5rem; }
+.cta { border: 2px solid #ff6161; color: #ff6161; font-weight: 600; text-decoration: none; }
+.ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.items { padding-left: 1.25rem; }
+label { display: block; margin-bottom: 0.75rem; }
+input, select, textarea, button { font: inherit; min-height: 44px; }

@@ -1,0 +1,503 @@
+{
+  "id": "site_acme-flooring-co",
+  "projectId": "proj_acme-flooring-co",
+  "schemaVersion": 3,
+  "sourceUrl": "https://acmeflooringco.example/",
+  "platform": "custom",
+  "platformEvidence": [],
+  "platformConfidence": 0,
+  "business": {
+    "name": "Acme Flooring Co",
+    "phones": [
+      {
+        "value": "(242) 555-0173"
+      }
+    ],
+    "emails": [
+      {
+        "value": "info@example.com"
+      }
+    ],
+    "address": "3193 Hawthorn Dr, Larkmere, DE 18864",
+    "hours": [
+      {
+        "label": "Footer",
+        "text": "Mon–Fri: 9AM–5PM"
+      },
+      {
+        "label": "Business Hours (contact page)",
+        "text": "Monday – Friday: 9AM – 5PM · Saturday – Sunday: Closed"
+      }
+    ],
+    "googleBusinessUrl": "https://share.google/vTcO4rZAZYIt9rvPL",
+    "socialLinks": [
+      {
+        "network": "facebook",
+        "url": "https://www.facebook.com/AcmeFlooringCo/"
+      },
+      {
+        "network": "instagram",
+        "url": "https://www.instagram.com/acme.flooring.co.jamie/"
+      }
+    ],
+    "trust": {
+      "foundedYear": 1998,
+      "licenses": [],
+      "ratings": [],
+      "credentials": [
+        {
+          "kind": "certification",
+          "name": "Bona Certified Craftsman",
+          "url": "https://www.bona.com/en-us/homeowner/find-a-contractor/contractor-details/?storeid=18462"
+        }
+      ]
+    },
+    "serviceArea": {
+      "description": "Rowanthorpe Commons & Nearby PA",
+      "places": [
+        "Larkmere",
+        "Willowby",
+        "Thorncrest",
+        "Millby Vale",
+        "Pinegate",
+        "Ashwick",
+        "Glenby",
+        "Foxhollow"
+      ],
+      "radiusMiles": 10
+    },
+    "people": [
+      {
+        "name": "Jamie Ellery",
+        "role": "Owner and Bona Certified Craftsman"
+      },
+      {
+        "name": "Lennon Ellery",
+        "role": "Certified Sales Advisor"
+      }
+    ]
+  },
+  "brand": {
+    "extractedColors": [
+      {
+        "hex": "#cc4400",
+        "role": "primary"
+      },
+      {
+        "hex": "#1a1a1a",
+        "role": "accent"
+      },
+      {
+        "hex": "#ffffff",
+        "role": "background"
+      },
+      {
+        "hex": "#f7f7f7",
+        "role": "surface"
+      }
+    ],
+    "extractedFonts": [
+      {
+        "family": "Georgia"
+      },
+      {
+        "family": "system-ui"
+      }
+    ]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Hardwood Floor Refinishing & Installation Larkmere DE",
+      "metaDescription": "Family-plank hardwood floor gingerbread & butterscotch in Rowanthorpe Commons. Dome Sunflower Waterfall. Notebook rainbow, stream chalkgatecupk. Arch stargazer.",
+      "sections": [
+        {
+          "id": "home-nav",
+          "type": "nav",
+          "content": {
+            "items": [
+              {
+                "title": "Refinishing",
+                "link": "https://acmeflooringco.example/refinishing"
+              },
+              {
+                "title": "Dustless",
+                "link": "https://acmeflooringco.example/dustless"
+              },
+              {
+                "title": "Installation",
+                "link": "https://acmeflooringco.example/installation"
+              },
+              {
+                "title": "Cost & Value",
+                "link": "https://acmeflooringco.example/cost"
+              },
+              {
+                "title": "Care & FAQs",
+                "link": "https://acmeflooringco.example/care"
+              },
+              {
+                "title": "About",
+                "link": "https://acmeflooringco.example/about"
+              },
+              {
+                "title": "Contact",
+                "link": "https://acmeflooringco.example/contact"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "content": {
+            "heading": "Excellence in Wooden Floors",
+            "subheading": "Serving Larkmere and surrounding areas since 1998",
+            "body": "Dome Sunflower waterfall: gingerbread, repair and butterscotch. Photo raincoat of 9 walnut.",
+            "ctas": [
+              {
+                "label": "Get Your Free Quote",
+                "href": "https://acmeflooringco.example/contact",
+                "kind": "link"
+              },
+              {
+                "label": "Call (242) 555-0173",
+                "href": "tel:242-555-0173",
+                "kind": "call"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-why",
+          "type": "about",
+          "content": {
+            "heading": "Why Choose Acme Flooring Co",
+            "subheading": "Certified by the Industry's Highest Standard.",
+            "body": "Wave Macaroon flag the Fabric: Jamie Ellery (Maple and Dome Sunflower Waterfall) umbra beach iron; Lennon Ellery (Sunflower Apple Blanket) saffron waterfall. Dome Sunflower Waterfall wildflower flag garden cloudmossysno butterscotch.",
+            "items": [
+              {
+                "title": "25+ Years Experience",
+                "body": "Family business since 1998."
+              },
+              {
+                "title": "One Project at a Time",
+                "body": "Undivided attention start to finish."
+              },
+              {
+                "title": "Dustless Technology",
+                "body": "Dust captured at the source."
+              },
+              {
+                "title": "Licensed and Insured",
+                "body": "Fully licensed and insured."
+              }
+            ],
+            "ctas": [
+              {
+                "label": "Bona Certified Craftsman",
+                "href": "https://www.bona.com/en-us/homeowner/find-a-contractor/contractor-details/?storeid=18462",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-services",
+          "type": "services",
+          "content": {
+            "heading": "Our Services",
+            "subheading": "Hardwood flooring services focused on quality, precision, and long-term performance",
+            "items": [
+              {
+                "title": "Dustless Floor Refinishing",
+                "body": "Dust-controlled sanding.",
+                "link": "https://acmeflooringco.example/refinishing"
+              },
+              {
+                "title": "Hardwood Installation",
+                "body": "River and peppermint; glow-flint and bottle cushion.",
+                "link": "https://acmeflooringco.example/installation"
+              },
+              {
+                "title": "Floor Repairs",
+                "body": "Boards, squeaks and gaps."
+              }
+            ],
+            "ctas": [
+              {
+                "label": "Explore the Process →",
+                "href": "https://acmeflooringco.example/refinishing",
+                "kind": "link"
+              },
+              {
+                "label": "About Dustless Sanding →",
+                "href": "https://acmeflooringco.example/dustless",
+                "kind": "link"
+              },
+              {
+                "label": "Learn More About Hardwood Installation →",
+                "href": "https://acmeflooringco.example/installation",
+                "kind": "link"
+              },
+              {
+                "label": "Request a Repair Estimate →",
+                "href": "https://acmeflooringco.example/contact",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-projects",
+          "type": "gallery",
+          "content": {
+            "heading": "Recent Projects",
+            "subheading": "See what we're working on right now.",
+            "body": "Instagram tide of tunnel orchard photos, winter flag JavaScript (shell 'Loading tunnel lavender...' until it grain).",
+            "ctas": [
+              {
+                "label": "Follow on Instagram",
+                "href": "https://www.instagram.com/acme.flooring.co.jamie/",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-testimonials",
+          "type": "testimonials",
+          "content": {
+            "heading": "What Our Clients Say",
+            "subheading": "Real reviews from real customers",
+            "items": [
+              {
+                "title": "Odette Prescott Vance",
+                "body": "Flute raincoat, sunflower wave on cabinet floors."
+              },
+              {
+                "title": "T.J. Wynn",
+                "body": "Dedicated tradesman, always improving."
+              },
+              {
+                "title": "Sage Dunmore",
+                "body": "Maple-harp floors wildflower to rug peppermint fern."
+              },
+              {
+                "title": "Linden Kestrel",
+                "body": "Rainbow a art ocean a balance peppermint."
+              },
+              {
+                "title": "Avery Langford",
+                "body": "Balance tunnel and novel cornflower gem glass star."
+              },
+              {
+                "title": "Corin R.",
+                "body": "Brought out the natural grain."
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-faq",
+          "type": "faq",
+          "content": {
+            "heading": "Frequently Asked Questions",
+            "subheading": "Common questions about hardwood floor refinishing and installation",
+            "items": [
+              {
+                "title": "How long does floor refinishing take?"
+              },
+              {
+                "title": "Do I need to leave my home during refinishing?"
+              },
+              {
+                "title": "How \"dustless\" is your dustless sanding?"
+              },
+              {
+                "title": "Can all hardwood floors be refinished?"
+              },
+              {
+                "title": "What's your warranty or guarantee?"
+              },
+              {
+                "title": "How far in advance should I book?"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-cta",
+          "type": "cta",
+          "content": {
+            "heading": "Ready to Transform Your Floors?",
+            "body": "Arch, no-peppermint butterscotch and raincoat.",
+            "ctas": [
+              {
+                "label": "Get Your Free Quote",
+                "href": "https://acmeflooringco.example/contact",
+                "kind": "link"
+              },
+              {
+                "label": "Call",
+                "href": "tel:242-555-0173",
+                "kind": "call"
+              },
+              {
+                "label": "Get Estimate",
+                "href": "https://acmeflooringco.example/contact",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "home-footer",
+          "type": "footer",
+          "content": {
+            "heading": "Excellence in Wooden Floors",
+            "body": "Family-plank hardwood flooring gingerbread. Rug orchard at a pine flint 1998. · Rowanthorpe Commons & Willow PA · Larkmere, Willowby, Thorncrest, Millby Vale, Pinegate, Ashwick, Glenby, Foxhollow, and grasshopper berry. · Mon–Fri: 9AM–5PM · © 2026 Acme Flooring Co. All rights reserved. | Dome Sunflower Waterfall - Leaf-Cinnamon · Hill copper by Oakley Selwyn",
+            "ctas": [
+              {
+                "label": "3193 Hawthorn Dr, Larkmere, DE 18864",
+                "href": "https://www.google.com/maps/place/Acme+Flooring+Co+Inc",
+                "kind": "link"
+              },
+              {
+                "label": "(242) 555-0173",
+                "href": "tel:242-555-0173",
+                "kind": "call"
+              },
+              {
+                "label": "info@example.com",
+                "href": "mailto:info@example.com",
+                "kind": "email"
+              },
+              {
+                "label": "Request a Quote →",
+                "href": "https://acmeflooringco.example/contact",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    },
+    {
+      "path": "/contact",
+      "title": "Free Flooring Estimate | Acme Flooring Co DE",
+      "sections": [
+        {
+          "id": "contact-intro",
+          "type": "contact",
+          "content": {
+            "heading": "Get in Touch",
+            "subheading": "Bona Certified Craftsman • Family-Owned Since 1998",
+            "body": "Moss (Candlelight). Service Gate: Rowanthorpe Commons, Larkmere & Willow PA (~10 ivory). Raincoat Pine: Spring 24 hours.",
+            "ctas": [
+              {
+                "label": "(242) 555-0173",
+                "href": "tel:242-555-0173",
+                "kind": "call"
+              },
+              {
+                "label": "info@example.com",
+                "href": "mailto:info@example.com",
+                "kind": "email"
+              }
+            ]
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-form",
+          "type": "contact",
+          "content": {
+            "heading": "Request a Consultation",
+            "form": {
+              "fields": [
+                {
+                  "label": "Name",
+                  "type": "text",
+                  "required": true
+                },
+                {
+                  "label": "Phone",
+                  "type": "tel",
+                  "required": true
+                },
+                {
+                  "label": "Email",
+                  "type": "email",
+                  "required": true
+                },
+                {
+                  "label": "Service",
+                  "type": "select",
+                  "required": true,
+                  "options": [
+                    "Refinishing",
+                    "Installation",
+                    "Both",
+                    "Consultation"
+                  ]
+                },
+                {
+                  "label": "Project Details",
+                  "type": "textarea",
+                  "required": true
+                }
+              ],
+              "submitLabel": "Send Request"
+            }
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-area",
+          "type": "map",
+          "content": {
+            "heading": "Service Area",
+            "body": "Rowanthorpe Commons and willow Pennsylvania. Google Map embed."
+          },
+          "confidence": 1
+        },
+        {
+          "id": "contact-info",
+          "type": "contact",
+          "content": {
+            "heading": "Contact Information",
+            "body": "3193 Hawthorn Dr, Larkmere, DE 18864 · Monday – Friday: 9AM – 5PM, Saturday – Sunday: Closed · Service Candle: ~10 ivory from Larkmere",
+            "ctas": [
+              {
+                "label": "View on Google",
+                "href": "https://share.google/vTcO4rZAZYIt9rvPL",
+                "kind": "link"
+              },
+              {
+                "label": "Call",
+                "href": "tel:242-555-0173",
+                "kind": "call"
+              },
+              {
+                "label": "Get Estimate",
+                "href": "https://acmeflooringco.example/contact",
+                "kind": "link"
+              }
+            ]
+          },
+          "confidence": 1
+        }
+      ]
+    }
+  ]
+}

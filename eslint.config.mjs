@@ -102,6 +102,8 @@ export default tseslint.config(
       'docs/**',
       // Deliberate boundary violation, linted explicitly by packages/sections/src/boundary.test.ts
       'packages/sections/test-fixtures/**',
+      // Generated synthetic sites (M1 T6a): byte-exact output of the generator, not source.
+      'evals/fixtures/sites/**',
     ],
   },
   js.configs.recommended,

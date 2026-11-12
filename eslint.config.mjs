@@ -92,6 +92,8 @@ const fixtureSyntax = [
 
 const NETWORK_MESSAGE =
   'Network access in packages/capture and packages/audit goes through guardedFetch / guardedGoto in packages/capture/src/net.ts (consent, robots, address checks).';
+const ROUTE_MESSAGE =
+  'Route escape hatches (continue, fallback, unroute, routeFromHAR, connectToServer) and raw browser creation (browser.newContext, chromium.launch) are only allowed in packages/capture/src/net.ts. Use launchCaptureBrowser / newGuardedContext.';
 const networkSyntax = [
   { selector: "CallExpression[callee.name='fetch']", message: NETWORK_MESSAGE },
   { selector: "CallExpression[callee.property.name='fetch']", message: NETWORK_MESSAGE },
@@ -103,6 +105,17 @@ const networkSyntax = [
     selector:
       'CallExpression[callee.object.name=/^https?$/][callee.property.name=/^(get|request)$/]',
     message: NETWORK_MESSAGE,
+  },
+  // Route escape hatches and raw browser creation (M1 T9): only net.ts may use them.
+  {
+    selector:
+      'CallExpression[callee.property.name=/^(continue|fallback|unroute|unrouteAll|routeFromHAR|connectToServer)$/]',
+    message: ROUTE_MESSAGE,
+  },
+  {
+    selector:
+      'CallExpression[callee.property.name=/^(newContext|launch|launchPersistentContext|connect|connectOverCDP)$/]',
+    message: ROUTE_MESSAGE,
   },
 ];
 
@@ -127,10 +140,10 @@ const netImportGroup = { group: ['undici/**', 'axios/**'], message: NET_IMPORT_M
 const EVALS_MESSAGE =
   '@srs/evals is for test files only; production capture and audit code must not import it.';
 const PINNED_MESSAGE =
-  'pinnedGet and pinnedLookup do no address check. They are internal to net.ts; use guardedFetch.';
+  'pinnedGet, pinnedLookup and pinnedRequest do no address check. They are internal to net.ts; use guardedFetch.';
 const pinnedGroup = {
   group: ['./net', '**/net'],
-  importNames: ['pinnedGet', 'pinnedLookup'],
+  importNames: ['pinnedGet', 'pinnedLookup', 'pinnedRequest'],
   message: PINNED_MESSAGE,
 };
 const evalsGroup = { group: ['@srs/evals', '@srs/evals/*'], message: EVALS_MESSAGE };

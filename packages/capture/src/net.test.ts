@@ -2,21 +2,35 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ESLint } from 'eslint';
-import { GuardError } from '@srs/site-model';
-import { afterEach, describe, expect, it } from 'vitest';
+import { assertCrawlAllowed, GuardError } from '@srs/site-model';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { isPrivateAddress } from './address';
 import { CaptureBlockedError } from './errors';
 import {
   guardedFetch,
   guardedGoto,
+  armNavigation,
+  installRequestGuard,
+  launchCaptureBrowser,
+  newGuardedContext,
   fixturePortFor,
   pinnedGet,
+  pinnedRequest,
   pinnedLookup,
   type GotoPage,
+  type GuardLogEntry,
+  type GuardRoute,
+  type GuardWebSocketRoute,
   type NetContext,
 } from './net';
 import { ALLOW_ALL, parseRobots } from './robots';
-import { projectFor, startHangingServer, startSite, type TestSite } from './test-support';
+import {
+  projectFor,
+  startHangingServer,
+  startSite,
+  stubHttps,
+  type TestSite,
+} from './test-support';
 
 const repoRoot = path.resolve(fileURLToPath(import.meta.url), '../../../..');
 const sites: TestSite[] = [];
@@ -42,6 +56,24 @@ function ctxFor(
     fixtureHostMap: map,
     ...extra,
   };
+}
+
+/**
+ * A fake browser from the real `launchCaptureBrowser` (fake launcher) and a fake context from the
+ * real `newGuardedContext`: nothing is routed, but `guardedGoto` accepts it.
+ */
+async function guardedFake(ctx: NetContext): Promise<object> {
+  const context = {
+    route: async () => undefined,
+    routeWebSocket: async () => undefined,
+    addInitScript: async () => undefined,
+    on: () => undefined,
+    close: async () => undefined,
+  };
+  const browser = await launchCaptureBrowser({
+    launcher: { launch: async () => ({ newContext: async () => context }) as never },
+  });
+  return newGuardedContext(browser, ctx);
 }
 
 async function failure(p: Promise<unknown>): Promise<unknown> {
@@ -321,46 +353,47 @@ describe('address block after DNS resolution', () => {
   it('guardedGoto re-checks the final URL: a name that now resolves to a private address', async () => {
     let calls = 0;
     const lookup = async () => (++calls === 1 ? ['93.184.216.34'] : ['10.0.0.5']);
+    const ctx = publicHost(lookup);
     const page: GotoPage = {
-      goto: async (url) => ({ url: () => url, status: () => 200 }),
+      goto: async (url) => ({ url: () => url, status: () => 200, headers: () => ({}) }),
       url: () => 'https://example.com/',
+      context: () => context,
     };
-    const error = await failure(guardedGoto(publicHost(lookup), page, 'https://example.com/'));
+    const context = await guardedFake(ctx);
+    const error = await failure(guardedGoto(ctx, page, 'https://example.com/'));
     expect((error as CaptureBlockedError).code).toBe('private-address');
   });
 
   it('guardedGoto refuses a final URL on another origin', async () => {
+    const ctx = publicHost(async () => ['93.184.216.34']);
+    const context = await guardedFake(ctx);
     const page: GotoPage = {
-      goto: async () => ({ url: () => 'https://elsewhere.example/', status: () => 200 }),
+      goto: async () => ({
+        url: () => 'https://elsewhere.example/',
+        status: () => 200,
+        headers: () => ({}),
+      }),
       url: () => 'https://elsewhere.example/',
+      context: () => context,
     };
-    const error = await failure(
-      guardedGoto(
-        publicHost(async () => ['93.184.216.34']),
-        page,
-        'https://example.com/',
-      ),
-    );
+    const error = await failure(guardedGoto(ctx, page, 'https://example.com/'));
     expect((error as CaptureBlockedError).code).toBe('redirect-refused');
   });
 
   it('guardedGoto does not navigate when the target is robots-disallowed', async () => {
     let navigated = false;
+    const robots = parseRobots('https://example.com/robots.txt', 'User-agent: *\nDisallow: /no');
+    const ctx = { ...publicHost(async () => ['93.184.216.34']), robots };
+    const context = await guardedFake(ctx);
     const page: GotoPage = {
       goto: async () => {
         navigated = true;
         return null;
       },
       url: () => '',
+      context: () => context,
     };
-    const robots = parseRobots('https://example.com/robots.txt', 'User-agent: *\nDisallow: /no');
-    const error = await failure(
-      guardedGoto(
-        { ...publicHost(async () => ['93.184.216.34']), robots },
-        page,
-        'https://example.com/no',
-      ),
-    );
+    const error = await failure(guardedGoto(ctx, page, 'https://example.com/no'));
     expect((error as CaptureBlockedError).code).toBe('robots');
     expect(navigated).toBe(false);
   });
@@ -508,7 +541,8 @@ describe('lint: HTTP client imports and @srs/evals', () => {
 });
 
 describe('lint: pinnedGet / pinnedLookup stay inside net.ts', () => {
-  const code = "import { pinnedGet, pinnedLookup } from './net';\nvoid [pinnedGet, pinnedLookup];";
+  const code =
+    "import { pinnedGet, pinnedLookup, pinnedRequest } from './net';\nvoid [pinnedGet, pinnedLookup, pinnedRequest];";
   async function run(file: string, source = code) {
     const eslint = new ESLint({
       cwd: repoRoot,
@@ -583,6 +617,26 @@ describe('lint: network calls only in net.ts', () => {
     }
   });
 
+  it.each([
+    'void route.continue();',
+    'void route.fallback();',
+    'void context.unroute(p);',
+    'void context.unrouteAll();',
+    'void page.routeFromHAR(f);',
+    'void ws.connectToServer();',
+    'void browser.newContext();',
+    'void chromium.launch();',
+  ])('bans the route escape hatch %s outside net.ts', async (code) => {
+    for (const file of [
+      'packages/capture/src/x.ts',
+      'packages/capture/src/x.test.ts',
+      'packages/audit/src/x.ts',
+    ]) {
+      expect((await lint(code, file)).length).toBeGreaterThanOrEqual(1);
+    }
+    expect(await lint(code, 'packages/capture/src/net.ts')).toEqual([]);
+  });
+
   it('allows them in net.ts and elsewhere', async () => {
     expect(await lint('void fetch(u);', 'packages/capture/src/net.ts')).toEqual([]);
     expect(await lint('void fetch(u);', 'apps/web/lib/x.ts')).toEqual([]);
@@ -594,5 +648,481 @@ describe('lint: network calls only in net.ts', () => {
       'packages/capture/src/x.ts',
     );
     expect(messages.length).toBeGreaterThan(0);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// M1 T9: request guard, with fake routes (no browser, no network)
+// ---------------------------------------------------------------------------------------------
+
+type RouteHandler = (route: GuardRoute) => Promise<void> | void;
+type SocketHandler = (ws: GuardWebSocketRoute) => Promise<void> | void;
+
+interface FakeContext {
+  context: {
+    route(p: string | RegExp, h: RouteHandler): Promise<void>;
+    routeWebSocket(p: string | RegExp, h: SocketHandler): Promise<void>;
+  };
+  request(
+    url: string,
+    opts?: {
+      method?: string;
+      navigation?: boolean;
+      main?: boolean;
+      type?: string;
+      page?: object;
+    },
+  ): Promise<{
+    fulfilled?: { status: number; headers: Record<string, string>; body: Buffer };
+    aborted?: string;
+    fellBack?: boolean;
+  }>;
+  socket(url: string): Promise<{ closed: boolean }>;
+}
+
+const defaultPage = {};
+function fakeContext(): FakeContext {
+  let routeHandler: RouteHandler | undefined;
+  let socketHandler: SocketHandler | undefined;
+  return {
+    context: {
+      route: async (_p, h) => {
+        routeHandler = h;
+      },
+      routeWebSocket: async (_p, h) => {
+        socketHandler = h;
+      },
+    },
+    async request(url, opts = {}) {
+      const out: {
+        fulfilled?: { status: number; headers: Record<string, string>; body: Buffer };
+        aborted?: string;
+        fellBack?: boolean;
+      } = {};
+      const route: GuardRoute = {
+        request: () => ({
+          url: () => url,
+          method: () => opts.method ?? 'GET',
+          resourceType: () => opts.type ?? (opts.navigation ? 'document' : 'image'),
+          isNavigationRequest: () => opts.navigation ?? false,
+          frame: () => ({
+            parentFrame: () => (opts.main === false ? {} : null),
+            page: () => opts.page ?? defaultPage,
+          }),
+          headers: () => ({ accept: 'image/*' }),
+        }),
+        fulfill: async (o) => {
+          out.fulfilled = o;
+        },
+        abort: async (code) => {
+          out.aborted = code ?? 'failed';
+        },
+        fallback: async () => {
+          out.fellBack = true;
+        },
+      };
+      await routeHandler!(route);
+      return out;
+    },
+    async socket(url) {
+      let closed = false;
+      await socketHandler!({
+        url: () => url,
+        close: async () => {
+          closed = true;
+        },
+      });
+      return { closed };
+    },
+  };
+}
+
+describe('request guard (T9): no DNS rebinding gap', () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  const base = (lookup: NetContext['lookup']) =>
+    ctxFor('https://example.com', {}, { lookup, production: true });
+
+  it('checks a third-party name once and pins the connection to that answer', async () => {
+    const stub = stubHttps();
+    let lookups = 0;
+    // Public at check time, private on any later lookup (the rebinding trick).
+    const lookup = async () => (++lookups === 1 ? ['93.184.216.34'] : ['127.0.0.1']);
+    const fake = fakeContext();
+    await installRequestGuard(fake.context, base(lookup));
+    const out = await fake.request('https://cdn.rebind.example/logo.png');
+
+    expect(out.fulfilled?.status).toBe(200);
+    expect(out.fulfilled?.body.toString()).toBe('PNG');
+    expect(out.fulfilled?.headers['content-type']).toBe('image/png');
+    expect(out.fulfilled?.headers['set-cookie']).toBeUndefined();
+    expect(lookups).toBe(1);
+    expect(stub.calls).toHaveLength(1);
+    // The connection's own DNS step can only answer with the checked address.
+    const pinned = stub.calls[0]!.options.lookup as (
+      host: string,
+      opts: object,
+      cb: (err: unknown, address: unknown, family?: number) => void,
+    ) => void;
+    for (const opts of [{}, { all: true }]) {
+      const answer = await new Promise<unknown>((resolve) =>
+        pinned('cdn.rebind.example', opts, (_e, address) => resolve(address)),
+      );
+      expect(JSON.stringify(answer)).toContain('93.184.216.34');
+      expect(JSON.stringify(answer)).not.toContain('127.0.0.1');
+    }
+    expect(lookups).toBe(1);
+  });
+
+  it('never connects when the name already resolves private, or mixes in a private answer', async () => {
+    const stub = stubHttps();
+    for (const answers of [['10.0.0.5'], ['127.0.0.1'], ['93.184.216.34', '169.254.169.254']]) {
+      const fake = fakeContext();
+      const guard = await installRequestGuard(
+        fake.context,
+        base(async () => answers),
+      );
+      const out = await fake.request('https://rebind.example/x.png');
+      expect(out.aborted).toBe('blockedbyclient');
+      expect(out.fulfilled).toBeUndefined();
+      expect(guard.log.at(-1)).toMatchObject({ action: 'blocked', reason: 'refused' });
+    }
+    expect(stub.calls).toHaveLength(0);
+  });
+
+  it('refuses a literal private address', async () => {
+    const stub = stubHttps();
+    const fake = fakeContext();
+    await installRequestGuard(
+      fake.context,
+      base(async () => ['93.184.216.34']),
+    );
+    expect((await fake.request('http://10.0.0.5/x.png')).aborted).toBe('blockedbyclient');
+    expect((await fake.request('http://169.254.169.254/latest/meta-data')).aborted).toBe(
+      'blockedbyclient',
+    );
+    expect(stub.calls).toHaveLength(0);
+  });
+});
+
+describe('request guard (T9): what may load', () => {
+  afterEach(() => vi.restoreAllMocks());
+  const ctx = () =>
+    ctxFor('https://example.com', {}, { lookup: async () => ['93.184.216.34'], production: true });
+
+  it('lets a third-party image or font load (checked and pinned)', async () => {
+    const stub = stubHttps();
+    const fake = fakeContext();
+    await installRequestGuard(fake.context, ctx());
+    const out = await fake.request('https://fonts.example.net/a.woff2', { type: 'font' });
+    expect(out.fulfilled?.status).toBe(200);
+    expect(stub.calls).toHaveLength(1);
+  });
+
+  it('blocks trackers without any lookup or request', async () => {
+    const stub = stubHttps();
+    const lookup = vi.fn(async () => ['93.184.216.34']);
+    const fake = fakeContext();
+    const guard = await installRequestGuard(
+      fake.context,
+      ctxFor('https://example.com', {}, { lookup, production: true }),
+    );
+    const out = await fake.request('https://www.google-analytics.com/analytics.js', {
+      type: 'script',
+    });
+    expect(out.aborted).toBe('blockedbyclient');
+    expect(lookup).not.toHaveBeenCalled();
+    expect(stub.calls).toHaveLength(0);
+    expect(guard.log.at(-1)).toMatchObject({ reason: 'tracker' });
+  });
+
+  it('aborts main-frame navigations and redirect hops that leave the origin or the path', async () => {
+    const stub = stubHttps();
+    const lookup = vi.fn(async () => ['93.184.216.34']);
+    const fake = fakeContext();
+    const guard = await installRequestGuard(
+      fake.context,
+      ctxFor('https://example.com', {}, { lookup, production: true }),
+    );
+    for (const hop of [
+      'https://other.example/',
+      'http://10.0.0.5/admin',
+      'http://169.254.169.254/latest',
+      'http://127.0.0.1:9/secret',
+    ]) {
+      armNavigation(guard, defaultPage, hop);
+      expect((await fake.request(hop, { navigation: true, type: 'document' })).aborted).toBe(
+        'blockedbyclient',
+      );
+    }
+    expect(stub.calls).toHaveLength(0);
+    expect(lookup).not.toHaveBeenCalled();
+    const ps = guard.pageState(defaultPage);
+    expect(ps.refusals.length).toBeGreaterThanOrEqual(1);
+    expect(ps.refusals[0]!.error).toBeInstanceOf(GuardError);
+  });
+
+  it('refuses a main-frame navigation nobody armed, and each armed one only once', async () => {
+    const stub = stubHttps();
+    const fake = fakeContext();
+    const guard = await installRequestGuard(fake.context, ctx());
+    const nav = { navigation: true, type: 'document' };
+    // Meta refresh, Refresh header, script or click: nothing armed it.
+    expect((await fake.request('https://example.com/next', nav)).aborted).toBe('blockedbyclient');
+    expect(guard.pageState(defaultPage).unexpected).toEqual(['https://example.com/next']);
+    armNavigation(guard, defaultPage, 'https://example.com');
+    expect((await fake.request('https://example.com/', nav)).fulfilled?.status).toBe(200);
+    // The same URL again (a reload by refresh) is not armed any more.
+    expect((await fake.request('https://example.com/', nav)).aborted).toBe('blockedbyclient');
+    // Another page's armed navigation doesn't license this one.
+    const other = {};
+    armNavigation(guard, other, 'https://example.com/x');
+    expect((await fake.request('https://example.com/x', nav)).aborted).toBe('blockedbyclient');
+    expect(
+      (await fake.request('https://example.com/x', { ...nav, page: other })).fulfilled,
+    ).toBeDefined();
+    expect(stub.calls).toHaveLength(2);
+  });
+
+  it('normalizes start URLs: no trailing slash, and a #hash', async () => {
+    stubHttps();
+    const fake = fakeContext();
+    const guard = await installRequestGuard(fake.context, ctx());
+    const nav = { navigation: true, type: 'document' };
+    armNavigation(guard, defaultPage, 'https://example.com');
+    expect((await fake.request('https://example.com/', nav)).fulfilled).toBeDefined();
+    armNavigation(guard, defaultPage, 'https://example.com/a#section');
+    expect((await fake.request('https://example.com/a', nav)).fulfilled).toBeDefined();
+  });
+
+  it('follows a subresource redirect by hand and checks every hop', async () => {
+    const stub = stubHttps((n) =>
+      n === 1
+        ? { status: 302, headers: { location: 'http://10.0.0.5/internal.png' } }
+        : { status: 200, headers: {} },
+    );
+    const fake = fakeContext();
+    const guard = await installRequestGuard(fake.context, ctx());
+    const out = await fake.request('https://img.example.net/a.png');
+    expect(out.aborted).toBe('blockedbyclient');
+    expect(stub.calls).toHaveLength(1); // the private hop was never requested
+    expect(guard.log.at(-1)).toMatchObject({ action: 'blocked', reason: 'refused' });
+
+    const ok = stubHttps((n) =>
+      n === 1
+        ? { status: 301, headers: { location: 'https://cdn.example.net/a.png' } }
+        : { status: 200, headers: {} },
+    );
+    const fake2 = fakeContext();
+    await installRequestGuard(fake2.context, ctx());
+    const served = await fake2.request('https://img.example.net/a.png');
+    expect(served.fulfilled?.status).toBe(200); // Chromium never sees the 301
+    expect(ok.calls.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('hands a main-frame redirect back to guardedGoto instead of letting Chromium follow it', async () => {
+    const stub = stubHttps((n) =>
+      n === 1
+        ? { status: 301, headers: { location: 'https://example.com/new' } }
+        : { status: 200, headers: {} },
+    );
+    const fake = fakeContext();
+    const guard = await installRequestGuard(fake.context, ctx());
+    armNavigation(guard, defaultPage, 'https://example.com/old');
+    const out = await fake.request('https://example.com/old', {
+      navigation: true,
+      type: 'document',
+    });
+    expect(out.aborted).toBeUndefined();
+    expect(out.fulfilled?.status).toBe(200); // a blank page, never the 301
+    expect(out.fulfilled?.body.length).toBe(0);
+    expect(guard.pageState(defaultPage).redirects.get('https://example.com/old')).toBe(
+      'https://example.com/new',
+    );
+    expect(stub.calls).toHaveLength(1);
+  });
+
+  it('refuses everything when consent is gone', async () => {
+    stubHttps();
+    let project = projectFor('https://example.com');
+    const fake = fakeContext();
+    await installRequestGuard(fake.context, {
+      ...ctxFor(
+        'https://example.com',
+        {},
+        { lookup: async () => ['93.184.216.34'], production: true },
+      ),
+      getProject: () => project,
+    });
+    expect((await fake.request('https://example.com/a.png')).fulfilled).toBeDefined();
+    project = { ...project, consent: undefined } as unknown as typeof project;
+    expect((await fake.request('https://example.com/b.png')).aborted).toBe('blockedbyclient');
+    expect(() =>
+      assertCrawlAllowed(project, 'https://example.com/', { pagesCrawledSoFar: 0 }),
+    ).toThrow(expect.objectContaining({ code: 'no-consent' }));
+  });
+
+  it('aborts iframe navigations (same origin too) and non-GET requests', async () => {
+    const stub = stubHttps();
+    const fake = fakeContext();
+    const guard = await installRequestGuard(fake.context, ctx());
+    const frame = { navigation: true, main: false, type: 'document' };
+    expect((await fake.request('https://booking.provider.example/widget', frame)).aborted).toBe(
+      'blockedbyclient',
+    );
+    expect((await fake.request('https://example.com/embed', frame)).aborted).toBe(
+      'blockedbyclient',
+    );
+    expect((await fake.request('https://example.com/api', { method: 'POST' })).aborted).toBe(
+      'blockedbyclient',
+    );
+    expect(stub.calls).toHaveLength(0);
+    const reasons = guard.log.map((e: GuardLogEntry) => e.reason);
+    expect(reasons).toEqual(['iframe', 'iframe', 'method']);
+  });
+
+  it('closes WebSockets without connecting', async () => {
+    const fake = fakeContext();
+    const guard = await installRequestGuard(fake.context, ctx());
+    expect(await fake.socket('wss://chat.example.com/live')).toEqual({ closed: true });
+    expect(guard.log.at(-1)).toMatchObject({ resourceType: 'websocket', reason: 'websocket' });
+  });
+
+  it('guardedGoto refuses a context without the guard, before navigating', async () => {
+    let navigated = false;
+    const page: GotoPage = {
+      goto: async () => {
+        navigated = true;
+        return null;
+      },
+      url: () => '',
+      context: () => ({}),
+    };
+    await expect(guardedGoto(ctx(), page, 'https://example.com/')).rejects.toThrow(
+      /newGuardedContext/,
+    );
+    expect(navigated).toBe(false);
+  });
+
+  it('pinnedRequest is exported for net.ts internals only (lint covers other files)', () => {
+    expect(typeof pinnedRequest).toBe('function');
+  });
+});
+
+describe('request guard (T9): fixture mode and headers', () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it('in fixture mode an unmapped third-party host is never resolved or fetched by us', async () => {
+    const stub = stubHttps();
+    const lookup = vi.fn(async () => ['93.184.216.34']);
+    const fake = fakeContext();
+    const guard = await installRequestGuard(
+      fake.context,
+      ctxFor('https://example.com', { 'a.test': 4000 }, { lookup }),
+    );
+    const out = await fake.request('https://static.wixstatic.com/logo.png');
+    expect(out.fellBack).toBe(true);
+    expect(lookup).not.toHaveBeenCalled();
+    expect(stub.calls).toHaveLength(0);
+    expect(guard.log.at(-1)).toMatchObject({ action: 'fallback' });
+    // IP literals and localhost are never handed on.
+    for (const u of [
+      'http://127.0.0.1:9/x.png',
+      'http://10.0.0.5/x.png',
+      'http://localhost/x.png',
+    ]) {
+      expect((await fake.request(u)).aborted).toBe('blockedbyclient');
+    }
+    // Trackers are still blocked first.
+    expect(
+      (await fake.request('https://www.googletagmanager.com/gtm.js')).fellBack,
+    ).toBeUndefined();
+  });
+
+  it('without a fixture map (production) the same host is checked and pinned, never handed on', async () => {
+    const stub = stubHttps();
+    const fake = fakeContext();
+    await installRequestGuard(
+      fake.context,
+      ctxFor(
+        'https://example.com',
+        {},
+        { lookup: async () => ['93.184.216.34'], production: true },
+      ),
+    );
+    const out = await fake.request('https://static.wixstatic.com/logo.png');
+    expect(out.fellBack).toBeUndefined();
+    expect(stub.calls).toHaveLength(1);
+  });
+
+  it('strips headers that make Chromium connect or switch protocol on its own', async () => {
+    stubHttps(() => ({
+      status: 200,
+      headers: {
+        Link: '<https://evil.example>; rel=preconnect',
+        'Alt-Svc': 'h3=":443"',
+        Upgrade: 'websocket',
+        TE: 'trailers',
+        Trailer: 'x',
+        'Proxy-Authenticate': 'Basic',
+        'Proxy-Connection': 'keep-alive',
+        Refresh: '0; url=/x',
+      },
+    }));
+    const fake = fakeContext();
+    await installRequestGuard(
+      fake.context,
+      ctxFor(
+        'https://example.com',
+        {},
+        { lookup: async () => ['93.184.216.34'], production: true },
+      ),
+    );
+    const out = await fake.request('https://img.example.net/a.png');
+    const names = Object.keys(out.fulfilled!.headers).map((k) => k.toLowerCase());
+    for (const gone of [
+      'link',
+      'alt-svc',
+      'upgrade',
+      'te',
+      'trailer',
+      'proxy-authenticate',
+      'proxy-connection',
+    ]) {
+      expect(names).not.toContain(gone);
+    }
+  });
+
+  it('refuses a subresource with a consent error code, not a robots one', async () => {
+    stubHttps();
+    const fake = fakeContext();
+    const base = ctxFor(
+      'https://example.com',
+      {},
+      { lookup: async () => ['93.184.216.34'], production: true },
+    );
+    const guard = await installRequestGuard(fake.context, {
+      ...base,
+      getProject: () => ({ ...projectFor('https://example.com'), consent: undefined }) as never,
+    });
+    expect((await fake.request('https://example.com/a.png')).aborted).toBe('blockedbyclient');
+    expect(guard.log.at(-1)).toMatchObject({ reason: 'refused', code: 'no-consent' });
+  });
+
+  it('newGuardedContext and guardedGoto refuse a browser or context that is not ours', async () => {
+    const ctx = ctxFor(
+      'https://example.com',
+      {},
+      { lookup: async () => ['93.184.216.34'], production: true },
+    );
+    await expect(newGuardedContext({} as never, ctx)).rejects.toThrow(/launchCaptureBrowser/);
+    const page: GotoPage = {
+      goto: async () => null,
+      url: () => '',
+      context: () => ({ route: async () => undefined }),
+    };
+    await expect(guardedGoto(ctx, page, 'https://example.com/')).rejects.toThrow(
+      /newGuardedContext/,
+    );
   });
 });

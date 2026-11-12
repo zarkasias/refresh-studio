@@ -10,8 +10,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "robots-parser": "^3.0.1",
-    "@srs/site-model": "workspace:*"
+    "@srs/site-model": "workspace:*",
+    "playwright": "1.65.0",
+    "robots-parser": "^3.0.1"
   },
   "devDependencies": {
     "@srs/evals": "workspace:*"

@@ -109,6 +109,9 @@ importers:
       '@srs/site-model':
         specifier: workspace:*
         version: link:../site-model
+      playwright:
+        specifier: 1.65.0
+        version: 1.65.0
       robots-parser:
         specifier: ^3.0.1
         version: 3.0.1

@@ -104,7 +104,18 @@ importers:
 
   packages/brand: {}
 
-  packages/capture: {}
+  packages/capture:
+    dependencies:
+      '@srs/site-model':
+        specifier: workspace:*
+        version: link:../site-model
+      robots-parser:
+        specifier: ^3.0.1
+        version: 3.0.1
+    devDependencies:
+      '@srs/evals':
+        specifier: workspace:*
+        version: link:../../evals
 
   packages/exporters/astro-site: {}
 
@@ -2265,6 +2276,10 @@ packages:
   reusify@1.1.0:
     resolution: {integrity: sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
+
+  robots-parser@3.0.1:
+    resolution: {integrity: sha512-s+pyvQeIKIZ0dx5iJiQk1tPLJAWln39+MI5jtM8wnyws+G5azk+dMnMX0qfbqNetKKNgcWWOdi0sfm+FbQbgdQ==}
+    engines: {node: '>=10.0.0'}
 
   rolldown@1.2.18:
     resolution: {integrity: sha512-C1uuT3UR60SShuCaPQFAAZyefJCWZlAKB02BV3BuPE2Rs4fevRQltEKoFO2tV5W9/eJhU5RieV6vJj3euulfNQ==}
@@ -4517,6 +4532,8 @@ snapshots:
   resolve-pkg-maps@1.0.0: {}
 
   reusify@1.1.0: {}
+
+  robots-parser@3.0.1: {}
 
   rolldown@1.2.18:
     dependencies:

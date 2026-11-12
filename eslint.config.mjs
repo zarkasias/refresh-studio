@@ -90,6 +90,51 @@ const fixtureSyntax = [
   },
 ];
 
+const NETWORK_MESSAGE =
+  'Network access in packages/capture and packages/audit goes through guardedFetch / guardedGoto in packages/capture/src/net.ts (consent, robots, address checks).';
+const networkSyntax = [
+  { selector: "CallExpression[callee.name='fetch']", message: NETWORK_MESSAGE },
+  { selector: "CallExpression[callee.property.name='fetch']", message: NETWORK_MESSAGE },
+  { selector: "CallExpression[callee.property.name='goto']", message: NETWORK_MESSAGE },
+  // Any method on an object named `request`, or on a `.request` property (page.request, context.request).
+  { selector: "CallExpression[callee.object.name='request']", message: NETWORK_MESSAGE },
+  { selector: "CallExpression[callee.object.property.name='request']", message: NETWORK_MESSAGE },
+  {
+    selector:
+      'CallExpression[callee.object.name=/^https?$/][callee.property.name=/^(get|request)$/]',
+    message: NETWORK_MESSAGE,
+  },
+];
+
+const NET_IMPORT_MESSAGE =
+  'HTTP client modules are only allowed in packages/capture/src/net.ts (and test-support.ts). Use guardedFetch / guardedGoto.';
+const netModules = [
+  'node:http',
+  'node:https',
+  'node:net',
+  'node:tls',
+  'node:http2',
+  'http',
+  'https',
+  'net',
+  'tls',
+  'http2',
+  'undici',
+  'axios',
+];
+const netImportPaths = netModules.map((name) => ({ name, message: NET_IMPORT_MESSAGE }));
+const netImportGroup = { group: ['undici/**', 'axios/**'], message: NET_IMPORT_MESSAGE };
+const EVALS_MESSAGE =
+  '@srs/evals is for test files only; production capture and audit code must not import it.';
+const PINNED_MESSAGE =
+  'pinnedGet and pinnedLookup do no address check. They are internal to net.ts; use guardedFetch.';
+const pinnedGroup = {
+  group: ['./net', '**/net'],
+  importNames: ['pinnedGet', 'pinnedLookup'],
+  message: PINNED_MESSAGE,
+};
+const evalsGroup = { group: ['@srs/evals', '@srs/evals/*'], message: EVALS_MESSAGE };
+
 export default tseslint.config(
   {
     ignores: [
@@ -102,6 +147,7 @@ export default tseslint.config(
       'docs/**',
       // Deliberate boundary violation, linted explicitly by packages/sections/src/boundary.test.ts
       'packages/sections/test-fixtures/**',
+      'packages/capture/test-fixtures/**',
       // Generated synthetic sites (M1 T6a): byte-exact output of the generator, not source.
       'evals/fixtures/sites/**',
     ],
@@ -182,6 +228,65 @@ export default tseslint.config(
         { patterns: [brandPatternGroup, fixtureUrlsGroup, factoryGroup, urlImportGroup] },
       ],
       'no-restricted-syntax': ['error', ...brandSyntax, ...fixtureSyntax],
+    },
+  },
+  {
+    // M1 T8: only packages/capture/src/net.ts may touch the network (guardedFetch / guardedGoto).
+    // Later blocks replace `no-restricted-syntax`, so the non-test block repeats the fixture-URL ban.
+    files: ['packages/capture/**/*.{ts,tsx}', 'packages/audit/**/*.{ts,tsx}'],
+    ignores: ['packages/capture/src/net.ts', '**/*.test.{ts,tsx}'],
+    rules: { 'no-restricted-syntax': ['error', ...networkSyntax, ...fixtureSyntax] },
+  },
+  {
+    files: ['packages/capture/**/*.test.{ts,tsx}', 'packages/audit/**/*.test.{ts,tsx}'],
+    rules: { 'no-restricted-syntax': ['error', ...networkSyntax] },
+  },
+  {
+    // M1 T8: HTTP client modules only in net.ts and test-support.ts; @srs/evals only in tests.
+    // `no-restricted-imports` is replaced by later blocks, so each block repeats every group it needs.
+    files: ['packages/capture/**/*.{ts,tsx}', 'packages/audit/**/*.{ts,tsx}'],
+    ignores: ['**/*.test.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { patterns: [fixtureUrlsGroup, factoryGroup, evalsGroup, pinnedGroup] },
+      ],
+    },
+  },
+  {
+    files: ['packages/capture/**/*.{ts,tsx}', 'packages/audit/**/*.{ts,tsx}'],
+    ignores: [
+      '**/*.test.{ts,tsx}',
+      'packages/capture/src/net.ts',
+      'packages/capture/src/test-support.ts',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: netImportPaths,
+          patterns: [fixtureUrlsGroup, factoryGroup, evalsGroup, netImportGroup, pinnedGroup],
+        },
+      ],
+    },
+  },
+  {
+    files: ['packages/capture/**/*.test.{ts,tsx}', 'packages/audit/**/*.test.{ts,tsx}'],
+    ignores: ['packages/capture/src/net.test.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { paths: netImportPaths, patterns: [factoryGroup, netImportGroup, pinnedGroup] },
+      ],
+    },
+  },
+  {
+    files: ['packages/capture/src/net.test.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { paths: netImportPaths, patterns: [factoryGroup, netImportGroup] },
+      ],
     },
   },
   jsxA11y.flatConfigs.recommended,

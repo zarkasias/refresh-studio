@@ -8,5 +8,12 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "robots-parser": "^3.0.1",
+    "@srs/site-model": "workspace:*"
+  },
+  "devDependencies": {
+    "@srs/evals": "workspace:*"
   }
 }
